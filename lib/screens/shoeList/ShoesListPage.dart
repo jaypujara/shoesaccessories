@@ -29,80 +29,131 @@ class _ShoesListPageState extends State<ShoesListPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(
-                () => !controller.isLoading.value &&
-                        controller.searchShoesList.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: controller.searchShoesList.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        physics: const NeverScrollableScrollPhysics(),
-                        primary: true,
-                        itemBuilder: (context, index) {
-                          Product model = controller.searchShoesList[index];
-                          return Container(
-                            height: 100,
-                            // clipBehavior: Clip.antiAliasWithSaveLayer,
-                            // decoration: BoxDecoration(
-                            //   color: colorWhite,
-                            //   borderRadius: boxBorderRadius,
-                            //   boxShadow: boxShadow,
-                            // ),
-                            margin: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
+              _buildSearch(context),
+              Expanded(
+                child: Obx(
+                  () => !controller.isLoading.value &&
+                          controller.searchShoesList.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: controller.searchShoesList.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          physics: const NeverScrollableScrollPhysics(),
+                          primary: true,
+                          itemBuilder: (context, index) {
+                            Product model = controller.searchShoesList[index];
+                            return Container(
+                              height: 120,
+                              // clipBehavior: Clip.antiAliasWithSaveLayer,
+                              // decoration: BoxDecoration(
+                              //   color: colorWhite,
+                              //   borderRadius: boxBorderRadius,
+                              //   boxShadow: boxShadow,
+                              // ),
+                              margin: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Material(
+                                      elevation: 2,
+                                      color: colorPrimary.shade50,
                                       borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    padding: const EdgeInsets.all(5),
-                                    child: Center(
-                                      child:
-                                          Image.network(model.imagePath ?? ""),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: colorWhite,
-                                      borderRadius: BorderRadius(),
-                                      boxShadow: boxShadow,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0,
-                                        vertical: 8,
-                                      ),
-                                      child: Text(
-                                        "${model.proName}",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: colorBlack,
-                                          fontSize: 24,
-                                          height: 1,
-                                          fontWeight: FontWeight.w500,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Center(
+                                          child: Image.network(
+                                              model.imagePath ?? ""),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    : !controller.isLoading.value &&
-                            controller.searchShoesList.isEmpty
-                        ? buildNoData(
-                            controller.inProgressOrDataNotAvailable.value)
-                        : _buildLoading(),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: colorWhite,
+                                        borderRadius:
+                                            const BorderRadius.horizontal(
+                                          right: Radius.circular(20),
+                                        ),
+                                        boxShadow: boxShadow,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            "${model.proName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: colorBlack,
+                                              fontSize: 22,
+                                              height: 1,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.proWeight!.isEmpty
+                                                ? ""
+                                                : "${model.proWeight} g",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: colorGrayText,
+                                              fontSize: 14,
+                                              height: 1,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "${model.proPrice}₹",
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  color: colorGrayText,
+                                                  fontSize: 14,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${model.proDiscount}%",
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  color: colorGrayText,
+                                                  fontSize: 14,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : !controller.isLoading.value &&
+                              controller.searchShoesList.isEmpty
+                          ? buildNoData(
+                              controller.inProgressOrDataNotAvailable.value)
+                          : _buildLoading(),
+                ),
               ),
             ],
           ),
@@ -117,6 +168,51 @@ class _ShoesListPageState extends State<ShoesListPage> {
       width: Get.width,
       child: const Center(
         child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildSearch(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                prefixIcon: Icon(Icons.search_rounded),
+                prefixIconColor: colorPrimary.shade100,
+              ),
+              onChanged: (value) {
+                controller.search(value);
+                // _homepageBloc.add(SearchEvent(value));
+              },
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              controller.getData();
+            },
+            icon: const Icon(Icons.close_rounded),
+          ),
+        ],
       ),
     );
   }

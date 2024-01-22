@@ -20,6 +20,22 @@ class ShoesListController extends GetxController {
     getData();
   }
 
+  void search(String value) {
+    searchShoesList.clear();
+    if (value.isNotEmpty) {
+      searchShoesList.value = shoesList
+          .where((element) => element.proName != null
+              ? element.proName
+                  .toString()
+                  .toLowerCase()
+                  .contains(value.toLowerCase())
+              : false)
+          .toList();
+    } else {
+      searchShoesList.addAll(shoesList);
+    }
+  }
+
   getData() async {
     print("ARGUNMENTS :  ${Get.arguments}   ");
     HttpRequestModel request = HttpRequestModel(

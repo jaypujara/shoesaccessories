@@ -16,14 +16,16 @@ class DashBoardPage extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   "WellCome To",
                   style: Theme.of(context).textTheme.headlineSmall,
@@ -31,13 +33,15 @@ class DashBoardPage extends GetView<DashBoardController> {
               ),
               const SizedBox(height: 3),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   "Shoes Accessories",
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
+              _buildSearch(context),
+              const SizedBox(height: 20),
               Obx(
                 () => !controller.isLoading.value &&
                         controller.searchCategoryList.isNotEmpty
@@ -81,8 +85,8 @@ class DashBoardPage extends GetView<DashBoardController> {
                                         gradient: LinearGradient(
                                             colors: [
                                               Colors.transparent,
-                                              Color(0x33888888),
-                                              Color(0x33888888),
+                                              // Color(0x33b3baff),
+                                              Color(0x55b3baff),
                                             ],
                                             begin: Alignment.centerRight,
                                             end: Alignment.centerLeft),
@@ -134,19 +138,50 @@ class DashBoardPage extends GetView<DashBoardController> {
     );
   }
 
-  _buildNoData() {
-    return SizedBox(
-      height: 500,
-      width: Get.width,
-      child: Center(
-        child: Text(
-          controller.inProgressOrDataNotAvailable.value,
-          style: TextStyle(
-            color: colorBlack,
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
+  Widget _buildSearch(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide(
+                    color: colorPrimary.shade100,
+                  ),
+                ),
+                prefixIcon: const Icon(Icons.search_rounded),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    controller.getData();
+                  },
+                  icon: Icon(Icons.close_rounded, color: colorPrimary.shade100),
+                ),
+                prefixIconColor: colorPrimary.shade100,
+              ),
+              onChanged: (value) {
+                controller.search(value);
+                // _homepageBloc.add(SearchEvent(value));
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

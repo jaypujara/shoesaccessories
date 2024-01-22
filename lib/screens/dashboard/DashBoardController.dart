@@ -7,7 +7,6 @@ import 'package:shoes_acces/screens/dashboard/model/CategoryResponseModel.dart';
 import '../../Network/API.dart';
 import '../../Network/ApiUrls.dart';
 import '../../utils/Strings.dart';
-import '../../utils/methods.dart';
 
 class DashBoardController extends GetxController {
   RxList<Category> searchCategoryList = <Category>[].obs;
@@ -19,6 +18,22 @@ class DashBoardController extends GetxController {
   void onInit() {
     super.onInit();
     getData();
+  }
+
+  void search(String value) {
+    searchCategoryList.clear();
+    if (value.isNotEmpty) {
+      searchCategoryList.value = categoryList
+          .where((element) => element.catName != null
+              ? element.catName
+                  .toString()
+                  .toLowerCase()
+                  .contains(value.toLowerCase())
+              : false)
+          .toList();
+    } else {
+      searchCategoryList.addAll(categoryList);
+    }
   }
 
   getData() async {
