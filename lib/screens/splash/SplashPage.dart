@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/dashboard/DashBoardPage.dart';
+import 'package:shoes_acces/screens/login/LoginPage.dart';
 
-import '../dashboard/DashBoardPage.dart';
+import '../../utils/Preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,8 +21,14 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     Future.delayed(
       const Duration(seconds: 3),
-      () {
-        Get.offAll(() => DashBoardPage());
+      () async {
+        String email = await Preferences().getPrefString(Preferences.prefEmail);
+        print("EMAIL : $email");
+        if (email.isEmpty) {
+          Get.offAll(() => LoginPage());
+        } else {
+          Get.offAll(() => DashBoardPage());
+        }
       },
     );
   }

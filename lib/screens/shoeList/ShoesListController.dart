@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/shoeList/model/ProductResponseModel.dart';
 
@@ -13,6 +14,8 @@ class ShoesListController extends GetxController {
   List<Product> shoesList = [];
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
+  final TextEditingController textControllerSearch = TextEditingController();
+
 
   @override
   void onInit() {

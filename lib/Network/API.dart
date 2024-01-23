@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import '../utils/Strings.dart';
-import '../utils/functions.dart';
+import '../widgets/Widgets.dart';
 import 'ApiUrls.dart';
 import 'ConnectionStatusSingleton.dart';
 import 'GlobalMethods.dart';
@@ -44,10 +44,10 @@ class HttpService {
     } else {
       // String token = await Preferences().getPrefString(Preferences.prefToken);
 
-      // headers = {
-      //   'Content-type': 'application/json',
-      //   'Authorization': "bearer $token"
-      // };
+      headers = {
+        'Content-type': 'application/json',
+        // 'Authorization': "bearer $token"
+      };
     }
   }
 

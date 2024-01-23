@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/dashboard/model/CategoryResponseModel.dart';
 
@@ -13,6 +14,10 @@ class DashBoardController extends GetxController {
   List<Category> categoryList = [];
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
+  RxInt indexSlider = 0.obs;
+  List<String> imageList = [];
+  final TextEditingController textControllerSearch = TextEditingController();
+
 
   @override
   void onInit() {

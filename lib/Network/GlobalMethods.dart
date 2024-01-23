@@ -23,11 +23,12 @@ bool isValidateEmail(String value) {
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp regex = RegExp(pattern);
 
+  print(regex.hasMatch(value));
   return regex.hasMatch(value); //'Enter Valid Email Address';
 }
 
-String? validateEmail(String value) {
-  if (value.isEmpty) {
+String? validateEmail(String? value) {
+  if (value == null || value.isEmpty) {
     return 'Enter your Email Address';
   }
   if (!isValidateEmail(value)) {
