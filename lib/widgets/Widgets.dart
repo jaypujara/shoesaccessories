@@ -52,25 +52,25 @@ Widget buildSearch(BuildContext context, TextEditingController controller,
       decoration: InputDecoration(
         hintText: "Search here....",
         hintStyle: TextStyle(
-          color: colorPrimary.shade100,
+          color: colorPrimary.shade200,
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: colorPrimary.shade100,
+            color: colorPrimary.shade200,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: colorPrimary.shade100,
+            color: colorPrimary.shade200,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: colorPrimary.shade100,
+            color: colorPrimary.shade200,
           ),
         ),
         prefixIcon: const Icon(Icons.search_rounded),
@@ -78,9 +78,9 @@ Widget buildSearch(BuildContext context, TextEditingController controller,
           onPressed: () {
             controller.clear();
           },
-          icon: Icon(Icons.close_rounded, color: colorPrimary.shade100),
+          icon: Icon(Icons.close_rounded, color: colorPrimary.shade200),
         ),
-        prefixIconColor: colorPrimary.shade100,
+        prefixIconColor: colorPrimary.shade200,
       ),
       onChanged: onChanged,
     ),

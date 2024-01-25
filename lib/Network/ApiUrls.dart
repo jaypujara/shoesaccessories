@@ -13,3 +13,15 @@ const String endLogin = "MobileLogin";
 
 /// * [endRegister] "CustomerRegistration" Registration
 const String endRegister = "CustomerRegistration";
+
+/// * [endChangePassword] "CustomerChnagePassword" Change Password with old pass
+const String endChangePassword = "CustomerChnagePassword";
+
+/// * [endRegister] "CustomerRegistration" Registration
+const String endAddressList= "CustomerAddressList";
+
+/// * [endRegister] "CustomerRegistration" Registration
+const String endAddressSave= "CustomerAddressSave";
+
+/// * [endAdvertisementList] "AdvertisementList" fetch banner
+const String endAdvertisementList= "AdvertisementList";

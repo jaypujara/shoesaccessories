@@ -44,14 +44,17 @@ class _ShoesListPageState extends State<ShoesListPage> {
                         itemBuilder: (context, index) {
                           Product model = controller.searchShoesList[index];
                           return Container(
-                            height: 120,
-                            // clipBehavior: Clip.antiAliasWithSaveLayer,
-                            // decoration: BoxDecoration(
-                            //   color: colorWhite,
-                            //   borderRadius: boxBorderRadius,
-                            //   boxShadow: boxShadow,
-                            // ),
+                            height: 150,
                             margin: const EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: colorWhite,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: boxShadow,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
+                            ),
                             child: Row(
                               children: [
                                 Expanded(
@@ -59,7 +62,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                   child: Material(
                                     elevation: 2,
                                     color: colorPrimary.shade50,
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(8),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Center(
@@ -73,14 +76,6 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                   flex: 3,
                                   child: Container(
                                     width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: colorWhite,
-                                      borderRadius:
-                                          const BorderRadius.horizontal(
-                                        right: Radius.circular(20),
-                                      ),
-                                      boxShadow: boxShadow,
-                                    ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 10,
                                       vertical: 8,
@@ -115,25 +110,41 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                         ),
                                         const SizedBox(height: 15),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
+                                            if (model.proDiscount != null &&
+                                                model.proDiscount != 0)
+                                              Text(
+                                                "${model.proDiscount}₹",
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(
+                                                  color: colorGreen,
+                                                  fontSize: 16,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            if (model.proDiscount != null &&
+                                                model.proDiscount != 0)
+                                              const SizedBox(width: 5),
                                             Text(
                                               "${model.proPrice}₹",
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
-                                                color: colorGrayText,
-                                                fontSize: 14,
-                                                height: 1,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${model.proDiscount}%",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                color: colorGrayText,
-                                                fontSize: 14,
+                                                color: model.proDiscount !=
+                                                            null &&
+                                                        model.proDiscount != 0
+                                                    ? Colors.red
+                                                    : colorGreen,
+                                                fontSize: model.proDiscount !=
+                                                            null &&
+                                                        model.proDiscount != 0
+                                                    ? 12
+                                                    : 16,
+                                                decoration: model.proDiscount !=
+                                                            null &&
+                                                        model.proDiscount != 0
+                                                    ? TextDecoration.lineThrough
+                                                    : null,
                                                 height: 1,
                                                 fontWeight: FontWeight.w500,
                                               ),
@@ -171,7 +182,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
       ),
     );
   }
-
+}
 // Widget _buildSearch(BuildContext context) {
 //   return Padding(
 //     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -216,7 +227,6 @@ class _ShoesListPageState extends State<ShoesListPage> {
 //     ),
 //   );
 // }
-}
 
 // class ShoesListPage extends GetView<ShoesListController> {
 //   ShoesListController controller = Get.put(ShoesListController());
