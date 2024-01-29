@@ -3,10 +3,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/cart/CartController.dart';
 import 'package:shoes_acces/screens/shoeList/model/ProductResponseModel.dart';
+import 'package:shoes_acces/utils/methods.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
 import '../../Network/API.dart';
 import '../../Network/ApiUrls.dart';
+import '../../utils/Preferences.dart';
 import '../../utils/Strings.dart';
 
 class ShoesListController extends GetxController {
@@ -16,10 +20,10 @@ class ShoesListController extends GetxController {
   RxBool isLoading = false.obs;
   final TextEditingController textControllerSearch = TextEditingController();
 
-
   @override
   void onInit() {
     super.onInit();
+    intiOverLay();
     getData();
   }
 
@@ -78,4 +82,5 @@ class ShoesListController extends GetxController {
       isLoading.trigger(false);
     }
   }
+
 }

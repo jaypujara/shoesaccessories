@@ -6,6 +6,7 @@ import 'package:shoes_acces/screens/shoeList/model/ProductResponseModel.dart';
 import '../../utils/ColorConstants.dart';
 import '../../utils/Constants.dart';
 import '../../widgets/Widgets.dart';
+import '../cart/CartController.dart';
 
 class ShoesListPage extends StatefulWidget {
   const ShoesListPage({super.key});
@@ -16,6 +17,7 @@ class ShoesListPage extends StatefulWidget {
 
 class _ShoesListPageState extends State<ShoesListPage> {
   ShoesListController controller = Get.put(ShoesListController());
+  CartController controllerCart = Get.find(tag: "CartController");
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,19 @@ class _ShoesListPageState extends State<ShoesListPage> {
                               children: [
                                 Expanded(
                                   flex: 2,
+                                  // child:   FutureBuilder<PaletteGenerator>(
+                                  //     future: _updatePaletteGenerator(), // async work
+                                  //     builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
+                                  //       switch (snapshot.connectionState) {
+                                  //         case ConnectionState.waiting: return const Center(child:CircularProgressIndicator());
+                                  //         default:
+                                  //           if (snapshot.hasError)
+                                  //             return new Text('Error: ${snapshot.error}');
+                                  //           else {
+                                  //             // Color color=new Color(snapshot.data.dominantColor.color);
+                                  //             Color color =snapshot.data!.dominantColor!.color;
+                                  //             return new Text('color: ${color.toString()}');
+                                  //           }}}),
                                   child: Material(
                                     elevation: 2,
                                     color: colorPrimary.shade50,
@@ -89,7 +104,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                         Text(
                                           "${model.proName}",
                                           textAlign: TextAlign.left,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: colorBlack,
                                             fontSize: 20,
                                             height: 1,
@@ -101,7 +116,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                               ? ""
                                               : "${model.proWeight} g",
                                           textAlign: TextAlign.left,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: colorGrayText,
                                             fontSize: 14,
                                             height: 1,
@@ -154,6 +169,67 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                       ],
                                     ),
                                   ),
+                                ),
+                                Obx(
+                                  () => controllerCart.isAddCartLoading.value
+                                      ? const SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: Center(
+                                            child: SizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 1,
+                                                color: colorPrimary,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : !controllerCart
+                                              .checkIfIdExist(model.proId ?? "")
+                                          ? IconButton(
+                                              icon: const Icon(
+                                                Icons.add_shopping_cart_rounded,
+                                                color: colorPrimary,
+                                              ),
+                                              onPressed: () {
+                                                controllerCart.addToCart(
+                                                    model.proId ?? "");
+                                              },
+                                            )
+                                          : Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: const Icon(
+                                                    Icons.add,
+                                                    color: colorGreen,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 24,
+                                                  height: 24,
+                                                  child: Text(
+                                                    "1",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: const Icon(
+                                                    Icons.remove_rounded,
+                                                    color: colorRed,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                 ),
                               ],
                             ),

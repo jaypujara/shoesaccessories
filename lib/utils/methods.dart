@@ -1,9 +1,7 @@
-
-
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../Network/ApiUrls.dart';
 
@@ -35,35 +33,40 @@ String? validateEmail(String value) {
   }
 }
 
-
 bool _isLoading = false;
-final OverlayEntry overlayEntry = OverlayEntry(
-  builder: (context) => Container(
-    color: Colors.black.withOpacity(0.5),
-    child: Center(
-      child: Container(
-        height: 45.0,
-        width: 45.0,
-        decoration:
-        const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+OverlayEntry? overlayEntry;
+OverlayState? overlayStates;
+
+intiOverLay() {
+  _isLoading = false;
+  overlayEntry = OverlayEntry(
+    builder: (context) => Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
         child: Container(
-          margin: const EdgeInsets.all(5.0),
-          child: const CircularProgressIndicator(
-            backgroundColor: Colors.green,
-            strokeWidth: 5.0,
+          height: 45.0,
+          width: 45.0,
+          decoration:
+              const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          child: Container(
+            margin: const EdgeInsets.all(5.0),
+            child: const CircularProgressIndicator(
+              backgroundColor: Colors.green,
+              strokeWidth: 5.0,
+            ),
           ),
         ),
       ),
     ),
-  ),
-);
-OverlayState? overlayStates;
+  );
+}
 
 getOverlay(BuildContext context) {
+
   overlayStates = Overlay.of(context);
 
   if (overlayEntry != null && !_isLoading && overlayStates != null) {
-    overlayStates!.insert(overlayEntry);
+    overlayStates!.insert(overlayEntry!);
     _isLoading = true;
   }
 }
@@ -72,6 +75,6 @@ removeOverlay() {
   log("_isLoading : $_isLoading && ${overlayEntry != null}");
   if (_isLoading && overlayEntry != null) {
     _isLoading = false;
-    overlayEntry.remove();
+    overlayEntry!.remove();
   }
 }

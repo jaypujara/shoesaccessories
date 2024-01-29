@@ -16,6 +16,7 @@ const MaterialColor colorPrimary = MaterialColor(0xFF3F454F, {
 const Color colorWhite = Colors.white;
 const Color colorBlack = Colors.black;
 const Color colorOrange = Color(0xFFFF6600);
+const Color colorYellow = Color(0xFFFFC400);
 const Color colorRed = Colors.red;
 const Color colorGreen = Color(0xFF008A00);
 const Color colorLogoGray = Color(0xFF3F454F);

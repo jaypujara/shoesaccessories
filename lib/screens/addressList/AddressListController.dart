@@ -18,6 +18,7 @@ class AddressListController extends GetxController {
   List<AddressModel> addressList = [];
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
+  RxBool isSubmitLoading = false.obs;
   final TextEditingController textControllerSearch = TextEditingController();
 
   // add Address Dialog Variable
@@ -117,7 +118,7 @@ class AddressListController extends GetxController {
     }
   }
 
-  onAddressSubmit() async {
+  onAddressSubmit({String id = "0"}) async {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
       print("Address Save");
       String userId = await Preferences().getPrefString(Preferences.prefCustId);
@@ -130,7 +131,7 @@ class AddressListController extends GetxController {
           body: '',
           headerType: '',
           params: json.encode({
-            "Id": "0",
+            "Id": id,
             "Cus_Id": userId,
             "Add1": textControllerAdd1.text,
             "Add2": textControllerAdd2.text,
@@ -143,7 +144,7 @@ class AddressListController extends GetxController {
           method: 'POST');
 
       try {
-        isLoading.trigger(true);
+        isSubmitLoading.trigger(true);
         String response = await HttpService().init(request);
         if (response.isNotEmpty) {
           var responseModel = jsonDecode(response);
@@ -151,7 +152,7 @@ class AddressListController extends GetxController {
             showSnackBarWithText(Get.context, responseModel["Message"],
                 color: colorGreen);
             Get.back();
-            getData();
+            await getData();
           } else {
             showSnackBarWithText(Get.context, responseModel["Message"]);
           }
@@ -162,7 +163,7 @@ class AddressListController extends GetxController {
         log("ERROR: NS ${e.toString()}");
         showSnackBarWithText(Get.context, stringSomeThingWentWrong);
       } finally {
-        isLoading.trigger(false);
+        isSubmitLoading.trigger(false);
       }
     }
   }

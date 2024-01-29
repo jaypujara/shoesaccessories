@@ -3,6 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/addressList/AddressListPage.dart';
+import 'package:shoes_acces/screens/cart/CartScreen.dart';
 import 'package:shoes_acces/screens/shoeList/ShoesListPage.dart';
 import 'package:shoes_acces/screens/splash/SplashPage.dart';
 import 'package:shoes_acces/utils/Constants.dart';
@@ -154,7 +155,10 @@ class DashBoardPage extends GetView<DashBoardController> {
                     endIndent: 10,
                     indent: 50,
                   ),
-                  const ListTile(
+                  ListTile(
+                    onTap: () {
+                      Get.to(() => CartPage());
+                    },
                     leading: Icon(Icons.shopping_cart),
                     title: Text("Cart"),
                   ),
@@ -226,25 +230,14 @@ class DashBoardPage extends GetView<DashBoardController> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CarouselSlider(
-          carouselController: CarouselController(),
-          items: controller.imageList
-              .map(
-                (e) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Container(
-                    height: 240,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, 0),
-                            blurRadius: 5,
-                            spreadRadius: 0),
-                      ],
-                    ),
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: CarouselSlider(
+            carouselController: CarouselController(),
+            items: controller.imageList
+                .map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Image.network(
                       e,
                       fit: BoxFit.cover,
@@ -258,31 +251,31 @@ class DashBoardPage extends GetView<DashBoardController> {
                       loadingBuilder: (context, child, loadingProgress) {
                         return Material(
                           elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
                           child: Center(child: child),
                         );
                       },
                     ),
                   ),
-                ),
-              )
-              .toList(),
-          options: CarouselOptions(
-            height: 150,
-            aspectRatio: 16 / 9,
-            viewportFraction: .8,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.easeInOutSine,
-            enlargeCenterPage: true,
-            enlargeFactor: 0.3,
-            onPageChanged: (index, reason) {
-              controller.indexSlider.value = index;
-            },
-            scrollDirection: Axis.horizontal,
+                )
+                .toList(),
+            options: CarouselOptions(
+              aspectRatio: 16 / 9,
+              viewportFraction: .8,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayCurve: Curves.easeInOutSine,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.3,
+              onPageChanged: (index, reason) {
+                controller.indexSlider.value = index;
+              },
+              scrollDirection: Axis.horizontal,
+            ),
           ),
         ),
         const SizedBox(height: 10),
@@ -310,13 +303,13 @@ class DashBoardPage extends GetView<DashBoardController> {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
+        childAspectRatio: 1 / 1,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         Category model = controller.searchCategoryList[index];
         return Container(
-          height: 100,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           decoration: BoxDecoration(
             color: colorWhite,
@@ -344,7 +337,8 @@ class DashBoardPage extends GetView<DashBoardController> {
                       gradient: LinearGradient(
                           colors: [
                             Colors.transparent,
-                            Color(0x55b3baff),
+                            Color(0xAAb3baff),
+                            Color(0xAAb3baff),
                           ],
                           begin: Alignment.centerRight,
                           end: Alignment.centerLeft),
@@ -355,9 +349,9 @@ class DashBoardPage extends GetView<DashBoardController> {
                         vertical: 8,
                       ),
                       child: Text(
-                        "${model.catName}",
+                        (model.catName ?? "").toUpperCase(),
                         textAlign: TextAlign.left,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: colorBlack,
                           fontSize: 20,
                           height: 1,

@@ -33,6 +33,7 @@ Widget buildNoData(String data) {
     child: Center(
       child: Text(
         data,
+        textAlign: TextAlign.center,
         style: const TextStyle(
           color: colorBlack,
           fontWeight: FontWeight.w500,

@@ -25,3 +25,12 @@ const String endAddressSave= "CustomerAddressSave";
 
 /// * [endAdvertisementList] "AdvertisementList" fetch banner
 const String endAdvertisementList= "AdvertisementList";
+
+/// * [endCartList] "CartList" fetch banner
+const String endCartList= "CartList";
+
+/// * [endDeleteCart] "DeleteCart" fetch banner
+const String endDeleteCart= "DeleteCart";
+
+/// * [endAddCart] "AddCart" fetch banner
+const String endAddCart= "AddCart";

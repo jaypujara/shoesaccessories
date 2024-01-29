@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
+import 'package:shoes_acces/screens/cart/CartController.dart';
 import 'package:shoes_acces/screens/splash/SplashPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 
@@ -20,6 +21,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const SplashPage(),
+      onInit: () {
+        Get.put(CartController(), tag: "CartController");
+      },
+      // home: const Demo(),
     );
   }
 }
