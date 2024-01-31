@@ -23,6 +23,9 @@ const String endAddressList= "CustomerAddressList";
 /// * [endRegister] "CustomerRegistration" Registration
 const String endAddressSave= "CustomerAddressSave";
 
+/// * [endCustomerAddressDelete] "CustomerAddressDelete" delete Address
+const String endCustomerAddressDelete= "CustomerAddressDelete";
+
 /// * [endAdvertisementList] "AdvertisementList" fetch banner
 const String endAdvertisementList= "AdvertisementList";
 
@@ -30,7 +33,10 @@ const String endAdvertisementList= "AdvertisementList";
 const String endCartList= "CartList";
 
 /// * [endDeleteCart] "DeleteCart" fetch banner
-const String endDeleteCart= "DeleteCart";
+const String endDeleteCart= "InActiveCart";
 
 /// * [endAddCart] "AddCart" fetch banner
 const String endAddCart= "AddCart";
+
+/// * [endOrderSave] "OrderSave" Save Order
+const String endOrderSave= "OrderSave";

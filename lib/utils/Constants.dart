@@ -32,11 +32,5 @@ double elevation = 2;
 
 
 class Constants {
-  static double pixelRatio = 0.0;
-  static String leapCardNumber = "";
-  static String staticLogFileName = "trans";
-
-  static bool allowWriteFile = false;
-
   static bool isFromPaymentConfirmation = false;
 }

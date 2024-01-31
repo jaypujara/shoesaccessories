@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,16 @@ class DashBoardPage extends GetView<DashBoardController> {
         elevation: 0,
         titleSpacing: 0,
         title: const Text("Shoes Accessories"),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart_rounded,
+            ),
+            onPressed: () {
+              Get.to(() => CartPage());
+            },
+          )
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -212,7 +223,7 @@ class DashBoardPage extends GetView<DashBoardController> {
                 _buildLogOutOrDeleteAcc(
                   "Delete",
                   "Are you sure?\nYou want to delete account from this out servers!",
-                  Icons.logout_rounded,
+                  Icons.delete_forever_rounded,
                   isDelete: true,
                 );
               },
@@ -236,31 +247,62 @@ class DashBoardPage extends GetView<DashBoardController> {
             carouselController: CarouselController(),
             items: controller.imageList
                 .map(
-                  (e) => Padding(
+                  (e) => CachedNetworkImage(
+                    imageUrl: e ?? "",
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Image(image: imageProvider, fit: BoxFit.cover),
+                      );
+                    },
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress,color: colorPrimary,
+                              strokeWidth: 2,)),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.image_rounded, size: 40),
+                  ), /*Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Image.network(
                       e,
                       fit: BoxFit.cover,
-                      frameBuilder: (BuildContext context, Widget child,
-                          int? frame, bool? wasSynchronouslyLoaded) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: child,
-                        );
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        return Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Center(child: child),
-                        );
-                      },
+                      // frameBuilder: (BuildContext context, Widget child,
+                      //     int? frame, bool? wasSynchronouslyLoaded) {
+                      //   return Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: child,
+                      //   );
+                      // },
+                      // loadingBuilder: (context, child, loadingProgress) {
+                      //   return Material(
+                      //     elevation: 2,
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     child: Center(child: child),
+                      //   );
+                      // },
+                      // progressIndicatorBuilder: (context,
+                      //     url,
+                      //     downloadProgress) =>
+                      //     Center(
+                      //         child: CircularProgressIndicator(
+                      //             value:
+                      //             downloadProgress
+                      //                 .progress)),
+                      // errorWidget:
+                      //     (context, url, error) =>
+                      // const Icon(Icons.error),
                     ),
-                  ),
+                  ),*/
                 )
                 .toList(),
             options: CarouselOptions(
-              aspectRatio: 16 / 9,
+              // aspectRatio: 16 / 9,
               viewportFraction: .8,
               initialPage: 0,
               enableInfiniteScroll: true,
@@ -270,7 +312,7 @@ class DashBoardPage extends GetView<DashBoardController> {
               autoPlayAnimationDuration: const Duration(milliseconds: 800),
               autoPlayCurve: Curves.easeInOutSine,
               enlargeCenterPage: true,
-              enlargeFactor: 0.3,
+              enlargeFactor: 0.2,
               onPageChanged: (index, reason) {
                 controller.indexSlider.value = index;
               },
@@ -326,8 +368,20 @@ class DashBoardPage extends GetView<DashBoardController> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(
-                  model.imagePath ?? "",
+                CachedNetworkImage(
+                  imageUrl: model.imagePath ?? "",
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      color: Colors.white,
+                      child: Image(image: imageProvider),
+                    );
+                  },
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress,color: colorPrimary,
+                            strokeWidth: 2,)),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
@@ -468,6 +522,7 @@ class DashBoardPage extends GetView<DashBoardController> {
                                         width: 27,
                                         child: CircularProgressIndicator(
                                           color: colorWhite,
+                                          strokeWidth: 2,
                                         ),
                                       ),
                                     )

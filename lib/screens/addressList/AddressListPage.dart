@@ -37,7 +37,7 @@ class AddressListPage extends GetView<AddressListController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSearch(context, controller.textControllerSearch, (value) {
+              buildSearch( controller.textControllerSearch, (value) {
                 controller.search(value);
               }),
               Obx(
@@ -171,7 +171,10 @@ class AddressListPage extends GetView<AddressListController> {
                                     ),
                                     Expanded(
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          _buildDeleteConfirmation(
+                                              (model.id ?? -1).toString());
+                                        },
                                         child: Container(
                                           color: colorRed,
                                           alignment: Alignment.center,
@@ -207,7 +210,119 @@ class AddressListPage extends GetView<AddressListController> {
     );
   }
 
+  _buildDeleteConfirmation(String addressId) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: colorWhite,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Material(
+                    color: colorPrimary,
+                    borderRadius: BorderRadius.circular(8),
+                    child: const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.delete_forever_rounded,
+                        color: colorWhite,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    "Delete Address",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: colorPrimary,
+                      fontSize: 28,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 10),
+              Divider(color: colorPrimary.shade100),
+              const SizedBox(height: 20),
+              Text(
+                "Are you sure yo want to delete this address?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: colorPrimary.shade300,
+                  fontSize: 18,
+                  height: 1,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Divider(color: colorPrimary.shade100),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        await controller.onAddressDelete(id: addressId);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: colorRed,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: const Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: colorWhite,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: colorGreen,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: const Text(
+                          "No",
+                          style: TextStyle(
+                            color: colorWhite,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   _addOrEditAddress({bool isEdit = false, AddressModel? model}) {
+    controller.error.value = "";
     Get.bottomSheet(
       isScrollControlled: true,
       BottomSheet(
@@ -331,7 +446,19 @@ class AddressListPage extends GetView<AddressListController> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 15),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              controller.error.value,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.red,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
                           InkWell(
                             onTap: () {
                               controller.onAddressSubmit(
@@ -352,7 +479,7 @@ class AddressListPage extends GetView<AddressListController> {
                                       height: 18,
                                       child: CircularProgressIndicator(
                                         color: colorWhite,
-                                        strokeWidth: 1,
+                                        strokeWidth: 2,
                                       ),
                                     )
                                   : const Row(
@@ -395,7 +522,10 @@ class AddressListPage extends GetView<AddressListController> {
       height: 500,
       width: Get.width,
       child: const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: colorPrimary,
+          strokeWidth: 2,
+        ),
       ),
     );
   }

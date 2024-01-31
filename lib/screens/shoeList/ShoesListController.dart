@@ -5,25 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/cart/CartController.dart';
 import 'package:shoes_acces/screens/shoeList/model/ProductResponseModel.dart';
-import 'package:shoes_acces/utils/methods.dart';
-import 'package:shoes_acces/widgets/Widgets.dart';
 
 import '../../Network/API.dart';
 import '../../Network/ApiUrls.dart';
-import '../../utils/Preferences.dart';
 import '../../utils/Strings.dart';
+import '../cart/model/CartListResponseModel.dart';
 
 class ShoesListController extends GetxController {
+  List<Product> shoesList = <Product>[];
   RxList<Product> searchShoesList = <Product>[].obs;
-  List<Product> shoesList = [];
+
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
   final TextEditingController textControllerSearch = TextEditingController();
 
+  CartController cartController = Get.find(tag: "CartController");
+
   @override
   void onInit() {
     super.onInit();
-    intiOverLay();
     getData();
   }
 
@@ -41,6 +41,23 @@ class ShoesListController extends GetxController {
     } else {
       searchShoesList.addAll(shoesList);
     }
+  }
+
+  mapWithCartList() {
+    print("ListMap");
+    for (CartProductModel cartModel in cartController.cartProductList) {
+      for (Product model in shoesList) {
+        if (model.proId == cartModel.proId) {
+          model.model = cartModel;
+        }
+      }
+      for (Product model in searchShoesList) {
+        if (model.proId == cartModel.proId) {
+          model.model = cartModel;
+        }
+      }
+    }
+    search("");
   }
 
   getData() async {
@@ -65,6 +82,7 @@ class ShoesListController extends GetxController {
           if (responseModel.productList != null) {
             shoesList.addAll(responseModel.productList!);
             searchShoesList.addAll(shoesList);
+            mapWithCartList();
           } else {
             inProgressOrDataNotAvailable.value = stringDataNotAvailable;
           }
@@ -82,5 +100,4 @@ class ShoesListController extends GetxController {
       isLoading.trigger(false);
     }
   }
-
 }

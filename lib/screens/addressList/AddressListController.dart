@@ -19,6 +19,7 @@ class AddressListController extends GetxController {
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
   RxBool isSubmitLoading = false.obs;
+  RxString error = "".obs;
   final TextEditingController textControllerSearch = TextEditingController();
 
   // add Address Dialog Variable
@@ -124,7 +125,7 @@ class AddressListController extends GetxController {
       String userId = await Preferences().getPrefString(Preferences.prefCustId);
       String userName =
           await Preferences().getPrefString(Preferences.prefFullName);
-
+      error.value = "";
       HttpRequestModel request = HttpRequestModel(
           url: endAddressSave,
           authMethod: '',
@@ -149,22 +150,61 @@ class AddressListController extends GetxController {
         if (response.isNotEmpty) {
           var responseModel = jsonDecode(response);
           if (responseModel["Status"] == "1") {
+            error.value = "";
             showSnackBarWithText(Get.context, responseModel["Message"],
                 color: colorGreen);
             Get.back();
             await getData();
           } else {
-            showSnackBarWithText(Get.context, responseModel["Message"]);
+            error.value = responseModel["Message"];
+            // showSnackBarWithText(Get.context, responseModel["Message"]);
           }
         } else {
-          showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+          error.value = stringSomeThingWentWrong;
+          // showSnackBarWithText(Get.context, stringSomeThingWentWrong);
         }
       } catch (e) {
         log("ERROR: NS ${e.toString()}");
-        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+        error.value = stringSomeThingWentWrong;
+        // showSnackBarWithText(Get.context, stringSomeThingWentWrong);
       } finally {
         isSubmitLoading.trigger(false);
       }
+    }
+  }
+
+  onAddressDelete({String id = "-1"}) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endCustomerAddressDelete,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "Id": id,
+        }).toString(),
+        method: 'POST');
+
+    try {
+      isSubmitLoading.trigger(true);
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseModel = jsonDecode(response);
+        if (responseModel["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseModel["Message"],
+              color: colorGreen);
+          Get.back();
+          await getData();
+        } else {
+          showSnackBarWithText(Get.context, responseModel["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: NS ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      isSubmitLoading.trigger(false);
     }
   }
 }

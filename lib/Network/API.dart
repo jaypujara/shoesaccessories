@@ -109,9 +109,11 @@ class HttpService {
       }
 
       if (httpRequestModel.method == "DELETE") {
-        var url = baseUrl.trim() + httpRequestModel.url.trim();
-
-        http.Response response = await doDelete(url, headers);
+        var url = baseUrlWithHttp.trim() +
+            nestedUrl.trim() +
+            httpRequestModel.url.trim();
+        log(url);
+        http.Response response = await doDelete(url, httpRequestModel.params!, headers);
         log("API_RESPONSE : ${response.body.toString()}");
         return handleResponse(response, callback);
       }
@@ -213,16 +215,24 @@ class HttpService {
   Future<http.Response> doPost(
       String subUrl, String body, Map<String, String> headerType) {
     return getHttpClient()
-        .post(Uri.parse(subUrl), headers: headerType, body: body,)
+        .post(
+      Uri.parse(subUrl),
+      headers: headerType,
+      body: body,
+    )
         .timeout(const Duration(seconds: 30), onTimeout: () {
       throw TimeoutException('The connection has timed out, Please try again!');
     });
   }
 
   Future<http.Response> doDelete(
-      String subUrl, Map<String, String> headerType) {
+      String subUrl, String body, Map<String, String> headerType) {
     return getHttpClient()
-        .delete(Uri.parse(subUrl), headers: headerType)
+        .delete(
+      Uri.parse(subUrl),
+      headers: headerType,
+      body: body,
+    )
         .timeout(const Duration(seconds: 10), onTimeout: () {
       throw TimeoutException('The connection has timed out, Please try again!');
     });

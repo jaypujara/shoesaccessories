@@ -3,22 +3,117 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/methods.dart';
 
 import '../../Network/API.dart';
 import '../../Network/ApiUrls.dart';
 import '../../utils/Preferences.dart';
 import '../../utils/Strings.dart';
 import '../../widgets/Widgets.dart';
+import '../addressList/model/AddressListResponseModel.dart';
 import 'model/CartListResponseModel.dart';
 
 class CartController extends GetxController {
   RxList<CartProductModel> searchedCartProductList = <CartProductModel>[].obs;
-  List<CartProductModel> cartProductList = [];
+  RxList<CartProductModel> cartProductList = <CartProductModel>[].obs;
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
   RxBool isAddCartLoading = false.obs;
   RxDouble total = 0.0.obs;
+  RxDouble subTotal = 0.0.obs;
   final TextEditingController textControllerSearch = TextEditingController();
+
+  final TextEditingController textControllerAddressSearch =
+      TextEditingController();
+  RxList<AddressModel> searchAddressList = <AddressModel>[].obs;
+  List<AddressModel> addressList = [];
+  RxInt selectedAddressIndex = (-1).obs;
+  RxBool isAddressLoading = false.obs;
+
+  void searchAddress(String value) {
+    searchAddressList.clear();
+    if (value.isNotEmpty) {
+      searchAddressList.value = addressList
+          .where((element) =>
+              (element.add1 != null &&
+                  element.add1
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.add2 != null &&
+                  element.add2
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.add3 != null &&
+                  element.add3
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.city != null &&
+                  element.city
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.area != null &&
+                  element.area
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.pinCode != null &&
+                  element.pinCode
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())))
+          .toList();
+    } else {
+      searchAddressList.addAll(addressList);
+    }
+  }
+
+  getAddressData() async {
+    String userId = await Preferences().getPrefString(Preferences.prefCustId);
+
+    HttpRequestModel request = HttpRequestModel(
+        url: endAddressList,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: {"UserId": userId}.toString(),
+        method: 'POST');
+
+    try {
+      isAddressLoading.trigger(true);
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        AddressListResponseModel responseModel =
+            AddressListResponseModel.fromJson(jsonDecode(response));
+        if (responseModel.status == "1" &&
+            responseModel.addressModelList != null) {
+          addressList.clear();
+          searchAddressList.clear();
+          if (responseModel.addressModelList != null) {
+            addressList.addAll(responseModel.addressModelList!);
+            searchAddressList.addAll(addressList);
+          } else {
+            inProgressOrDataNotAvailable.value = stringDataNotAvailable;
+          }
+          isAddressLoading.trigger(false);
+        } else {
+          inProgressOrDataNotAvailable.value = jsonDecode(response)["Message"];
+        }
+      } else {
+        inProgressOrDataNotAvailable.value = stringDataNotAvailable;
+      }
+    } catch (e) {
+      log("ERROR: NS ${e.toString()}");
+      inProgressOrDataNotAvailable.value = stringDataNotAvailable;
+    } finally {
+      isAddressLoading.trigger(false);
+    }
+  }
 
   void search(String value) {
     searchedCartProductList.clear();
@@ -39,7 +134,7 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getData();
+    getData(true);
   }
 
   checkIfIdExist(String productId) {
@@ -52,15 +147,21 @@ class CartController extends GetxController {
     return false;
   }
 
-  String getGrandTotal() {
+  String getTotal() {
     total.value = 0;
+    subTotal.value = 0;
     for (CartProductModel model in cartProductList) {
-      total.value += model.proPrice ?? 0;
+      if (model.proDiscount != null && model.proDiscount != 0.0) {
+        total.value += (model.proDiscount ?? 0) * (model.proQty ?? 0);
+      } else {
+        total.value += (model.proPrice ?? 0) * (model.proQty ?? 0);
+      }
+      subTotal.value += (model.proPrice ?? 0) * (model.proQty ?? 0);
     }
     return total.toStringAsFixed(2);
   }
 
-  getData() async {
+  getData(bool isWithLoader) async {
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
     HttpRequestModel request = HttpRequestModel(
         url: endCartList,
@@ -71,7 +172,9 @@ class CartController extends GetxController {
         method: 'POST');
 
     try {
-      isLoading.trigger(true);
+      if (isWithLoader) {
+        isLoading.trigger(true);
+      }
       String response = await HttpService().init(request);
       if (response.isNotEmpty) {
         CartListResponseModel responseModel =
@@ -83,12 +186,18 @@ class CartController extends GetxController {
           if (responseModel.cartProductLis != null) {
             cartProductList.addAll(responseModel.cartProductLis!);
             searchedCartProductList.addAll(cartProductList);
-            getGrandTotal();
+            getTotal();
           } else {
             inProgressOrDataNotAvailable.value = stringDataNotAvailable;
           }
-          isLoading.trigger(false);
+          if (isWithLoader) {
+            isLoading.trigger(false);
+          }
         } else {
+          cartProductList.clear();
+          searchedCartProductList.clear();
+          subTotal.value = 0;
+          total.value = 0;
           inProgressOrDataNotAvailable.value = jsonDecode(response)["Message"];
         }
       } else {
@@ -98,19 +207,16 @@ class CartController extends GetxController {
       log("ERROR: NS ${e.toString()}");
       inProgressOrDataNotAvailable.value = stringDataNotAvailable;
     } finally {
-      isLoading.trigger(false);
+      if (isWithLoader) {
+        isLoading.trigger(false);
+      }
     }
   }
 
-  increaseQuantityItem(){
-
-  }
-
-  decreaseQuantityItem(){
-
-  }
-
-  addToCart(String productId) async {
+  addToCart(
+      {required String productId,
+      String cartId = "0",
+      int quantity = 1}) async {
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
     HttpRequestModel request = HttpRequestModel(
         url: endAddCart,
@@ -118,20 +224,23 @@ class CartController extends GetxController {
         body: '',
         headerType: '',
         params: json.encode({
-          "CartId": "0",
+          "CartId": cartId,
           "CustId": userId,
           "ProId": productId,
+          "Qty": quantity.toString(),
         }).toString(),
         method: 'POST');
 
     try {
-      isAddCartLoading.trigger(true);
+      // isAddCartLoading.trigger(true);
+      getOverlay();
       String response = await HttpService().init(request);
       if (response.isNotEmpty) {
         var responseJson = jsonDecode(response);
         if (responseJson["Status"] == "1") {
-          showSnackBarWithText(Get.context, responseJson["Message"]);
-          await getData();
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          await getData(false);
         } else {
           showSnackBarWithText(Get.context, responseJson["Message"]);
         }
@@ -142,7 +251,101 @@ class CartController extends GetxController {
       log("ERROR: NS ${e.toString()}");
       showSnackBarWithText(Get.context, stringSomeThingWentWrong);
     } finally {
-      isAddCartLoading.trigger(false);
+      removeOverlay();
+      // isAddCartLoading.trigger(false);
+    }
+  }
+
+  deleteFromCart(String cartId) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endDeleteCart,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "CartId": cartId,
+        }).toString(),
+        method: 'POST');
+
+    try {
+      // isAddCartLoading.trigger(true);
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          await getData(false);
+        } else {
+          showSnackBarWithText(Get.context, responseJson["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: NS ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      removeOverlay();
+      // isAddCartLoading.trigger(false);
+    }
+  }
+
+  placeOrder({required int addressId}) async {
+    String userId = await Preferences().getPrefString(Preferences.prefCustId);
+    String productIds = "";
+    String productNames = "";
+    String productQty = "";
+    for (CartProductModel model in cartProductList) {
+      productIds += "${productIds.isEmpty ? "" : "^"}${model.proId ?? ""}";
+      productNames +=
+          "${productNames.isEmpty ? "" : "^"}${model.proName ?? ""}";
+      productQty += "${productQty.isEmpty ? "" : "^"}${model.proQty ?? "1"}";
+    }
+
+    HttpRequestModel request = HttpRequestModel(
+        url: endOrderSave,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "OrderId": "0",
+          "UserId": userId,
+          "AddressId": addressId.toString(),
+          "ProductId": productIds,
+          "ProductName": productNames,
+          "SubTotal": subTotal.value.toString(),
+          "TotalAmount": subTotal.value.toString(),
+          "Qty": productQty,
+          "OrderDate": DateFormat("dd MMM yyyy").format(DateTime.now()),
+          "ExpectedDeliveryDate": DateFormat("dd MMM yyyy")
+              .format(DateTime.now().add(const Duration(days: 7))),
+        }).toString(),
+        method: 'POST');
+
+    try {
+      // isAddCartLoading.trigger(true);
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          // await getData(false);
+        } else {
+          showSnackBarWithText(Get.context, responseJson["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: NS ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      removeOverlay();
+      // isAddCartLoading.trigger(false);
     }
   }
 }

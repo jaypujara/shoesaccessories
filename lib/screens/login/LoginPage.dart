@@ -79,7 +79,8 @@ class LoginPage extends GetView<LoginController> {
                           horizontal: 20, vertical: 10),
                       child: controller.isLoading.value
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(color: colorPrimary,
+                                strokeWidth: 2,),
                             )
                           : const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

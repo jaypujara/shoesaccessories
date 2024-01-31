@@ -1,3 +1,7 @@
+import 'package:get/get.dart';
+
+import '../../cart/model/CartListResponseModel.dart';
+
 class ProductResponseModel {
   String? status;
   String? message;
@@ -37,18 +41,18 @@ class Product {
   double? proCourierCharges;
   String? proWeight;
   String? imagePath;
-
+  CartProductModel? model;
 
   Product(
       {this.proId,
-        this.proName,
-        this.proPrice,
-        this.proDiscount,
-        this.proSGST,
-        this.proCGST,
-        this.proCourierCharges,
-        this.proWeight,
-        this.imagePath});
+      this.proName,
+      this.proPrice,
+      this.proDiscount,
+      this.proSGST,
+      this.proCGST,
+      this.proCourierCharges,
+      this.proWeight,
+      this.imagePath});
 
   Product.fromJson(Map<String, dynamic> json) {
     proId = json['Pro_Id'];

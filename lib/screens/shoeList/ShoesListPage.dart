@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/shoeList/ShoesListController.dart';
@@ -31,7 +32,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSearch(context, controller.textControllerSearch, (value) {
+              buildSearch(controller.textControllerSearch, (value) {
                 controller.search(value);
               }),
               Obx(
@@ -76,13 +77,74 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                   //           }}}),
                                   child: Material(
                                     elevation: 2,
-                                    color: colorPrimary.shade50,
+                                    color: colorWhite,
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Center(
-                                        child: Image.network(
-                                            model.imagePath ?? ""),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.dialog(
+                                          Dialog(
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            backgroundColor: colorWhite,
+                                            insetPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 20),
+                                            child: AspectRatio(
+                                              aspectRatio: 1 / 1,
+                                              child: CachedNetworkImage(
+                                                imageUrl: model.imagePath ?? "",
+                                                imageBuilder:
+                                                    (context, imageProvider) {
+                                                  return Container(
+                                                    color: Colors.white,
+                                                    child: Image(
+                                                        image: imageProvider),
+                                                  );
+                                                },
+                                                progressIndicatorBuilder: (context,
+                                                        url,
+                                                        downloadProgress) =>
+                                                    Center(
+                                                        child: CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress,color: colorPrimary,
+                                                          strokeWidth: 2,)),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Center(
+                                          child: CachedNetworkImage(
+                                            imageUrl: model.imagePath ?? "",
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                color: Colors.white,
+                                                child:
+                                                    Image(image: imageProvider),
+                                              );
+                                            },
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress,color: colorPrimary,
+                                                          strokeWidth: 2,)),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -170,67 +232,111 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                     ),
                                   ),
                                 ),
-                                Obx(
-                                  () => controllerCart.isAddCartLoading.value
-                                      ? const SizedBox(
-                                          height: 50,
-                                          width: 50,
-                                          child: Center(
-                                            child: SizedBox(
-                                              height: 24,
-                                              width: 24,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 1,
-                                                color: colorPrimary,
+                                (model.model != null)
+                                    ? Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () async {
+                                              print((model.model!.proQty ?? 1) +
+                                                  1);
+                                              await controllerCart.addToCart(
+                                                  productId: model.proId ?? "",
+                                                  quantity:
+                                                      (model.model!.proQty ??
+                                                              1) +
+                                                          1,
+                                                  cartId:
+                                                      (model.model!.cartId ?? 0)
+                                                          .toString());
+                                              controller.mapWithCartList();
+                                            },
+                                            icon: const Icon(
+                                              Icons.add,
+                                              color: colorGreen,
+                                              size: 20,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: Text(
+                                              (model.model!.proQty ?? 1)
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 20,
                                               ),
                                             ),
                                           ),
-                                        )
-                                      : !controllerCart
-                                              .checkIfIdExist(model.proId ?? "")
-                                          ? IconButton(
-                                              icon: const Icon(
-                                                Icons.add_shopping_cart_rounded,
-                                                color: colorPrimary,
-                                              ),
-                                              onPressed: () {
-                                                controllerCart.addToCart(
-                                                    model.proId ?? "");
-                                              },
-                                            )
-                                          : Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.add,
-                                                    color: colorGreen,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 24,
-                                                  height: 24,
-                                                  child: Text(
-                                                    "1",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.remove_rounded,
-                                                    color: colorRed,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ],
+                                          IconButton(
+                                            onPressed: () async {
+                                              if ((model.model!.proQty ?? 1) >
+                                                  1) {
+                                                await controllerCart.addToCart(
+                                                    productId:
+                                                        model.proId ?? "",
+                                                    quantity:
+                                                        (model.model!.proQty ??
+                                                                1) -
+                                                            1,
+                                                    cartId:
+                                                        (model.model!.cartId ??
+                                                                0)
+                                                            .toString());
+                                                controller.mapWithCartList();
+                                              } else {
+                                                await buildConfirmationDialog(
+                                                    icon: Icons
+                                                        .delete_forever_rounded,
+                                                    title: "Delete From Cart",
+                                                    msg:
+                                                        "Are you sure you want to remove this product from the cart?",
+                                                    onYesTap: () async {
+                                                      await controllerCart
+                                                          .deleteFromCart((model
+                                                                      .model!
+                                                                      .cartId ??
+                                                                  0)
+                                                              .toString())
+                                                          .then((v) {
+                                                        Future.delayed(
+                                                            const Duration(
+                                                                seconds: 1),
+                                                            () {
+                                                          controller
+                                                              .mapWithCartList();
+                                                        });
+                                                        model.model = null;
+                                                        Get.back();
+                                                      });
+                                                    },
+                                                    onClose: () {
+                                                      print("ONCLOSE");
+                                                      controller
+                                                          .mapWithCartList();
+                                                    });
+                                              }
+                                            },
+                                            icon: const Icon(
+                                              Icons.remove_rounded,
+                                              color: colorRed,
+                                              size: 20,
                                             ),
-                                ),
+                                          ),
+                                        ],
+                                      )
+                                    : IconButton(
+                                        icon: const Icon(
+                                          Icons.add_shopping_cart_rounded,
+                                          color: colorPrimary,
+                                        ),
+                                        onPressed: () async {
+                                          await controllerCart.addToCart(
+                                              productId: model.proId ?? "");
+                                          controller.mapWithCartList();
+                                        },
+                                      ),
                               ],
                             ),
                           );
@@ -254,7 +360,8 @@ class _ShoesListPageState extends State<ShoesListPage> {
       height: 500,
       width: Get.width,
       child: const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: colorPrimary,
+          strokeWidth: 2,),
       ),
     );
   }

@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
         useMaterial3: true,
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: colorPrimary,
+        ),
       ),
       home: const SplashPage(),
       onInit: () {

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/cart/model/CartListResponseModel.dart';
@@ -5,10 +6,11 @@ import 'package:shoes_acces/screens/cart/model/CartListResponseModel.dart';
 import '../../utils/ColorConstants.dart';
 import '../../utils/Constants.dart';
 import '../../widgets/Widgets.dart';
+import '../addressList/model/AddressListResponseModel.dart';
 import 'CartController.dart';
 
 class CartPage extends GetView<CartController> {
-  CartController controller = Get.put(CartController());
+  CartController controller = Get.find(tag: "CartController");
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CartPage extends GetView<CartController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildSearch(context, controller.textControllerSearch, (value) {
+            buildSearch(controller.textControllerSearch, (value) {
               controller.search(value);
             }),
             const SizedBox(height: 10),
@@ -56,7 +58,7 @@ class CartPage extends GetView<CartController> {
                               ),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
-                                vertical: 8,
+                                vertical: 10,
                               ),
                               child: Row(
                                 children: [
@@ -69,8 +71,30 @@ class CartPage extends GetView<CartController> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: Center(
-                                          child: Image.network(
-                                              model.imagePath ?? ""),
+                                          child: CachedNetworkImage(
+                                            imageUrl: model.imagePath ?? "",
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                color: Colors.white,
+                                                child:
+                                                    Image(image: imageProvider),
+                                              );
+                                            },
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Center(
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: colorPrimary,
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -92,7 +116,7 @@ class CartPage extends GetView<CartController> {
                                           Text(
                                             "${model.proName}",
                                             textAlign: TextAlign.left,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: colorBlack,
                                               fontSize: 20,
                                               height: 1,
@@ -104,7 +128,7 @@ class CartPage extends GetView<CartController> {
                                                 ? ""
                                                 : "${model.proWeight} g",
                                             textAlign: TextAlign.left,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: colorGrayText,
                                               fontSize: 14,
                                               height: 1,
@@ -164,7 +188,14 @@ class CartPage extends GetView<CartController> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       IconButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          print((model.proQty ?? 1) + 1);
+                                          await controller.addToCart(
+                                              productId: model.proId ?? "",
+                                              quantity: (model.proQty ?? 1) + 1,
+                                              cartId: (model.cartId ?? 0)
+                                                  .toString());
+                                        },
                                         icon: const Icon(
                                           Icons.add,
                                           color: colorGreen,
@@ -175,9 +206,7 @@ class CartPage extends GetView<CartController> {
                                         width: 24,
                                         height: 24,
                                         child: Text(
-                                          model.proQty != null
-                                              ? model.proQty.toString()
-                                              : "1",
+                                          (model.proQty ?? 1).toString(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 20,
@@ -185,8 +214,28 @@ class CartPage extends GetView<CartController> {
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () {
-
+                                        onPressed: () async {
+                                          if ((model.proQty ?? 1) > 1) {
+                                            await controller.addToCart(
+                                                productId: model.proId ?? "",
+                                                quantity:
+                                                    (model.proQty ?? 1) - 1,
+                                                cartId: (model.cartId ?? 0)
+                                                    .toString());
+                                          } else {
+                                            buildConfirmationDialog(
+                                                icon: Icons
+                                                    .delete_forever_rounded,
+                                                title: "Delete From Cart",
+                                                msg:
+                                                    "Are you sure you want to remove this product from the cart?",
+                                                onYesTap: () {
+                                                  Get.back();
+                                                  controller.deleteFromCart(
+                                                      (model.cartId ?? 0)
+                                                          .toString());
+                                                });
+                                          }
                                         },
                                         icon: const Icon(
                                           Icons.remove_rounded,
@@ -218,35 +267,39 @@ class CartPage extends GetView<CartController> {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Total:",
-                            style: TextStyle(
-                              color: colorPrimary,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                            ),
-                          ),
-                          Obx(
-                            () => Text(
+                      child: Obx(
+                        () => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (controller.subTotal != controller.total)
+                              Text(
+                                "${controller.subTotal}₹",
+                                style: const TextStyle(
+                                  color: colorRed,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              ),
+                            Text(
                               "${controller.total}₹",
                               style: const TextStyle(
-                                color: colorBlack,
+                                color: colorGreen,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
                     flex: 2,
                     child: InkWell(
-                      // onTap: controller.onLogin,
+                      onTap: () {
+                        _buildAddressListDialog();
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: colorPrimary,
@@ -257,7 +310,10 @@ class CartPage extends GetView<CartController> {
                             horizontal: 20, vertical: 10),
                         child: controller.isLoading.value
                             ? const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(
+                                  color: colorPrimary,
+                                  strokeWidth: 2,
+                                ),
                               )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -283,6 +339,7 @@ class CartPage extends GetView<CartController> {
                 ],
               ),
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
@@ -294,8 +351,189 @@ class CartPage extends GetView<CartController> {
       height: 500,
       width: Get.width,
       child: const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: colorPrimary,
+          strokeWidth: 2,
+        ),
       ),
     );
+  }
+
+  _buildAddressListDialog() {
+    controller.getAddressData();
+    Get.bottomSheet(
+        // isScrollControlled: true,
+        BottomSheet(
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return GetX<CartController>(
+              tag: "CartController",
+              builder: (controller) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        "Select Address",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    buildSearch(controller.textControllerAddressSearch,
+                        (value) {
+                      controller.search(value);
+                    }),
+                    Expanded(
+                      child: !controller.isAddressLoading.value &&
+                              controller.searchAddressList.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: controller.searchAddressList.length,
+                              shrinkWrap: true,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              primary: true,
+                              itemBuilder: (context, index) {
+                                AddressModel model =
+                                    controller.searchAddressList[index];
+                                return Container(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  decoration: BoxDecoration(
+                                    color: colorWhite,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: boxShadow,
+                                    border:
+                                        controller.selectedAddressIndex.value ==
+                                                index
+                                            ? Border.all(
+                                                color: colorPrimary.shade300,
+                                                width: 2,
+                                              )
+                                            : null,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 10,
+                                  ),
+                                  margin: const EdgeInsets.only(top: 10),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(10),
+                                    onTap: () {
+                                      controller.selectedAddressIndex.value =
+                                          index;
+                                      print(controller
+                                          .selectedAddressIndex.value);
+                                      setState(() {});
+                                      controller.placeOrder(
+                                          addressId: model.id ?? 0);
+                                      Get.back();
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "${model.createdBy}",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorBlack,
+                                            fontSize: 20,
+                                            height: 1,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Divider(color: colorPrimary.shade100),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          model.add1 ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorGrayText,
+                                            fontSize: 14,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        Text(
+                                          model.add2 ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorGrayText,
+                                            fontSize: 14,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        Text(
+                                          model.add3 ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorGrayText,
+                                            fontSize: 14,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "City : ${model.city ?? ""}",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorBlack,
+                                            fontSize: 16,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Area : ${model.area ?? ""}",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorBlack,
+                                            fontSize: 16,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Pin : ${model.pinCode}",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            color: colorBlack,
+                                            fontSize: 16,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : !controller.isAddressLoading.value &&
+                                  controller.searchAddressList.isEmpty
+                              ? buildNoData(
+                                  controller.inProgressOrDataNotAvailable.value)
+                              : _buildLoading(),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
+      onClosing: () {},
+    ));
   }
 }

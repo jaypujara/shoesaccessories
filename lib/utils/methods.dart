@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
 
 import '../Network/ApiUrls.dart';
 
@@ -51,8 +52,8 @@ intiOverLay() {
           child: Container(
             margin: const EdgeInsets.all(5.0),
             child: const CircularProgressIndicator(
-              backgroundColor: Colors.green,
-              strokeWidth: 5.0,
+              color: colorPrimary,
+              strokeWidth: 2,
             ),
           ),
         ),
@@ -61,20 +62,37 @@ intiOverLay() {
   );
 }
 
-getOverlay(BuildContext context) {
-
-  overlayStates = Overlay.of(context);
-
-  if (overlayEntry != null && !_isLoading && overlayStates != null) {
-    overlayStates!.insert(overlayEntry!);
+getOverlay(/*BuildContext context*/) {
+  // overlayStates = Overlay.of(context);
+  // if (overlayEntry != null && !_isLoading && overlayStates != null) {
+  //   overlayStates!.insert(overlayEntry!);
+  //   _isLoading = true;
+  // }
+  if (!_isLoading) {
     _isLoading = true;
+    Get.dialog(
+      const Dialog(
+        backgroundColor: Colors.transparent,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: colorPrimary,
+            strokeWidth: 2,
+          ),
+        ),
+      ),
+    );
   }
 }
 
 removeOverlay() {
   log("_isLoading : $_isLoading && ${overlayEntry != null}");
-  if (_isLoading && overlayEntry != null) {
+  if (_isLoading) {
+    // Get.back(closeOverlays: true);
+    Navigator.pop(Get.overlayContext!, true);
     _isLoading = false;
-    overlayEntry!.remove();
   }
+  // if (_isLoading && overlayEntry != null) {
+  //   _isLoading = false;
+  //   overlayEntry!.remove();
+  // }
 }
