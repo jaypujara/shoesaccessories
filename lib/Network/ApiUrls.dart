@@ -40,3 +40,6 @@ const String endAddCart= "AddCart";
 
 /// * [endOrderSave] "OrderSave" Save Order
 const String endOrderSave= "OrderSave";
+
+/// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
+const String endOrderHistoryList= "OrderHistoryList";

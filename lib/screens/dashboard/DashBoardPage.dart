@@ -4,7 +4,9 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/addressList/AddressListPage.dart';
+import 'package:shoes_acces/screens/cart/CartController.dart';
 import 'package:shoes_acces/screens/cart/CartScreen.dart';
+import 'package:shoes_acces/screens/order_history/OrderHistoryList.dart';
 import 'package:shoes_acces/screens/shoeList/ShoesListPage.dart';
 import 'package:shoes_acces/screens/splash/SplashPage.dart';
 import 'package:shoes_acces/utils/Constants.dart';
@@ -18,6 +20,7 @@ import 'model/CategoryResponseModel.dart';
 
 class DashBoardPage extends GetView<DashBoardController> {
   DashBoardController controller = Get.put(DashBoardController());
+  CartController cartController = Get.find(tag: "CartController");
 
   DashBoardPage({super.key});
 
@@ -32,14 +35,47 @@ class DashBoardPage extends GetView<DashBoardController> {
         titleSpacing: 0,
         title: const Text("Shoes Accessories"),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.shopping_cart_rounded,
-            ),
-            onPressed: () {
+          InkWell(
+            onTap: () {
               Get.to(() => CartPage());
             },
-          )
+            child: SizedBox(
+              height: 27,
+              width: 27,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(
+                    Icons.shopping_cart_rounded,
+                    color: colorPrimary,
+                    size: 27,
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: -5,
+                    child: Obx(
+                      () =>  Container(
+                        decoration: const BoxDecoration(
+                          color: colorRed,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          cartController.cartProductList.length.toString(),
+                          style: const TextStyle(
+                            color: colorWhite,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
         ],
       ),
       body: SafeArea(
@@ -178,9 +214,12 @@ class DashBoardPage extends GetView<DashBoardController> {
                     endIndent: 10,
                     indent: 50,
                   ),
-                  const ListTile(
-                    leading: Icon(Icons.delivery_dining_rounded),
-                    title: Text("Order History"),
+                  ListTile(
+                    onTap: () {
+                      Get.to(() => OrderHistoryList());
+                    },
+                    leading: const Icon(Icons.delivery_dining_rounded),
+                    title: const Text("Order History"),
                   ),
                   Divider(
                     color: colorPrimary.shade100,
@@ -263,42 +302,13 @@ class DashBoardPage extends GetView<DashBoardController> {
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                             child: CircularProgressIndicator(
-                                value: downloadProgress.progress,color: colorPrimary,
-                              strokeWidth: 2,)),
+                      value: downloadProgress.progress,
+                      color: colorPrimary,
+                      strokeWidth: 2,
+                    )),
                     errorWidget: (context, url, error) =>
                         const Icon(Icons.image_rounded, size: 40),
-                  ), /*Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Image.network(
-                      e,
-                      fit: BoxFit.cover,
-                      // frameBuilder: (BuildContext context, Widget child,
-                      //     int? frame, bool? wasSynchronouslyLoaded) {
-                      //   return Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: child,
-                      //   );
-                      // },
-                      // loadingBuilder: (context, child, loadingProgress) {
-                      //   return Material(
-                      //     elevation: 2,
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     child: Center(child: child),
-                      //   );
-                      // },
-                      // progressIndicatorBuilder: (context,
-                      //     url,
-                      //     downloadProgress) =>
-                      //     Center(
-                      //         child: CircularProgressIndicator(
-                      //             value:
-                      //             downloadProgress
-                      //                 .progress)),
-                      // errorWidget:
-                      //     (context, url, error) =>
-                      // const Icon(Icons.error),
-                    ),
-                  ),*/
+                  ),
                 )
                 .toList(),
             options: CarouselOptions(
@@ -345,7 +355,7 @@ class DashBoardPage extends GetView<DashBoardController> {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 1 / 1,
+        childAspectRatio: 3 / 3.5,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       physics: const NeverScrollableScrollPhysics(),
@@ -365,38 +375,43 @@ class DashBoardPage extends GetView<DashBoardController> {
                 "cat_name": model.catName.toString()
               });
             },
-            child: Stack(
-              fit: StackFit.expand,
+            child: Column(
+              // fit: StackFit.expand,
               children: [
-                CachedNetworkImage(
-                  imageUrl: model.imagePath ?? "",
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      color: Colors.white,
-                      child: Image(image: imageProvider),
-                    );
-                  },
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                          child: CircularProgressIndicator(
-                              value: downloadProgress.progress,color: colorPrimary,
-                            strokeWidth: 2,)),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                Expanded(
+                  child: CachedNetworkImage(
+                    imageUrl: model.imagePath ?? "",
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        color: Colors.white,
+                        child: Image(image: imageProvider),
+                      );
+                    },
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      color: colorPrimary,
+                      strokeWidth: 2,
+                    )),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Container(
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.transparent,
-                            Color(0xAAb3baff),
-                            Color(0xAAb3baff),
-                          ],
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft),
-                    ),
+                    decoration: BoxDecoration(color: colorPrimary.shade400
+                        // gradient: LinearGradient(
+                        //     colors: [
+                        //       Colors.transparent,
+                        //       Color(0xAAb3baff),
+                        //       Color(0xAAb3baff),
+                        //     ],
+                        //     begin: Alignment.centerRight,
+                        //     end: Alignment.centerLeft),
+                        ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8.0,
@@ -406,10 +421,10 @@ class DashBoardPage extends GetView<DashBoardController> {
                         (model.catName ?? "").toUpperCase(),
                         textAlign: TextAlign.left,
                         style: const TextStyle(
-                          color: colorBlack,
-                          fontSize: 20,
+                          color: colorWhite,
+                          fontSize: 18,
                           height: 1,
-                          fontWeight: FontWeight.w500,
+                          // fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
