@@ -3,12 +3,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/order_history/model/OrderHistoryListResponseModel.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/Preferences.dart';
-import '../../utils/Strings.dart';
+import '../../../Network/API.dart';
+import '../../../Network/ApiUrls.dart';
+import '../../../utils/Preferences.dart';
+import '../../../utils/Strings.dart';
+import 'model/OrderHistoryListResponseModel.dart';
+
+
 
 class OrderHistoryListController extends GetxController {
   List<Order> orderList = <Order>[];

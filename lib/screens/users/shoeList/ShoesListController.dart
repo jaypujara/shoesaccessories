@@ -3,13 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/cart/CartController.dart';
-import 'package:shoes_acces/screens/shoeList/model/ProductResponseModel.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/Strings.dart';
+import '../../../Network/API.dart';
+import '../../../Network/ApiUrls.dart';
+import '../../../utils/Strings.dart';
+import '../cart/CartController.dart';
 import '../cart/model/CartListResponseModel.dart';
+import 'model/ProductResponseModel.dart';
 
 class ShoesListController extends GetxController {
   List<Product> shoesList = <Product>[];
@@ -44,7 +44,7 @@ class ShoesListController extends GetxController {
   }
 
   mapWithCartList() {
-    print("ListMap");
+    log("ListMap");
     for (CartProductModel cartModel in cartController.cartProductList) {
       for (Product model in shoesList) {
         if (model.proId == cartModel.proId) {
@@ -61,7 +61,7 @@ class ShoesListController extends GetxController {
   }
 
   getData() async {
-    print("ARGUNMENTS :  ${Get.arguments}   ");
+    log("ARGUMENTS :  ${Get.arguments}   ");
     HttpRequestModel request = HttpRequestModel(
         url: endProductList,
         authMethod: '',

@@ -13,4 +13,4 @@ const String stringSomeThingWentWrong =
     "Something went Wrong! Please try again latter.";
 
 /// * [stringDataNotAvailable] = Data not Available! At the moment.
-const String stringDataNotAvailable = "Data not Available! At the moment.";
+const String stringDataNotAvailable = "Data not Available!\nAt the moment.";

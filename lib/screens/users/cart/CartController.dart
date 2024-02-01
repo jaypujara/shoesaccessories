@@ -4,14 +4,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shoes_acces/Network/API.dart';
+import 'package:shoes_acces/Network/ApiUrls.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/Preferences.dart';
+import 'package:shoes_acces/utils/Strings.dart';
 import 'package:shoes_acces/utils/methods.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/Preferences.dart';
-import '../../utils/Strings.dart';
-import '../../widgets/Widgets.dart';
 import '../addressList/model/AddressListResponseModel.dart';
 import 'model/CartListResponseModel.dart';
 
@@ -138,7 +138,7 @@ class CartController extends GetxController {
   }
 
   checkIfIdExist(String productId) {
-    print(productId);
+    log(productId);
     for (CartProductModel model in cartProductList) {
       if (model.proId == productId) {
         return true;

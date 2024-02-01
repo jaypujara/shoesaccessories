@@ -3,15 +3,14 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/dashboard/DashBoardPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Strings.dart';
-import 'package:shoes_acces/utils/methods.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/Preferences.dart';
+import '../../../Network/API.dart';
+import '../../../Network/ApiUrls.dart';
+import '../../../utils/Preferences.dart';
+import '../dashboard/DashBoardPage.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
@@ -22,10 +21,6 @@ class LoginController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   onLogin() {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {

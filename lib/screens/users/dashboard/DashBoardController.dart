@@ -3,15 +3,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/dashboard/model/CategoryResponseModel.dart';
+import 'package:shoes_acces/Network/API.dart';
+import 'package:shoes_acces/Network/ApiUrls.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/Constants.dart';
+import 'package:shoes_acces/utils/Preferences.dart';
+import 'package:shoes_acces/utils/Strings.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/ColorConstants.dart';
-import '../../utils/Preferences.dart';
-import '../../utils/Strings.dart';
-import '../../widgets/Widgets.dart';
+
 import 'model/AdvertisementResponseModel.dart';
+import 'model/CategoryResponseModel.dart';
 
 class DashBoardController extends GetxController {
   final GlobalKey<ScaffoldState> keyScaffold = GlobalKey<ScaffoldState>();
@@ -29,9 +31,14 @@ class DashBoardController extends GetxController {
   RxBool isChangePassLoading = false.obs;
   RxString error = "".obs;
 
+  RxBool isAdmin = false.obs;
+
   @override
   void onInit() {
     super.onInit();
+    if (isAdminLogin) {
+      isAdmin.trigger(true);
+    }
     getData();
     getAdvertisement();
   }
@@ -132,7 +139,7 @@ class DashBoardController extends GetxController {
 
   onChangePassword() async {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
-      print("CHANGE PASSWORD");
+      log("CHANGE PASSWORD");
       String userId = await Preferences().getPrefString(Preferences.prefCustId);
 
       HttpRequestModel request = HttpRequestModel(

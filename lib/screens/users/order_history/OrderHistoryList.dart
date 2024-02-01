@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/order_history/model/OrderHistoryListResponseModel.dart';
 
-import '../../utils/ColorConstants.dart';
-import '../../utils/Constants.dart';
-import '../../widgets/Widgets.dart';
+
+import '../../../utils/ColorConstants.dart';
+import '../../../utils/Constants.dart';
+import '../../../widgets/Widgets.dart';
+
+
+
 import 'OrderHistoryListController.dart';
+import 'model/OrderHistoryListResponseModel.dart';
 
 class OrderHistoryList extends GetView<OrderHistoryListController> {
   OrderHistoryListController controller = Get.put(OrderHistoryListController());
@@ -179,15 +183,77 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                                 ),
                                 const SizedBox(height: 10),
                                 Divider(color: colorPrimary.shade100),
-                                Text(
-                                  "Expected Delivery : ${model.expectedDeliveryDate}",
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                    color: colorGrayText,
-                                    fontSize: 14,
-                                    height: 1,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Expected Delivery",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: colorGrayText,
+                                        fontSize: 14,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    const Text(
+                                      " : ",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: colorGrayText,
+                                        fontSize: 14,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        "${model.expectedDeliveryDate}",
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color: colorGrayText,
+                                          fontSize: 14,
+                                          height: 1,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Address ",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: colorGrayText,
+                                        fontSize: 14,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    const Text(
+                                      " : ",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: colorGrayText,
+                                        fontSize: 14,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        "${model.address}",
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color: colorGrayText,
+                                          fontSize: 14,
+                                          height: 1,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

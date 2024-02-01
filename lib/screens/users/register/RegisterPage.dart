@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/register/RegisterController.dart';
 
-import '../../Network/GlobalMethods.dart';
-import '../../utils/ColorConstants.dart';
-import '../../widgets/ThemedTextField.dart';
+import '../../../Network/GlobalMethods.dart';
+import '../../../utils/ColorConstants.dart';
+import '../../../widgets/ThemedTextField.dart';
+import 'RegisterController.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   RegisterController controller = Get.put(RegisterController());
+
+  RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class RegisterPage extends GetView<RegisterController> {
                         if (value == null || value.isEmpty) {
                           return "Please enter you full name!";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(height: 10),
@@ -56,6 +59,7 @@ class RegisterPage extends GetView<RegisterController> {
                         if (value == null || value.isEmpty) {
                           return "Please enter you number!";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(height: 10),
@@ -174,6 +178,7 @@ class RegisterPage extends GetView<RegisterController> {
                         if (value == null || value.isEmpty) {
                           return "Please enter password!";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(height: 10),
@@ -189,6 +194,7 @@ class RegisterPage extends GetView<RegisterController> {
                             controller.controllerPassword.text) {
                           return "Password and Confirm Password has to be same!";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(height: 30),

@@ -20,8 +20,8 @@ class CategoryResponseModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Status'] = status;
     data['Message'] = message;
-    if (this.list != null) {
-      data['Data'] = this.list!.map((v) => v.toJson()).toList();
+    if (list != null) {
+      data['Data'] = list!.map((v) => v.toJson()).toList();
     }
     return data;
   }

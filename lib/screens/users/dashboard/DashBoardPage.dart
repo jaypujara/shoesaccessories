@@ -3,18 +3,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/addressList/AddressListPage.dart';
-import 'package:shoes_acces/screens/cart/CartController.dart';
-import 'package:shoes_acces/screens/cart/CartScreen.dart';
-import 'package:shoes_acces/screens/order_history/OrderHistoryList.dart';
-import 'package:shoes_acces/screens/shoeList/ShoesListPage.dart';
-import 'package:shoes_acces/screens/splash/SplashPage.dart';
+import 'package:shoes_acces/screens/users/addressList/AddressListPage.dart';
+import 'package:shoes_acces/screens/users/cart/CartController.dart';
+import 'package:shoes_acces/screens/users/cart/CartScreen.dart';
+import 'package:shoes_acces/screens/users/order_history/OrderHistoryList.dart';
+import 'package:shoes_acces/screens/users/shoeList/ShoesListPage.dart';
+import 'package:shoes_acces/screens/users/splash/SplashPage.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
+import 'package:shoes_acces/widgets/ThemedTextField.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../utils/ColorConstants.dart';
-import '../../widgets/ThemedTextField.dart';
-import '../../widgets/Widgets.dart';
 import 'DashBoardController.dart';
 import 'model/CategoryResponseModel.dart';
 
@@ -29,55 +29,7 @@ class DashBoardPage extends GetView<DashBoardController> {
     return Scaffold(
       key: controller.keyScaffold,
       drawer: _buildDrawer(),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        titleSpacing: 0,
-        title: const Text("Shoes Accessories"),
-        actions: [
-          InkWell(
-            onTap: () {
-              Get.to(() => CartPage());
-            },
-            child: SizedBox(
-              height: 27,
-              width: 27,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Icon(
-                    Icons.shopping_cart_rounded,
-                    color: colorPrimary,
-                    size: 27,
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: -5,
-                    child: Obx(
-                      () =>  Container(
-                        decoration: const BoxDecoration(
-                          color: colorRed,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: Text(
-                          cartController.cartProductList.length.toString(),
-                          style: const TextStyle(
-                            color: colorWhite,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -138,6 +90,55 @@ class DashBoardPage extends GetView<DashBoardController> {
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Theme.of(Get.context!).scaffoldBackgroundColor,
+      elevation: 0,
+      titleSpacing: 0,
+      clipBehavior: Clip.none,
+      title: const Text("Shoes Accessories"),
+      actions: [
+        InkWell(
+          onTap: () {
+            Get.to(() => CartPage());
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Icon(
+                Icons.shopping_cart_rounded,
+                color: colorPrimary,
+                size: 27,
+              ),
+              Positioned(
+                right: 0,
+                top: -4,
+                child: Obx(
+                  () => Container(
+                    decoration: const BoxDecoration(
+                      color: colorRed,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      cartController.cartProductList.length.toString(),
+                      style: const TextStyle(
+                        color: colorWhite,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+      ],
+    );
+  }
+
   Widget _buildDrawer() {
     return SafeArea(
       child: Drawer(
@@ -182,63 +183,109 @@ class DashBoardPage extends GetView<DashBoardController> {
               ),
             ),
             Expanded(
-              child: Column(
-                children: [
-                  Divider(
-                    color: colorPrimary.shade100,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      if (controller.keyScaffold.currentState != null) {
-                        controller.keyScaffold.currentState!.closeDrawer();
-                      }
-                      Get.to(() => AddressListPage());
-                    },
-                    leading: const Icon(Icons.pin_drop_rounded),
-                    title: const Text("Saved Addresses"),
-                  ),
-                  Divider(
-                    color: colorPrimary.shade100,
-                    endIndent: 10,
-                    indent: 50,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Get.to(() => CartPage());
-                    },
-                    leading: Icon(Icons.shopping_cart),
-                    title: Text("Cart"),
-                  ),
-                  Divider(
-                    color: colorPrimary.shade100,
-                    endIndent: 10,
-                    indent: 50,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Get.to(() => OrderHistoryList());
-                    },
-                    leading: const Icon(Icons.delivery_dining_rounded),
-                    title: const Text("Order History"),
-                  ),
-                  Divider(
-                    color: colorPrimary.shade100,
-                    endIndent: 10,
-                    indent: 50,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      _buildChangePassDialog();
-                    },
-                    leading: const Icon(Icons.password_rounded),
-                    title: const Text("Change Password"),
-                  ),
-                  Divider(
-                    color: colorPrimary.shade100,
-                    endIndent: 10,
-                    indent: 50,
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Divider(
+                      color: colorPrimary.shade100,
+                    ),
+                    if (isAdminLogin)
+                      Column(
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              if (controller.keyScaffold.currentState != null) {
+                                controller.keyScaffold.currentState!
+                                    .closeDrawer();
+                              }
+                              Get.to(() => AddressListPage());
+                            },
+                            leading: const Icon(Icons.category_rounded),
+                            title: const Text("Categories"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              if (controller.keyScaffold.currentState != null) {
+                                controller.keyScaffold.currentState!
+                                    .closeDrawer();
+                              }
+                              Get.to(() => AddressListPage());
+                            },
+                            leading:
+                                const Icon(Icons.accessibility_new_outlined),
+                            title: const Text("Products"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                        ],
+                      ),
+                    if (!isAdminLogin)
+                      Column(
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              if (controller.keyScaffold.currentState != null) {
+                                controller.keyScaffold.currentState!
+                                    .closeDrawer();
+                              }
+                              Get.to(() => AddressListPage());
+                            },
+                            leading: const Icon(Icons.pin_drop_rounded),
+                            title: const Text("Saved Addresses"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Get.to(() => CartPage());
+                            },
+                            leading: Icon(Icons.shopping_cart),
+                            title: Text("Cart"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Get.to(() => OrderHistoryList());
+                            },
+                            leading: const Icon(Icons.delivery_dining_rounded),
+                            title: const Text("Order History"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              _buildChangePassDialog();
+                            },
+                            leading: const Icon(Icons.password_rounded),
+                            title: const Text("Change Password"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
             Divider(color: colorPrimary.shade100),
@@ -252,23 +299,25 @@ class DashBoardPage extends GetView<DashBoardController> {
               leading: const Icon(Icons.logout_rounded),
               title: const Text("Logout"),
             ),
-            Divider(
-              color: colorPrimary.shade100,
-              endIndent: 10,
-              indent: 50,
-            ),
-            ListTile(
-              onTap: () {
-                _buildLogOutOrDeleteAcc(
-                  "Delete",
-                  "Are you sure?\nYou want to delete account from this out servers!",
-                  Icons.delete_forever_rounded,
-                  isDelete: true,
-                );
-              },
-              leading: const Icon(Icons.delete_forever_rounded),
-              title: const Text("Delete Account"),
-            ),
+            if (!isAdminLogin)
+              Divider(
+                color: colorPrimary.shade100,
+                endIndent: 10,
+                indent: 50,
+              ),
+            if (!isAdminLogin)
+              ListTile(
+                onTap: () {
+                  _buildLogOutOrDeleteAcc(
+                    "Delete",
+                    "Are you sure?\nYou want to delete account from this out servers!",
+                    Icons.delete_forever_rounded,
+                    isDelete: true,
+                  );
+                },
+                leading: const Icon(Icons.delete_forever_rounded),
+                title: const Text("Delete Account"),
+              ),
             Divider(color: colorPrimary.shade100),
           ],
         ),

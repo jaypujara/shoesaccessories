@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/dashboard/DashBoardPage.dart';
-import 'package:shoes_acces/screens/login/LoginPage.dart';
+
 import 'package:shoes_acces/utils/ColorConstants.dart';
 
-import '../../utils/Preferences.dart';
+import '../../../utils/Preferences.dart';
+import '../dashboard/DashBoardPage.dart';
+import '../login/LoginPage.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -25,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(seconds: 3),
       () async {
         String email = await Preferences().getPrefString(Preferences.prefEmail);
-        print("EMAIL : $email");
+        log("EMAIL : $email");
         if (email.isEmpty) {
           Get.offAll(() => LoginPage());
         } else {

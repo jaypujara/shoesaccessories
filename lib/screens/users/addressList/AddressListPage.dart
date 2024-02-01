@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/addressList/model/AddressListResponseModel.dart';
+import 'package:shoes_acces/screens/users/addressList/model/AddressListResponseModel.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/Constants.dart';
+import 'package:shoes_acces/widgets/ThemedTextField.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../utils/ColorConstants.dart';
-import '../../utils/Constants.dart';
-import '../../widgets/ThemedTextField.dart';
-import '../../widgets/Widgets.dart';
+
 import 'AddressListController.dart';
 
 class AddressListPage extends GetView<AddressListController> {
   AddressListController controller = Get.put(AddressListController());
+
+  AddressListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,17 +1,20 @@
-class CartListResponseModel {
+
+import '../../cart/model/CartListResponseModel.dart';
+
+class ProductResponseModel {
   String? status;
   String? message;
-  List<CartProductModel>? cartProductLis;
+  List<Product>? productList;
 
-  CartListResponseModel({this.status, this.message, this.cartProductLis});
+  ProductResponseModel({this.status, this.message, this.productList});
 
-  CartListResponseModel.fromJson(Map<String, dynamic> json) {
+  ProductResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     message = json['Message'];
     if (json['Data'] != null) {
-      cartProductLis = <CartProductModel>[];
+      productList = <Product>[];
       json['Data'].forEach((v) {
-        cartProductLis!.add(CartProductModel.fromJson(v));
+        productList!.add(Product.fromJson(v));
       });
     }
   }
@@ -20,29 +23,27 @@ class CartListResponseModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Status'] = status;
     data['Message'] = message;
-    if (this.cartProductLis != null) {
-      data['Data'] = this.cartProductLis!.map((v) => v.toJson()).toList();
+    if (productList != null) {
+      data['Data'] = productList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class CartProductModel {
-  int? cartId;
+class Product {
   String? proId;
   String? proName;
   double? proPrice;
   double? proDiscount;
   double? proSGST;
-  int? proQty;
   double? proCGST;
   double? proCourierCharges;
   String? proWeight;
   String? imagePath;
+  CartProductModel? model;
 
-  CartProductModel(
-      {this.cartId,
-      this.proId,
+  Product(
+      {this.proId,
       this.proName,
       this.proPrice,
       this.proDiscount,
@@ -52,15 +53,13 @@ class CartProductModel {
       this.proWeight,
       this.imagePath});
 
-  CartProductModel.fromJson(Map<String, dynamic> json) {
-    cartId = json['CartId'];
+  Product.fromJson(Map<String, dynamic> json) {
     proId = json['Pro_Id'];
     proName = json['Pro_Name'];
     proPrice = json['Pro_Price'];
     proDiscount = json['Pro_Discount'];
     proSGST = json['Pro_SGST'];
     proCGST = json['Pro_CGST'];
-    proQty = json['Qty'];
     proCourierCharges = json['Pro_Courier_Charges'];
     proWeight = json['Pro_Weight'];
     imagePath = json['ImagePath'];
@@ -68,12 +67,10 @@ class CartProductModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['CartId'] = cartId;
     data['Pro_Id'] = proId;
     data['Pro_Name'] = proName;
     data['Pro_Price'] = proPrice;
     data['Pro_Discount'] = proDiscount;
-    data['Qty'] = proQty;
     data['Pro_SGST'] = proSGST;
     data['Pro_CGST'] = proCGST;
     data['Pro_Courier_Charges'] = proCourierCharges;

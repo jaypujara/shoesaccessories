@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
 
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/ColorConstants.dart';
-import '../../utils/Strings.dart';
-import '../../widgets/Widgets.dart';
+import '../../../Network/API.dart';
+import '../../../Network/ApiUrls.dart';
+import '../../../utils/ColorConstants.dart';
+import '../../../utils/Strings.dart';
+import '../../../widgets/Widgets.dart';
 import '../dashboard/DashBoardPage.dart';
 
 class RegisterController extends GetxController {
@@ -25,7 +25,7 @@ class RegisterController extends GetxController {
   RxBool isLoading = false.obs;
 
   onRegister() {
-    print("Registe");
+    log("Register");
     if (keyForm.value.currentState != null &&
         keyForm.value.currentState!.validate()) {
       register(controllerName.text, controllerNumber.text, isGenderMale.value,

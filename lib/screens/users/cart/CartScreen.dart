@@ -1,16 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/cart/model/CartListResponseModel.dart';
+import 'package:shoes_acces/screens/users/addressList/AddressListPage.dart';
+import 'package:shoes_acces/screens/users/cart/model/CartListResponseModel.dart';
+import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/Constants.dart';
+import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../utils/ColorConstants.dart';
-import '../../utils/Constants.dart';
-import '../../widgets/Widgets.dart';
 import '../addressList/model/AddressListResponseModel.dart';
 import 'CartController.dart';
 
 class CartPage extends GetView<CartController> {
   CartController controller = Get.find(tag: "CartController");
+
+  CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,19 +69,21 @@ class CartPage extends GetView<CartController> {
                                     flex: 2,
                                     child: Material(
                                       elevation: 2,
-                                      color: colorPrimary.shade50,
+                                      color: colorWhite,
                                       borderRadius: BorderRadius.circular(8),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: Center(
                                           child: CachedNetworkImage(
                                             imageUrl: model.imagePath ?? "",
+                                            fit: BoxFit.cover,
                                             imageBuilder:
                                                 (context, imageProvider) {
                                               return Container(
                                                 color: Colors.white,
-                                                child:
-                                                    Image(image: imageProvider),
+                                                child: Image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover),
                                               );
                                             },
                                             progressIndicatorBuilder: (context,
@@ -116,6 +121,8 @@ class CartPage extends GetView<CartController> {
                                           Text(
                                             "${model.proName}",
                                             textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               color: colorBlack,
                                               fontSize: 20,
@@ -126,7 +133,7 @@ class CartPage extends GetView<CartController> {
                                           Text(
                                             model.proWeight!.isEmpty
                                                 ? ""
-                                                : "${model.proWeight} g",
+                                                : "${model.proWeight}",
                                             textAlign: TextAlign.left,
                                             style: const TextStyle(
                                               color: colorGrayText,
@@ -259,8 +266,22 @@ class CartPage extends GetView<CartController> {
               ),
             ),
             const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: colorWhite,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade400,
+                    blurRadius: 3,
+                    spreadRadius: 0,
+                    offset: const Offset(0, -1),
+                  ),
+                ],
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -376,17 +397,27 @@ class CartPage extends GetView<CartController> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                      ),
-                      child: Text(
-                        "Select Address",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
-                          height: 1,
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Select Address",
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.black,
+                              height: 1,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_rounded),
+                            color: colorPrimary,
+                            onPressed: () {
+                              Get.to(() => AddressListPage());
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(

@@ -3,14 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/addressList/model/AddressListResponseModel.dart';
+import 'package:shoes_acces/Network/API.dart';
+import 'package:shoes_acces/Network/ApiUrls.dart';
+import 'package:shoes_acces/screens/users/addressList/model/AddressListResponseModel.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
+import 'package:shoes_acces/utils/Strings.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
-
-import '../../Network/API.dart';
-import '../../Network/ApiUrls.dart';
-import '../../utils/Strings.dart';
 
 class AddressListController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
@@ -121,7 +120,7 @@ class AddressListController extends GetxController {
 
   onAddressSubmit({String id = "0"}) async {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
-      print("Address Save");
+      log("Address Save");
       String userId = await Preferences().getPrefString(Preferences.prefCustId);
       String userName =
           await Preferences().getPrefString(Preferences.prefFullName);

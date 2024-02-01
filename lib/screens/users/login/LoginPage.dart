@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/screens/login/LoginController.dart';
+
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 
-import '../../Network/GlobalMethods.dart';
+import '../../../Network/GlobalMethods.dart';
+
 import '../register/RegisterPage.dart';
+import 'LoginController.dart';
 
 class LoginPage extends GetView<LoginController> {
   LoginController controller = Get.put(LoginController());
