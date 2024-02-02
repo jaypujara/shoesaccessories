@@ -479,12 +479,14 @@ class AddressListPage extends GetView<AddressListController> {
                                   horizontal: 20, vertical: 10),
                               child: controller.isSubmitLoading.value
                                   ? const SizedBox(
-                                      height: 18,
-                                      child: CircularProgressIndicator(
-                                        color: colorWhite,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
+                                height: 18,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: colorWhite,
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              )
                                   : const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

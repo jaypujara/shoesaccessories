@@ -8,13 +8,13 @@ import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/screens/users/cart/CartScreen.dart';
 import 'package:shoes_acces/screens/users/order_history/OrderHistoryList.dart';
 import 'package:shoes_acces/screens/users/shoeList/ShoesListPage.dart';
-import 'package:shoes_acces/screens/users/splash/SplashPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
+import '../../splash/SplashPage.dart';
 import 'DashBoardController.dart';
 import 'model/CategoryResponseModel.dart';
 
@@ -409,7 +409,7 @@ class DashBoardPage extends GetView<DashBoardController> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        Category model = controller.searchCategoryList[index];
+        CategoryModel model = controller.searchCategoryList[index];
         return Container(
           clipBehavior: Clip.antiAliasWithSaveLayer,
           decoration: BoxDecoration(
@@ -693,7 +693,7 @@ class DashBoardPage extends GetView<DashBoardController> {
                           await controller.logout();
                         }
                         Get.back();
-                        Get.offAll(() => const SplashPage());
+                        Get.offAll(() => SplashPage());
                       },
                       child: Container(
                         decoration: BoxDecoration(

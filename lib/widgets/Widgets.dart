@@ -45,8 +45,21 @@ Widget buildNoData(String data) {
   );
 }
 
-Widget buildSearch(TextEditingController controller,
-    void Function(String)? onChanged) {
+Widget buildButtonProgressIndicator() {
+  return const SizedBox(
+    height: 18,
+    width: 18,
+    child: Center(
+      child: CircularProgressIndicator(
+        color: colorWhite,
+        strokeWidth: 2,
+      ),
+    ),
+  );
+}
+
+Widget buildSearch(
+    TextEditingController controller, void Function(String)? onChanged) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10),
     child: TextField(

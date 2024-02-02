@@ -5,6 +5,12 @@ String nestedUrl = 'api/MobileApp/';
 /// * [endSendLogRecord] "CategoryList" fetch category List
 const String endCategoryList = "CategoryList";
 
+/// * [endCategorySave] "CategorySave" Save Category ADMIN
+const String endCategorySave = "CategorySave";
+
+/// * [endProductSave] "ProductSave" fetch product list as per category
+const String endProductSave = "ProductSave";
+
 /// * [endSendLogRecord] "ProductList" fetch product list as per category
 const String endProductList = "ProductList";
 

@@ -119,7 +119,7 @@ class CartPage extends GetView<CartController> {
                                         children: [
                                           const SizedBox(height: 10),
                                           Text(
-                                            "${model.proName}",
+                                            "${model.proName} jfjkndr fmvsmnvd sdvlijsd dsiovjdfisnrv ",
                                             textAlign: TextAlign.left,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -142,7 +142,7 @@ class CartPage extends GetView<CartController> {
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          const SizedBox(height: 15),
+                                          const Spacer(),
                                           Row(
                                             children: [
                                               if (model.proDiscount != null &&
@@ -187,6 +187,29 @@ class CartPage extends GetView<CartController> {
                                               ),
                                             ],
                                           ),
+                                          const SizedBox(height: 3),
+                                          if (model.proSGST != 0)
+                                            Text(
+                                              "SGST : ${model.proSGST}",
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                                height: 1,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          if (model.proCGST != 0)
+                                            Text(
+                                              "CGST : ${model.proCGST}",
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                                height: 1,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -330,12 +353,15 @@ class CartPage extends GetView<CartController> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: controller.isLoading.value
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: colorPrimary,
-                                  strokeWidth: 2,
-                                ),
-                              )
+                            ? const SizedBox(
+                          height: 18,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: colorWhite,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

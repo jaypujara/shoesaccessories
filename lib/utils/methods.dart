@@ -71,15 +71,23 @@ getOverlay(/*BuildContext context*/) {
   if (!_isLoading) {
     _isLoading = true;
     Get.dialog(
-      const Dialog(
+      Dialog(
         backgroundColor: Colors.transparent,
         child: Center(
-          child: CircularProgressIndicator(
-            color: colorPrimary,
-            strokeWidth: 2,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: const CircularProgressIndicator(
+              color: colorPrimary,
+              strokeWidth: 2,
+            ),
           ),
         ),
       ),
+      barrierDismissible: false,
     );
   }
 }

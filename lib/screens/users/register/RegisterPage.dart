@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../Network/GlobalMethods.dart';
 import '../../../utils/ColorConstants.dart';
 import '../../../widgets/ThemedTextField.dart';
+import '../../../widgets/Widgets.dart';
 import 'RegisterController.dart';
 
 class RegisterPage extends GetView<RegisterController> {
@@ -209,9 +210,7 @@ class RegisterPage extends GetView<RegisterController> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: controller.isLoading.value
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
+                            ? buildButtonProgressIndicator()
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

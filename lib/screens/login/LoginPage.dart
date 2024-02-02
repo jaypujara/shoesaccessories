@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 
 import '../../../Network/GlobalMethods.dart';
-
-import '../register/RegisterPage.dart';
+import '../../widgets/Widgets.dart';
+import '../users/register/RegisterPage.dart';
 import 'LoginController.dart';
 
 class LoginPage extends GetView<LoginController> {
@@ -78,12 +77,11 @@ class LoginPage extends GetView<LoginController> {
                       ),
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       child: controller.isLoading.value
-                          ? const Center(
-                              child: CircularProgressIndicator(color: colorPrimary,
-                                strokeWidth: 2,),
-                            )
+                          ? buildButtonProgressIndicator()
                           : const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -7,6 +7,110 @@ import 'package:shoes_acces/utils/ColorConstants.dart';
 import '../utils/Constants.dart';
 import '../utils/Strings.dart';
 
+class ThemedDropDown extends StatelessWidget {
+  String? defaultValue;
+  String? hintText;
+  Widget? preFix;
+  List<String> dataString = [];
+  bool isDisabled = false;
+  void Function(String) onChanged;
+  bool isFromRepeating;
+  void Function()? onTap;
+
+  ThemedDropDown({
+    super.key,
+    required this.dataString,
+    required this.onChanged,
+    this.defaultValue,
+    this.onTap,
+    this.hintText,
+    this.preFix,
+    this.isDisabled = false,
+    this.isFromRepeating = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: colorWhite,
+        borderRadius: boxBorderRadius,
+      ),
+      padding: const EdgeInsets.only(right: spaceHorizontal),
+      child: Row(
+        children: [
+          if (preFix != null)
+            Container(
+              width: 47,
+              height: 47,
+              alignment: Alignment.center,
+              child: Center(
+                child: preFix,
+              ),
+            ),
+          Expanded(
+            child: InkWell(
+              onTap: onTap,
+              child: DropdownButton(
+                value: defaultValue,
+                menuMaxHeight: 300,
+                isExpanded: true,
+                iconEnabledColor: colorPrimary.shade300,
+                style:  TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: colorPrimary.shade300,
+                  fontFamily: stringFontFamilyGibson,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                borderRadius: boxBorderRadius,
+                icon: Icon(
+                  Icons.arrow_drop_down_rounded,
+                  color: colorPrimary.shade300,
+                ),
+                underline: Container(),
+                hint: Text(
+                  hintText ?? "Select",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontFamily: stringFontFamilyGibson,
+                    color: colorPrimary.shade300,
+                  ),
+                ),
+                items: dataString
+                    .map(
+                      (e) => DropdownMenuItem(
+                    value: e.toString(),
+                    child: Text(
+                      e.toString(),
+                      style: const TextStyle(
+                        color: colorPrimary,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        fontFamily: stringFontFamilyGibson,
+                      ),
+                    ),
+                  ),
+                )
+                    .toList(growable: true),
+                onChanged: !isFromRepeating && !isDisabled
+                    ? (String? value) {
+                  if (value != null) {
+                    onChanged(value);
+                  }
+                }
+                    : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ThemedTextField extends StatefulWidget {
   String? hintText;
   String? labelText;

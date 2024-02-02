@@ -3,14 +3,16 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/admin/dashboard/DashBoardAdmin.dart';
+import 'package:shoes_acces/screens/users/dashboard/DashBoardPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
+import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/utils/Strings.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
 import '../../../Network/API.dart';
 import '../../../Network/ApiUrls.dart';
 import '../../../utils/Preferences.dart';
-import '../dashboard/DashBoardPage.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
@@ -20,7 +22,6 @@ class LoginController extends GetxController {
   final TextEditingController controllerForgotNumber = TextEditingController();
 
   RxBool isLoading = false.obs;
-
 
   onLogin() {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
@@ -51,15 +52,17 @@ class LoginController extends GetxController {
       if (response.isNotEmpty) {
         var jsonResponse = json.decode(response);
         if (jsonResponse["Status"] == "1") {
-          showSnackBarWithText(Get.context, jsonResponse["Message"],
-              color: colorGreen);
+          showSnackBarWithText(Get.context, jsonResponse["Message"], color: colorGreen);
           await Preferences().setPrefString(
               Preferences.prefCustId, jsonResponse["Data"]["Cus_Id"]);
           await Preferences().setPrefString(
               Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
           await Preferences().setPrefString(Preferences.prefEmail, email);
           await Preferences().setPrefString(Preferences.prefPassword, password);
-          Get.offAll(() => DashBoardPage());
+          await Preferences().setPrefBool(
+              Preferences.prefIsAdmin, jsonResponse["Data"]["IsAdmin"] == "1");
+          isAdminLogin = true;//jsonResponse["Data"]["IsAdmin"] == "1";
+          Get.offAll(() => isAdminLogin ? DashBoardAdmin() : DashBoardPage());
         } else {
           showSnackBarWithText(Get.context, jsonResponse["Message"]);
         }

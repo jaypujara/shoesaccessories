@@ -1,7 +1,7 @@
 class CategoryResponseModel {
   String? status;
   String? message;
-  List<Category>? list;
+  List<CategoryModel>? list;
 
   CategoryResponseModel({this.status, this.message, this.list});
 
@@ -9,9 +9,9 @@ class CategoryResponseModel {
     status = json['Status'];
     message = json['Message'];
     if (json['Data'] != null) {
-      list = <Category>[];
+      list = <CategoryModel>[];
       json['Data'].forEach((v) {
-        list!.add(Category.fromJson(v));
+        list!.add(CategoryModel.fromJson(v));
       });
     }
   }
@@ -27,14 +27,14 @@ class CategoryResponseModel {
   }
 }
 
-class Category {
+class CategoryModel {
   String? catId;
   String? catName;
   String? imagePath;
 
-  Category({this.catId, this.catName, this.imagePath});
+  CategoryModel({this.catId, this.catName, this.imagePath});
 
-  Category.fromJson(Map<String, dynamic> json) {
+  CategoryModel.fromJson(Map<String, dynamic> json) {
     catId = json['Cat_Id'];
     catName = json['Cat_Name'];
     imagePath = json['ImagePath'];

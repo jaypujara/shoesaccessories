@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Preferences {
+  static const String prefIsAdmin = "full_name";
   static const String prefFullName = "full_name";
   static const String prefCustId = "customer_id";
   static const String prefPhone = "phone";

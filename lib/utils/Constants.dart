@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 bool trustSelfSigned = true;
-bool isAdminLogin = false;
+bool isAdminLogin = true;
 
 HttpClient getHttpClient() {
   HttpClient httpClient = HttpClient()
@@ -23,14 +23,12 @@ List<BoxShadow> boxShadow = [
   ),
 ];
 
-
 const double spaceVertical = 8;
 const double spaceHorizontal = 10;
 const double radius = 6;
 
 BorderRadius boxBorderRadius = BorderRadius.circular(radius);
 double elevation = 2;
-
 
 class Constants {
   static bool isFromPaymentConfirmation = false;

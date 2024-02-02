@@ -3,20 +3,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_acces/Network/API.dart';
-import 'package:shoes_acces/Network/ApiUrls.dart';
-import 'package:shoes_acces/utils/ColorConstants.dart';
-import 'package:shoes_acces/utils/Constants.dart';
-import 'package:shoes_acces/utils/Preferences.dart';
-import 'package:shoes_acces/utils/Strings.dart';
-import 'package:shoes_acces/widgets/Widgets.dart';
+import 'package:shoes_acces/screens/users/dashboard/model/CategoryResponseModel.dart';
 
+import '../../../Network/API.dart';
+import '../../../Network/ApiUrls.dart';
+import '../../../utils/Preferences.dart';
+import '../../../utils/Strings.dart';
+import '../../users/dashboard/model/AdvertisementResponseModel.dart';
 
-import 'model/AdvertisementResponseModel.dart';
-import 'model/CategoryResponseModel.dart';
-
-class DashBoardController extends GetxController {
+class DashBoardAdminController extends GetxController {
   final GlobalKey<ScaffoldState> keyScaffold = GlobalKey<ScaffoldState>();
+
   RxList<CategoryModel> searchCategoryList = <CategoryModel>[].obs;
   List<CategoryModel> categoryList = [];
   RxString inProgressOrDataNotAvailable = "".obs;
@@ -25,20 +22,9 @@ class DashBoardController extends GetxController {
   RxList imageList = [].obs;
   final TextEditingController textControllerSearch = TextEditingController();
 
-  final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
-  final TextEditingController textControllerOldPass = TextEditingController();
-  final TextEditingController textControllerNewPass = TextEditingController();
-  RxBool isChangePassLoading = false.obs;
-  RxString error = "".obs;
-
-  RxBool isAdmin = false.obs;
-
   @override
   void onInit() {
     super.onInit();
-    if (isAdminLogin) {
-      isAdmin.trigger(true);
-    }
     getData();
     getAdvertisement();
   }
@@ -137,63 +123,12 @@ class DashBoardController extends GetxController {
     }
   }
 
-  onChangePassword() async {
-    if (keyForm.currentState != null && keyForm.currentState!.validate()) {
-      log("CHANGE PASSWORD");
-      String userId = await Preferences().getPrefString(Preferences.prefCustId);
-
-      HttpRequestModel request = HttpRequestModel(
-          url: endChangePassword,
-          authMethod: '',
-          body: '',
-          headerType: '',
-          params: json.encode({
-            "Cus_Id": userId,
-            "OldPassword": textControllerOldPass.text,
-            "NewPassword": textControllerNewPass.text,
-          }).toString(),
-          method: 'POST');
-
-      try {
-        error.value = "";
-        isChangePassLoading.trigger(true);
-        String response = await HttpService().init(request);
-        if (response.isNotEmpty) {
-          var responseModel = jsonDecode(response);
-          if (responseModel["Status"] == "1") {
-            showSnackBarWithText(Get.context, responseModel["Message"],
-                color: colorGreen);
-            error.value = "";
-            textControllerOldPass.text = "";
-            textControllerNewPass.text = "";
-            Get.back();
-          } else {
-            error.value = responseModel["Message"];
-            // showSnackBarWithText(Get.context, responseModel["Message"]);
-          }
-        } else {
-          error.value = stringSomeThingWentWrong;
-          // showSnackBarWithText(Get.context, stringSomeThingWentWrong);
-        }
-      } catch (e) {
-        log("ERROR: NS ${e.toString()}");
-        error.value = stringSomeThingWentWrong;
-        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
-      } finally {
-        isChangePassLoading.trigger(false);
-      }
-    }
-  }
-
   logout() async {
     await Preferences().setPrefString(Preferences.prefCustId, "");
     await Preferences().setPrefString(Preferences.prefEmail, "");
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
-  }
-
-  deleteAccount() async {
-    await logout();
+    await Preferences().setPrefBool(Preferences.prefIsAdmin, false);
   }
 }

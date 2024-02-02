@@ -156,6 +156,8 @@ class CartController extends GetxController {
       } else {
         total.value += (model.proPrice ?? 0) * (model.proQty ?? 0);
       }
+      total.value += (model.proSGST ?? 0) * (model.proQty ?? 0) +
+          (model.proCGST ?? 0) * (model.proQty ?? 0);
       subTotal.value += (model.proPrice ?? 0) * (model.proQty ?? 0);
     }
     return total.toStringAsFixed(2);
