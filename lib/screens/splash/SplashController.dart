@@ -70,9 +70,9 @@ class SplashController extends GetxController {
               Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
           await Preferences().setPrefString(Preferences.prefEmail, email);
           await Preferences().setPrefString(Preferences.prefPassword, password);
-          await Preferences().setPrefBool(Preferences.prefIsAdmin,
-              (jsonResponse["Data"]["IsAdmin"] == "1"));
-          isAdminLogin = true; //jsonResponse["Data"]["IsAdmin"] == "1";
+          // await Preferences().setPrefBool(Preferences.prefIsAdmin,
+          //     (jsonResponse["Data"]["IsAdmin"] == "1"));
+          isAdminLogin = jsonResponse["Data"]["IsAdmin"] == "1";
           print("ISADMIN : ${(jsonResponse["Data"]["IsAdmin"] == "1")}");
           Get.offAll(() => isAdminLogin ? DashBoardAdmin() : DashBoardPage());
         } else {

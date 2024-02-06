@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 
-import '../../../Network/GlobalMethods.dart';
 import '../../widgets/Widgets.dart';
 import '../users/register/RegisterPage.dart';
 import 'LoginController.dart';
@@ -57,7 +56,10 @@ class LoginPage extends GetView<LoginController> {
                     hintText: "Email",
                     preFix: const Icon(Icons.email_outlined),
                     validator: (p0) {
-                      return validateEmail(p0);
+                      if (p0 == null || p0.isEmpty) {
+                        return "Please enter email or phone number!";
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 10),
@@ -66,6 +68,13 @@ class LoginPage extends GetView<LoginController> {
                     borderRadiusTextField: 25,
                     hintText: "Password",
                     preFix: const Icon(Icons.password_rounded),
+                    isPasswordTextField: true,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return "Please enter Password!";
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 30),
                   InkWell(

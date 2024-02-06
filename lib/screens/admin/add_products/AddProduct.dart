@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/admin/add_products/AddProductController.dart';
@@ -34,31 +35,117 @@ class AddProduct extends GetView<AddProductController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 200,
-                      child: InkWell(
-                        onTap: () {
-                          _buildPikeImageChooseDialog();
-                        },
-                        child: AspectRatio(
-                          aspectRatio: 3 / 3.5,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: colorPrimary.shade300,
-                                width: 1,
+                    Row(
+                      children: [
+                        if (controller.isForUpdate)
+                          Expanded(
+                            child: SizedBox(
+                              height: 200,
+                              child: AspectRatio(
+                                aspectRatio: 3 / 3.5,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: colorPrimary.shade300,
+                                        width: 1,
+                                      ),
+                                      borderRadius: boxBorderRadius,
+                                    ),
+                                    child:  CachedNetworkImage(
+                                      imageUrl:
+                                      controller.editModel!.imagePath ?? "",
+                                      imageBuilder: (context,
+                                          imageProvider) {
+                                        return Container(
+                                          color:
+                                          Colors.white,
+                                          child: Image(
+                                              image:
+                                              imageProvider),
+                                        );
+                                      },
+                                      progressIndicatorBuilder:
+                                          (context, url,
+                                          downloadProgress) =>
+                                          Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                value:
+                                                downloadProgress
+                                                    .progress,
+                                                color: colorPrimary,
+                                                strokeWidth: 2,
+                                              )),
+                                      errorWidget: (context,
+                                          url, error) =>
+                                      const Icon(
+                                          Icons.error),
+                                    )
+                                    ),
                               ),
-                              borderRadius: boxBorderRadius,
                             ),
-                            child: controller.image != null
-                                ? Image.file(controller.image!)
-                                : const Center(
-                                    child: Text("Add Image"),
+                          ),
+                        if (controller.isForUpdate)
+                          const SizedBox(
+                            width: 20,
+                            child: Center(
+                              child: Text("or"),
+                            ),
+                          ),
+                        Expanded(
+                          child: SizedBox(
+                            height: 200,
+                            child: InkWell(
+                              onTap: () {
+                                _buildPikeImageChooseDialog();
+                              },
+                              child: AspectRatio(
+                                aspectRatio: 3 / 3.5,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: colorPrimary.shade300,
+                                      width: 1,
+                                    ),
+                                    borderRadius: boxBorderRadius,
                                   ),
+                                  child: controller.image != null
+                                      ? Image.file(controller.image!)
+                                      : const Center(
+                                    child: Text("Selecte Image"),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
+                    // SizedBox(
+                    //   height: 200,
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       _buildPikeImageChooseDialog();
+                    //     },
+                    //     child: AspectRatio(
+                    //       aspectRatio: 3 / 3.5,
+                    //       child: Container(
+                    //         decoration: BoxDecoration(
+                    //           border: Border.all(
+                    //             color: colorPrimary.shade300,
+                    //             width: 1,
+                    //           ),
+                    //           borderRadius: boxBorderRadius,
+                    //         ),
+                    //         child: controller.image != null
+                    //             ? Image.file(controller.image!)
+                    //             : const Center(
+                    //                 child: Text("Add Image"),
+                    //               ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 30),
                     ThemedTextField(
                       controller: controller.controllerName,

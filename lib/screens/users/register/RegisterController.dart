@@ -100,8 +100,7 @@ class RegisterController extends GetxController {
               color: colorGreen);
           await Preferences().setPrefString(
               Preferences.prefCustId, jsonResponse["Data"]["Cus_Id"]);
-          await Preferences().setPrefString(
-              Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
+          await Preferences().setPrefString(Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
           await Preferences().setPrefString(Preferences.prefEmail, email);
           await Preferences().setPrefString(Preferences.prefPassword, password);
 

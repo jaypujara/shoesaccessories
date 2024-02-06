@@ -8,14 +8,35 @@ const String endCategoryList = "CategoryList";
 /// * [endCategorySave] "CategorySave" Save Category ADMIN
 const String endCategorySave = "CategorySave";
 
+/// * [endCategoryUpdate] "CategoryUpdate" Save Category ADMIN
+const String endCategoryUpdate = "CategoryUpdate";
+
+/// * [endCategoryImageUpload] "CategoryFileUpdated" Save Category ADMIN
+const String endCategoryImageUpload = "CategoryFileUpdated";
+
+/// * [endCategoryDelete] "CategoryDelete" Save Category ADMIN
+const String endCategoryDelete = "CategoryDelete";
+
 /// * [endProductSave] "ProductSave" fetch product list as per category
 const String endProductSave = "ProductSave";
 
 /// * [endSendLogRecord] "ProductList" fetch product list as per category
 const String endProductList = "ProductList";
 
+/// * [endProductDelete] "ProductDelete" fetch product list as per category
+const String endProductDelete = "ProductDelete";
+
+/// * [endProductUpdate] "ProductUpdate" fetch product list as per category
+const String endProductUpdate = "ProductUpdate";
+
+/// * [endUpdateProductImage] "ProductFileUpdated" fetch product list as per category
+const String endUpdateProductImage = "ProductFileUpdated";
+
 /// * [endLogin] "MobileLogin" Login
 const String endLogin = "MobileLogin";
+
+/// * [endForgotCustomerPassowrd] "ForgotCustomerPassowrd" Login
+const String endForgotCustomerPassowrd = "ForgotCustomerPassowrd";
 
 /// * [endRegister] "CustomerRegistration" Registration
 const String endRegister = "CustomerRegistration";
@@ -24,28 +45,34 @@ const String endRegister = "CustomerRegistration";
 const String endChangePassword = "CustomerChnagePassword";
 
 /// * [endRegister] "CustomerRegistration" Registration
-const String endAddressList= "CustomerAddressList";
+const String endAddressList = "CustomerAddressList";
 
 /// * [endRegister] "CustomerRegistration" Registration
-const String endAddressSave= "CustomerAddressSave";
+const String endAddressSave = "CustomerAddressSave";
 
 /// * [endCustomerAddressDelete] "CustomerAddressDelete" delete Address
-const String endCustomerAddressDelete= "CustomerAddressDelete";
+const String endCustomerAddressDelete = "CustomerAddressDelete";
 
 /// * [endAdvertisementList] "AdvertisementList" fetch banner
-const String endAdvertisementList= "AdvertisementList";
+const String endAdvertisementList = "AdvertisementList";
+
+/// * [endUploadAdvertisementFiles] "UploadAdvertisementFiles" fetch banner
+const String endUploadAdvertisementFiles = "UploadAdvertisementFiles";
+
+/// * [endAdvertisementFilesDelete] "AdvertisementFilesDelete" fetch banner
+const String endAdvertisementFilesDelete = "AdvertisementFilesDelete";
 
 /// * [endCartList] "CartList" fetch banner
-const String endCartList= "CartList";
+const String endCartList = "CartList";
 
 /// * [endDeleteCart] "DeleteCart" fetch banner
-const String endDeleteCart= "InActiveCart";
+const String endDeleteCart = "InActiveCart";
 
 /// * [endAddCart] "AddCart" fetch banner
-const String endAddCart= "AddCart";
+const String endAddCart = "AddCart";
 
 /// * [endOrderSave] "OrderSave" Save Order
-const String endOrderSave= "OrderSave";
+const String endOrderSave = "OrderSave";
 
 /// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
-const String endOrderHistoryList= "OrderHistoryList";
+const String endOrderHistoryList = "OrderHistoryList";

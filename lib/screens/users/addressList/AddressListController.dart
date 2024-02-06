@@ -121,9 +121,12 @@ class AddressListController extends GetxController {
   onAddressSubmit({String id = "0"}) async {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
       log("Address Save");
+      log("Address Save  ${await Preferences().getPrefString(Preferences.prefFullName)} ${await Preferences().getPrefString(Preferences.prefCustId)}");
       String userId = await Preferences().getPrefString(Preferences.prefCustId);
+      log("Address Save  ${await Preferences().getPrefString(Preferences.prefFullName)}");
       String userName =
           await Preferences().getPrefString(Preferences.prefFullName);
+      log("Address Save $userName ${await Preferences().getPrefString(Preferences.prefFullName)}");
       error.value = "";
       HttpRequestModel request = HttpRequestModel(
           url: endAddressSave,

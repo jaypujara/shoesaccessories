@@ -13,6 +13,7 @@ import 'package:shoes_acces/widgets/Widgets.dart';
 import '../../../Network/API.dart';
 import '../../../Network/ApiUrls.dart';
 import '../../../utils/Preferences.dart';
+import '../../utils/methods.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
@@ -22,6 +23,7 @@ class LoginController extends GetxController {
   final TextEditingController controllerForgotNumber = TextEditingController();
 
   RxBool isLoading = false.obs;
+  RxBool isForgotLoading = false.obs;
 
   onLogin() {
     if (keyForm.currentState != null && keyForm.currentState!.validate()) {
@@ -29,10 +31,10 @@ class LoginController extends GetxController {
     }
   }
 
-  onForgotSend() {
-    // if (keyForm.currentState != null && keyForm.currentState!.validate()) {
-    //   signIn(controllerEmail.text, controllerPassword.text);
-    // }
+  onForgotSend() async {
+    Get.back();
+    await forgotPassword(controllerForgotNumber.text);
+    controllerForgotNumber.text = "";
   }
 
   signIn(String email, String password) async {
@@ -52,16 +54,17 @@ class LoginController extends GetxController {
       if (response.isNotEmpty) {
         var jsonResponse = json.decode(response);
         if (jsonResponse["Status"] == "1") {
-          showSnackBarWithText(Get.context, jsonResponse["Message"], color: colorGreen);
+          showSnackBarWithText(Get.context, jsonResponse["Message"],
+              color: colorGreen);
           await Preferences().setPrefString(
               Preferences.prefCustId, jsonResponse["Data"]["Cus_Id"]);
           await Preferences().setPrefString(
               Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
           await Preferences().setPrefString(Preferences.prefEmail, email);
           await Preferences().setPrefString(Preferences.prefPassword, password);
-          await Preferences().setPrefBool(
-              Preferences.prefIsAdmin, jsonResponse["Data"]["IsAdmin"] == "1");
-          isAdminLogin = true;//jsonResponse["Data"]["IsAdmin"] == "1";
+          // await Preferences().setPrefBool(
+          //     Preferences.prefIsAdmin, jsonResponse["Data"]["IsAdmin"] == "1");
+          isAdminLogin = jsonResponse["Data"]["IsAdmin"] == "1";
           Get.offAll(() => isAdminLogin ? DashBoardAdmin() : DashBoardPage());
         } else {
           showSnackBarWithText(Get.context, jsonResponse["Message"]);
@@ -74,6 +77,37 @@ class LoginController extends GetxController {
       showSnackBarWithText(Get.context, stringSomeThingWentWrong);
     } finally {
       isLoading.trigger(false);
+    }
+  }
+
+  forgotPassword(String data) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endForgotCustomerPassowrd,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({"UserDet": data}).toString(),
+        method: 'POST');
+
+    try {
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var jsonResponse = json.decode(response);
+        if (jsonResponse["Status"] == "1") {
+          showSnackBarWithText(Get.context, jsonResponse["Message"],
+              color: colorGreen);
+        } else {
+          showSnackBarWithText(Get.context, jsonResponse["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: NS ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      removeOverlay();
     }
   }
 }

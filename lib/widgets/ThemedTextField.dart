@@ -57,7 +57,7 @@ class ThemedDropDown extends StatelessWidget {
                 menuMaxHeight: 300,
                 isExpanded: true,
                 iconEnabledColor: colorPrimary.shade300,
-                style:  TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                   color: colorPrimary.shade300,
@@ -82,25 +82,25 @@ class ThemedDropDown extends StatelessWidget {
                 items: dataString
                     .map(
                       (e) => DropdownMenuItem(
-                    value: e.toString(),
-                    child: Text(
-                      e.toString(),
-                      style: const TextStyle(
-                        color: colorPrimary,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        fontFamily: stringFontFamilyGibson,
+                        value: e.toString(),
+                        child: Text(
+                          e.toString(),
+                          style: const TextStyle(
+                            color: colorPrimary,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            fontFamily: stringFontFamilyGibson,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )
+                    )
                     .toList(growable: true),
                 onChanged: !isFromRepeating && !isDisabled
                     ? (String? value) {
-                  if (value != null) {
-                    onChanged(value);
-                  }
-                }
+                        if (value != null) {
+                          onChanged(value);
+                        }
+                      }
                     : null,
               ),
             ),
@@ -172,7 +172,16 @@ class ThemedTextField extends StatefulWidget {
 }
 
 class _ThemedTextFieldState extends State<ThemedTextField> {
-  bool isShowPassWord = false;
+  bool isPassWordHidden = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.isPasswordTextField) {
+      isPassWordHidden = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +222,7 @@ class _ThemedTextFieldState extends State<ThemedTextField> {
         }
         setState(() {});
       },
-      obscureText: isShowPassWord,
+      obscureText: isPassWordHidden,
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(
@@ -235,7 +244,7 @@ class _ThemedTextFieldState extends State<ThemedTextField> {
             ? InkWell(
                 onTap: () {
                   setState(() {
-                    isShowPassWord = !isShowPassWord;
+                    isPassWordHidden = !isPassWordHidden;
                   });
                 },
                 child: SizedBox(
@@ -243,7 +252,7 @@ class _ThemedTextFieldState extends State<ThemedTextField> {
                   width: 30,
                   child: Center(
                     child: Icon(
-                      isShowPassWord
+                      isPassWordHidden
                           ? CupertinoIcons.eye_solid
                           : CupertinoIcons.eye_slash_fill,
                     ),

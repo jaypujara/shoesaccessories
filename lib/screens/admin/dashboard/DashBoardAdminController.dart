@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/users/dashboard/model/CategoryResponseModel.dart';
 
 import '../../../Network/API.dart';
 import '../../../Network/ApiUrls.dart';
+import '../../../utils/ColorConstants.dart';
 import '../../../utils/Preferences.dart';
 import '../../../utils/Strings.dart';
+import '../../../utils/methods.dart';
+import '../../../widgets/Widgets.dart';
 import '../../users/dashboard/model/AdvertisementResponseModel.dart';
 
 class DashBoardAdminController extends GetxController {
@@ -106,6 +110,7 @@ class DashBoardAdminController extends GetxController {
           imageList.value = responseModel.imagePathList!
               .map((e) => e.imagePath ?? "")
               .toList();
+          indexSlider.value = 0;
         } else {
           imageList.clear();
           inProgressOrDataNotAvailable.value = stringDataNotAvailable;
@@ -123,12 +128,84 @@ class DashBoardAdminController extends GetxController {
     }
   }
 
+  deleteCategory(CategoryModel model) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endCategoryDelete,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "Cat_Id": model.catId ?? "",
+        }).toString(),
+        method: 'POST');
+
+    try {
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          await CachedNetworkImage.evictFromCache(model.imagePath ?? "");
+          removeOverlay();
+          await getData();
+        } else {
+          showSnackBarWithText(Get.context, responseJson["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: $endDeleteCart ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      removeOverlay();
+    }
+  }
+
+  deleteImage(String imagePath) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endAdvertisementFilesDelete,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "FileName": imagePath.split("/").last ?? "",
+        }).toString(),
+        method: 'POST');
+
+    try {
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          await CachedNetworkImage.evictFromCache(imagePath ?? "");
+          removeOverlay();
+          getAdvertisement();
+        } else {
+          showSnackBarWithText(Get.context, responseJson["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: $endDeleteCart ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
+      removeOverlay();
+    }
+  }
+
   logout() async {
     await Preferences().setPrefString(Preferences.prefCustId, "");
     await Preferences().setPrefString(Preferences.prefEmail, "");
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
-    await Preferences().setPrefBool(Preferences.prefIsAdmin, false);
+    // await Preferences().setPrefBool(Preferences.prefIsAdmin, false);
   }
 }

@@ -174,6 +174,7 @@ class RegisterPage extends GetView<RegisterController> {
                       borderRadiusTextField: 25,
                       keyBoardType: TextInputType.visiblePassword,
                       hintText: "Password",
+                      isPasswordTextField: true,
                       preFix: const Icon(Icons.password_rounded),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -187,6 +188,7 @@ class RegisterPage extends GetView<RegisterController> {
                       controller: controller.controllerConfirmPassword,
                       borderRadiusTextField: 25,
                       hintText: "Confirm Password",
+                      isPasswordTextField: true,
                       preFix: const Icon(Icons.password_rounded),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

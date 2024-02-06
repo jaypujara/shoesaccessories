@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/admin/add_products/AddProduct.dart';
 import 'package:shoes_acces/screens/admin/categories/AddCategory.dart';
+import 'package:shoes_acces/screens/admin/shoeList/ADShoesListPage.dart';
 import 'package:shoes_acces/screens/users/dashboard/model/CategoryResponseModel.dart';
-import 'package:shoes_acces/screens/users/shoeList/ShoesListPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
 import '../../../utils/Preferences.dart';
 import '../../splash/SplashPage.dart';
+import '../advertisement/ManageAdvertisements.dart';
 import 'DashBoardAdminController.dart';
 
 class DashBoardAdmin extends GetView<DashBoardAdminController> {
@@ -112,7 +113,10 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                                 msg:
                                     "Are you sure you want to delete this category?",
                                 icon: Icons.delete_forever_rounded,
-                                onYesTap: () {},
+                                onYesTap: () {
+                                  Get.back();
+                                  controller.deleteImage(e);
+                                },
                               );
                             },
                           ),
@@ -180,7 +184,7 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
           ),
           child: InkWell(
             onTap: () {
-              Get.to(const ShoesListPage(), arguments: {
+              Get.to(const ADShoesListPage(), arguments: {
                 "cat_id": model.catId.toString(),
                 "cat_name": model.catName.toString()
               });
@@ -254,7 +258,10 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                           title: "Delete",
                           msg: "Are you sure you want to delete this category?",
                           icon: Icons.delete_forever_rounded,
-                          onYesTap: () {},
+                          onYesTap: () {
+                            Get.back();
+                            controller.deleteCategory(model);
+                          },
                         );
                       },
                     ),
@@ -271,13 +278,14 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                         Icons.edit_rounded,
                         color: colorWhite,
                       ),
-                      onPressed: () {
-                        buildConfirmationDialog(
-                          title: "Delete",
-                          msg: "Are you sure you want to delete this category?",
-                          icon: Icons.delete_forever_rounded,
-                          onYesTap: () {},
+                      onPressed: () async {
+                        var result = await Get.to(
+                          () => AddCategory(),
+                          arguments: model,
                         );
+                        if (result != null && result == true) {
+                          controller.getData();
+                        }
                       },
                     ),
                   ],
@@ -382,6 +390,26 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                       },
                       leading: const Icon(Icons.accessibility_new_outlined),
                       title: const Text("Add Products"),
+                    ),
+                    Divider(
+                      color: colorPrimary.shade100,
+                      endIndent: 10,
+                      indent: 50,
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        if (controller.keyScaffold.currentState != null) {
+                          controller.keyScaffold.currentState!.closeDrawer();
+                        }
+                        var result = await Get.to(
+                          () => ManageAdvertisements(),
+                        );
+                        if (result != null && result == true) {
+                          controller.getAdvertisement();
+                        }
+                      },
+                      leading: const Icon(Icons.ad_units_rounded),
+                      title: const Text("Advertisement"),
                     ),
                     Divider(
                       color: colorPrimary.shade100,

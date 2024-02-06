@@ -137,12 +137,14 @@ buildConfirmationDialog({
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: colorPrimary,
-                    fontSize: 28,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: colorPrimary,
+                      fontSize: 24,
+                    ),
                   ),
                 )
               ],
