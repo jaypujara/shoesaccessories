@@ -1,13 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 import '../../../utils/ColorConstants.dart';
 import '../../../utils/Constants.dart';
 import '../../../widgets/Widgets.dart';
-
-
-
 import 'OrderHistoryListController.dart';
 import 'model/OrderHistoryListResponseModel.dart';
 
@@ -40,7 +37,7 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         primary: true,
                         itemBuilder: (context, index) {
-                          Order model = controller.searchOrderList[index];
+                          OrderModel model = controller.searchOrderList[index];
                           return Container(
                             margin: const EdgeInsets.only(top: 10),
                             decoration: BoxDecoration(
@@ -90,12 +87,12 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                                         ],
                                       ),
                                     ),
-                                    const Flexible(
+                                    Flexible(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Status",
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
@@ -104,11 +101,11 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                                               height: 1,
                                             ),
                                           ),
-                                          SizedBox(height: 3),
+                                          const SizedBox(height: 3),
                                           Text(
-                                            "Dispatched",
+                                            model.status ?? "Order Placed",
                                             textAlign: TextAlign.left,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: colorGreen,
                                                 fontSize: 16,
                                                 height: 1,
@@ -121,7 +118,178 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                                 ),
                                 Divider(color: colorPrimary.shade100),
                                 const SizedBox(height: 5),
-                                Text(
+                                Container(
+                                  height: 130,
+                                  margin: const EdgeInsets.only(top: 10),
+                                  decoration: BoxDecoration(
+                                    color: colorWhite,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: boxShadow,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 8,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Material(
+                                          elevation: 2,
+                                          color: colorWhite,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Get.dialog(
+                                                Dialog(
+                                                  clipBehavior: Clip
+                                                      .antiAliasWithSaveLayer,
+                                                  backgroundColor: colorWhite,
+                                                  insetPadding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20),
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1 / 1,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          model.imagePath ?? "",
+                                                      imageBuilder: (context,
+                                                          imageProvider) {
+                                                        return Container(
+                                                          color: Colors.white,
+                                                          child: Image(
+                                                              image:
+                                                                  imageProvider),
+                                                        );
+                                                      },
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  downloadProgress) =>
+                                                              Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                        value: downloadProgress
+                                                            .progress,
+                                                        color: colorPrimary,
+                                                        strokeWidth: 2,
+                                                      )),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Center(
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      model.imagePath ?? "",
+                                                  imageBuilder:
+                                                      (context, imageProvider) {
+                                                    return Container(
+                                                      color: Colors.white,
+                                                      child: Image(
+                                                          image: imageProvider),
+                                                    );
+                                                  },
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: colorPrimary,
+                                                    strokeWidth: 2,
+                                                  )),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 8,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                "${model.productName}",
+                                                textAlign: TextAlign.left,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: colorBlack,
+                                                  fontSize: 20,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              Row(
+                                                children: [
+                                                  // if (model.productTotal !=
+                                                  //         null &&
+                                                  //     model.productTotal != 0)
+                                                  Text(
+                                                    "${model.totalAmount}₹",
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      color: colorGreen,
+                                                      fontSize: 16,
+                                                      height: 1,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            "QTY",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            (model.qty ?? 1).toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                /*Text(
                                   "${model.productName}",
                                   textAlign: TextAlign.left,
                                   style: const TextStyle(
@@ -180,7 +348,7 @@ class OrderHistoryList extends GetView<OrderHistoryListController> {
                                       ),
                                     ),
                                   ],
-                                ),
+                                ),*/
                                 const SizedBox(height: 10),
                                 Divider(color: colorPrimary.shade100),
                                 Row(

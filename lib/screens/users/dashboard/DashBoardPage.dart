@@ -14,7 +14,6 @@ import 'package:shoes_acces/utils/Preferences.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
-import '../../splash/SplashPage.dart';
 import 'DashBoardController.dart';
 import 'model/CategoryResponseModel.dart';
 
@@ -335,28 +334,31 @@ class DashBoardPage extends GetView<DashBoardController> {
             carouselController: CarouselController(),
             items: controller.imageList
                 .map(
-                  (e) => CachedNetworkImage(
-                    imageUrl: e ?? "",
-                    fit: BoxFit.cover,
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Image(image: imageProvider, fit: BoxFit.cover),
-                      );
-                    },
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                      color: colorPrimary,
-                      strokeWidth: 2,
-                    )),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.image_rounded, size: 40),
+                  (e) => AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CachedNetworkImage(
+                      imageUrl: e ?? "",
+                      fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image(image: imageProvider, fit: BoxFit.cover),
+                        );
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        color: colorPrimary,
+                        strokeWidth: 2,
+                      )),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.image_rounded, size: 40),
+                    ),
                   ),
                 )
                 .toList(),
@@ -404,7 +406,7 @@ class DashBoardPage extends GetView<DashBoardController> {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 3 / 3.5,
+        childAspectRatio: 3 / 4,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       physics: const NeverScrollableScrollPhysics(),
@@ -451,30 +453,31 @@ class DashBoardPage extends GetView<DashBoardController> {
                   alignment: Alignment.bottomLeft,
                   child: Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(color: colorPrimary.shade400
-                        // gradient: LinearGradient(
-                        //     colors: [
-                        //       Colors.transparent,
-                        //       Color(0xAAb3baff),
-                        //       Color(0xAAb3baff),
-                        //     ],
-                        //     begin: Alignment.centerRight,
-                        //     end: Alignment.centerLeft),
-                        ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 8,
-                      ),
-                      child: Text(
-                        (model.catName ?? "").toUpperCase(),
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          color: colorWhite,
-                          fontSize: 18,
-                          height: 1,
-                          // fontWeight: FontWeight.w500,
-                        ),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: colorPrimary.shade400,
+                      gradient: const LinearGradient(
+                          colors: [
+                            // Colors.transparent,
+                            Color(0xFF6842FF),
+                            Color(0xFF896BFF),
+                          ],
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 8,
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      (model.catName ?? "").toUpperCase(),
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        color: colorWhite,
+                        fontSize: 16,
+                        height: 1,
+                        // fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -510,7 +513,7 @@ class DashBoardPage extends GetView<DashBoardController> {
                         children: [
                           const SizedBox(height: 30),
                           const Text(
-                            "Add Address",
+                            "Change Password",
                             style: TextStyle(
                               fontSize: 24,
                               color: Colors.black,
@@ -529,8 +532,8 @@ class DashBoardPage extends GetView<DashBoardController> {
                           ThemedTextField(
                             controller: controller.textControllerOldPass,
                             borderRadiusTextField: 25,
-                            hintText: "Old Password",
-                            preFix: const Icon(Icons.pin_drop_rounded),
+                            hintText: "Old Password*",
+                            preFix: const Icon(Icons.password_rounded),
                             keyBoardType: TextInputType.streetAddress,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -543,8 +546,8 @@ class DashBoardPage extends GetView<DashBoardController> {
                           ThemedTextField(
                             controller: controller.textControllerNewPass,
                             borderRadiusTextField: 25,
-                            hintText: "New Password",
-                            preFix: const Icon(Icons.pin_drop_rounded),
+                            hintText: "New Password*",
+                            preFix: const Icon(Icons.password_rounded),
                             keyBoardType: TextInputType.streetAddress,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -552,6 +555,23 @@ class DashBoardPage extends GetView<DashBoardController> {
                               } else if (value ==
                                   controller.textControllerOldPass.text) {
                                 return "Old Password and New Password can not be same!";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          ThemedTextField(
+                            controller: controller.textControllerConfirmNewPass,
+                            borderRadiusTextField: 25,
+                            hintText: "Confirm Password*",
+                            preFix: const Icon(Icons.password_rounded),
+                            keyBoardType: TextInputType.streetAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please confirm the new Password!";
+                              } else if (value !=
+                                  controller.textControllerNewPass.text) {
+                                return "New Password and Confirm password has to be same!";
                               }
                               return null;
                             },
@@ -692,8 +712,6 @@ class DashBoardPage extends GetView<DashBoardController> {
                         } else {
                           await controller.logout();
                         }
-                        Get.back();
-                        Get.offAll(() => SplashPage());
                       },
                       child: Container(
                         decoration: BoxDecoration(

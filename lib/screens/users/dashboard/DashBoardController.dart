@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/Network/API.dart';
 import 'package:shoes_acces/Network/ApiUrls.dart';
+import 'package:shoes_acces/screens/login/LoginPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
 import 'package:shoes_acces/utils/Strings.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
-
 
 import 'model/AdvertisementResponseModel.dart';
 import 'model/CategoryResponseModel.dart';
@@ -28,6 +28,7 @@ class DashBoardController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
   final TextEditingController textControllerOldPass = TextEditingController();
   final TextEditingController textControllerNewPass = TextEditingController();
+  final TextEditingController textControllerConfirmNewPass = TextEditingController();
   RxBool isChangePassLoading = false.obs;
   RxString error = "".obs;
 
@@ -191,6 +192,8 @@ class DashBoardController extends GetxController {
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
+    Get.back();
+    Get.offAll(() => LoginPage());
   }
 
   deleteAccount() async {

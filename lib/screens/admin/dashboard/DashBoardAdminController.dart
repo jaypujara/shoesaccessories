@@ -13,6 +13,7 @@ import '../../../utils/Preferences.dart';
 import '../../../utils/Strings.dart';
 import '../../../utils/methods.dart';
 import '../../../widgets/Widgets.dart';
+import '../../login/LoginPage.dart';
 import '../../users/dashboard/model/AdvertisementResponseModel.dart';
 
 class DashBoardAdminController extends GetxController {
@@ -206,6 +207,7 @@ class DashBoardAdminController extends GetxController {
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
-    // await Preferences().setPrefBool(Preferences.prefIsAdmin, false);
+    Get.back();
+    Get.offAll(() => LoginPage());
   }
 }

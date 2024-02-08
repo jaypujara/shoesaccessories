@@ -36,7 +36,7 @@ class SplashController extends GetxController {
         }
       },
     );
-
+    animate.trigger(false);
     Future.delayed(
       const Duration(milliseconds: 200),
       () {

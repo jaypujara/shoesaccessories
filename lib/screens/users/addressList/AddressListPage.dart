@@ -6,7 +6,6 @@ import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
-
 import 'AddressListController.dart';
 
 class AddressListPage extends GetView<AddressListController> {
@@ -40,7 +39,7 @@ class AddressListPage extends GetView<AddressListController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSearch( controller.textControllerSearch, (value) {
+              buildSearch(controller.textControllerSearch, (value) {
                 controller.search(value);
               }),
               Obx(
@@ -478,15 +477,7 @@ class AddressListPage extends GetView<AddressListController> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                               child: controller.isSubmitLoading.value
-                                  ? const SizedBox(
-                                height: 18,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: colorWhite,
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              )
+                                  ? buildButtonProgressIndicator()
                                   : const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

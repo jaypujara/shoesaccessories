@@ -1,17 +1,17 @@
 class OrderHistoryListResponseModel {
   String? status;
   String? message;
-  List<Order>? orderList;
+  List<OrderModel>? data;
 
-  OrderHistoryListResponseModel({this.status, this.message, this.orderList});
+  OrderHistoryListResponseModel({this.status, this.message, this.data});
 
   OrderHistoryListResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['Status'];
     message = json['Message'];
     if (json['Data'] != null) {
-      orderList = <Order>[];
+      data = <OrderModel>[];
       json['Data'].forEach((v) {
-        orderList!.add(Order.fromJson(v));
+        data!.add(OrderModel.fromJson(v));
       });
     }
   }
@@ -20,14 +20,14 @@ class OrderHistoryListResponseModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Status'] = status;
     data['Message'] = message;
-    if (orderList != null) {
-      data['Data'] = orderList!.map((v) => v.toJson()).toList();
+    if (this.data != null) {
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Order {
+class OrderModel {
   int? orderId;
   int? userId;
   int? addressId;
@@ -37,23 +37,33 @@ class Order {
   double? subTotal;
   double? totalAmount;
   double? qty;
+  double? productTotal;
+  double? sGST;
+  double? cGST;
   String? orderDate;
   String? expectedDeliveryDate;
+  String? status;
+  String? imagePath;
 
-  Order(
+  OrderModel(
       {this.orderId,
-        this.userId,
-        this.addressId,
-        this.address,
-        this.productId,
-        this.productName,
-        this.subTotal,
-        this.totalAmount,
-        this.qty,
-        this.orderDate,
-        this.expectedDeliveryDate});
+      this.userId,
+      this.addressId,
+      this.address,
+      this.productId,
+      this.productName,
+      this.subTotal,
+      this.totalAmount,
+      this.qty,
+      this.productTotal,
+      this.sGST,
+      this.cGST,
+      this.orderDate,
+      this.expectedDeliveryDate,
+      this.status,
+      this.imagePath});
 
-  Order.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     orderId = json['OrderId'];
     userId = json['UserId'];
     addressId = json['AddressId'];
@@ -63,8 +73,13 @@ class Order {
     subTotal = json['SubTotal'];
     totalAmount = json['TotalAmount'];
     qty = json['Qty'];
+    productTotal = json['ProductTotal'];
+    sGST = json['SGST'];
+    cGST = json['CGST'];
     orderDate = json['OrderDate'];
     expectedDeliveryDate = json['ExpectedDeliveryDate'];
+    status = json['Status'];
+    imagePath = json['ImagePath'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +93,9 @@ class Order {
     data['SubTotal'] = subTotal;
     data['TotalAmount'] = totalAmount;
     data['Qty'] = qty;
+    data['ProductTotal'] = productTotal;
+    data['SGST'] = sGST;
+    data['CGST'] = cGST;
     data['OrderDate'] = orderDate;
     data['ExpectedDeliveryDate'] = expectedDeliveryDate;
     return data;

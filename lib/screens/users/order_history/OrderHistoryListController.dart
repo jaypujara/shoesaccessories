@@ -13,8 +13,8 @@ import 'model/OrderHistoryListResponseModel.dart';
 
 
 class OrderHistoryListController extends GetxController {
-  List<Order> orderList = <Order>[];
-  RxList<Order> searchOrderList = <Order>[].obs;
+  List<OrderModel> orderList = <OrderModel>[];
+  RxList<OrderModel> searchOrderList = <OrderModel>[].obs;
 
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
@@ -68,11 +68,11 @@ class OrderHistoryListController extends GetxController {
       if (response.isNotEmpty) {
         OrderHistoryListResponseModel responseModel =
             OrderHistoryListResponseModel.fromJson(jsonDecode(response));
-        if (responseModel.status == "1" && responseModel.orderList != null) {
+        if (responseModel.status == "1" && responseModel.data != null) {
           orderList.clear();
           searchOrderList.clear();
-          if (responseModel.orderList != null) {
-            orderList.addAll(responseModel.orderList!);
+          if (responseModel.data != null) {
+            orderList.addAll(responseModel.data!);
             searchOrderList.addAll(orderList);
           } else {
             inProgressOrDataNotAvailable.value = stringDataNotAvailable;

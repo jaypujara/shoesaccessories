@@ -431,8 +431,7 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                   icon: Icons.logout_rounded,
                   onYesTap: () async {
                     await controller.logout();
-                    Get.back();
-                    Get.offAll(() => SplashPage());
+
                   },
                 );
               },

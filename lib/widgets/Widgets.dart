@@ -47,8 +47,8 @@ Widget buildNoData(String data) {
 
 Widget buildButtonProgressIndicator() {
   return const SizedBox(
-    height: 18,
-    width: 18,
+    height: 26,
+    width: 26,
     child: Center(
       child: CircularProgressIndicator(
         color: colorWhite,
