@@ -11,17 +11,19 @@ class SplashPage extends GetView<SplashController> {
     return Scaffold(
       backgroundColor: colorPrimary,
       body: Center(
-        child: AnimatedContainer(
-          duration: const Duration(seconds: 2),
-          curve: Curves.bounceOut,
-          width: controller.animate.value ? Get.width * .7 : 0,
-          height: controller.animate.value ? Get.width * .7 : 0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+        child: Obx(
+          () => AnimatedContainer(
+            duration: const Duration(seconds: 2),
+            curve: Curves.bounceOut,
+            width: controller.animate.value ? Get.width * .7 : 0,
+            height: controller.animate.value ? Get.width * .7 : 0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Image.asset("assets/images/logo.png"),
           ),
-          padding: const EdgeInsets.all(10),
-          child: Image.asset("assets/images/logo.png"),
         ),
       ),
     );

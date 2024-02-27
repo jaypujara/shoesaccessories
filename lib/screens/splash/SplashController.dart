@@ -12,6 +12,7 @@ import '../../utils/Strings.dart';
 import '../../widgets/Widgets.dart';
 import '../admin/dashboard/DashBoardAdmin.dart';
 import '../login/LoginPage.dart';
+import '../users/cart/CartController.dart';
 import '../users/dashboard/DashBoardPage.dart';
 
 class SplashController extends GetxController {
@@ -22,6 +23,13 @@ class SplashController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    animate.trigger(false);
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        animate.trigger(true);
+      },
+    );
     Future.delayed(
       const Duration(seconds: 3),
       () async {
@@ -34,13 +42,6 @@ class SplashController extends GetxController {
               await Preferences().getPrefString(Preferences.prefPassword);
           signIn(email, password);
         }
-      },
-    );
-    animate.trigger(false);
-    Future.delayed(
-      const Duration(milliseconds: 200),
-      () {
-        animate.trigger(true);
       },
     );
   }
@@ -72,10 +73,13 @@ class SplashController extends GetxController {
           await Preferences().setPrefString(Preferences.prefPassword, password);
           // await Preferences().setPrefBool(Preferences.prefIsAdmin,
           //     (jsonResponse["Data"]["IsAdmin"] == "1"));
+          CartController cartController = Get.find(tag: "CartController");
+          cartController.getData(false);
           isAdminLogin = jsonResponse["Data"]["IsAdmin"] == "1";
           print("ISADMIN : ${(jsonResponse["Data"]["IsAdmin"] == "1")}");
           Get.offAll(() => isAdminLogin ? DashBoardAdmin() : DashBoardPage());
         } else {
+          Get.offAll(() => LoginPage());
           showSnackBarWithText(Get.context, jsonResponse["Message"]);
         }
       } else {

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/admin/dashboard/DashBoardAdmin.dart';
+import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/screens/users/dashboard/DashBoardPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
@@ -65,6 +66,8 @@ class LoginController extends GetxController {
           // await Preferences().setPrefBool(
           //     Preferences.prefIsAdmin, jsonResponse["Data"]["IsAdmin"] == "1");
           isAdminLogin = jsonResponse["Data"]["IsAdmin"] == "1";
+          CartController cartController = Get.find(tag: "CartController");
+          cartController.getData(false);
           Get.offAll(() => isAdminLogin ? DashBoardAdmin() : DashBoardPage());
         } else {
           showSnackBarWithText(Get.context, jsonResponse["Message"]);

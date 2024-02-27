@@ -12,7 +12,6 @@ import 'package:shoes_acces/utils/Constants.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
 import '../../../utils/Preferences.dart';
-import '../../splash/SplashPage.dart';
 import '../advertisement/ManageAdvertisements.dart';
 import 'DashBoardAdminController.dart';
 
@@ -63,66 +62,69 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
             carouselController: CarouselController(),
             items: controller.imageList
                 .map(
-                  (e) => Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: e ?? "",
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
+                  (e) => AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: e ?? "",
+                          fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Image(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            );
+                          },
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                                  child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            color: colorPrimary,
+                            strokeWidth: 2,
+                          )),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.image_rounded, size: 40),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              iconSize: 16,
+                              style: IconButton.styleFrom(
+                                backgroundColor: colorRed,
+                                padding: const EdgeInsets.all(0),
+                                minimumSize: const Size(30, 30),
+                                maximumSize: const Size(30, 30),
+                              ),
+                              color: colorRed,
+                              icon: const Icon(
+                                Icons.delete_forever_rounded,
+                                color: colorWhite,
+                              ),
+                              onPressed: () {
+                                buildConfirmationDialog(
+                                  title: "Delete",
+                                  msg:
+                                      "Are you sure you want to delete this category?",
+                                  icon: Icons.delete_forever_rounded,
+                                  onYesTap: () {
+                                    Get.back();
+                                    controller.deleteImage(e);
+                                  },
+                                );
+                              },
                             ),
-                            child:
-                                Image(image: imageProvider, fit: BoxFit.cover),
-                          );
-                        },
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                          value: downloadProgress.progress,
-                          color: colorPrimary,
-                          strokeWidth: 2,
-                        )),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.image_rounded, size: 40),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IconButton(
-                            iconSize: 16,
-                            style: IconButton.styleFrom(
-                              backgroundColor: colorRed,
-                              padding: const EdgeInsets.all(0),
-                              minimumSize: const Size(30, 30),
-                              maximumSize: const Size(30, 30),
-                            ),
-                            color: colorRed,
-                            icon: const Icon(
-                              Icons.delete_forever_rounded,
-                              color: colorWhite,
-                            ),
-                            onPressed: () {
-                              buildConfirmationDialog(
-                                title: "Delete",
-                                msg:
-                                    "Are you sure you want to delete this category?",
-                                icon: Icons.delete_forever_rounded,
-                                onYesTap: () {
-                                  Get.back();
-                                  controller.deleteImage(e);
-                                },
-                              );
-                            },
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
                 .toList(),
@@ -169,7 +171,7 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 3 / 3.5,
+        childAspectRatio: 3 / 4,
       ),
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -216,22 +218,32 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Container(
+                        height: 50,
                         width: double.infinity,
-                        decoration: BoxDecoration(color: colorPrimary.shade400),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 8,
-                          ),
-                          child: Text(
-                            (model.catName ?? "").toUpperCase(),
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              color: colorWhite,
-                              fontSize: 18,
-                              height: 1,
-                              // fontWeight: FontWeight.w500,
-                            ),
+                        decoration: BoxDecoration(
+                          color: colorPrimary.shade400,
+                          gradient: const LinearGradient(
+                              colors: [
+                                // Colors.transparent,
+                                Color(0xFF6842FF),
+                                Color(0xFF896BFF),
+                              ],
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          (model.catName ?? "").toUpperCase(),
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: colorWhite,
+                            fontSize: 18,
+                            height: 1,
+                            // fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -431,7 +443,6 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                   icon: Icons.logout_rounded,
                   onYesTap: () async {
                     await controller.logout();
-
                   },
                 );
               },

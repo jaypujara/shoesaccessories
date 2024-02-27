@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/users/addressList/AddressListPage.dart';
 import 'package:shoes_acces/screens/users/cart/model/CartListResponseModel.dart';
@@ -13,7 +14,9 @@ import 'CartController.dart';
 class CartPage extends GetView<CartController> {
   CartController controller = Get.find(tag: "CartController");
 
-  CartPage({super.key});
+  CartPage({super.key}) {
+    controller.getData(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class CartPage extends GetView<CartController> {
                             CartProductModel model =
                                 controller.searchedCartProductList[index];
                             return Container(
-                              height: 150,
+                              height: 160,
                               margin: const EdgeInsets.symmetric(vertical: 5),
                               decoration: BoxDecoration(
                                 color: colorWhite,
@@ -119,7 +122,7 @@ class CartPage extends GetView<CartController> {
                                         children: [
                                           const SizedBox(height: 10),
                                           Text(
-                                            "${model.proName} jfjkndr fmvsmnvd sdvlijsd dsiovjdfisnrv ",
+                                            "${model.proName}",
                                             textAlign: TextAlign.left,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -233,14 +236,87 @@ class CartPage extends GetView<CartController> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 24,
                                         height: 24,
-                                        child: Text(
-                                          (model.proQty ?? 1).toString(),
+                                        width: 60,
+                                        child: TextField(
+                                          controller: model.quantityController,
+                                          keyboardType: TextInputType.number,
                                           textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            fontSize: 20,
+                                          maxLines: 1,
+                                          minLines: 1,
+                                          buildCounter: (context,
+                                              {required currentLength,
+                                              required isFocused,
+                                              maxLength}) {
+                                            return const SizedBox(
+                                              height: 0,
+                                              width: 1,
+                                            );
+                                          },
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(3),
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp('[0-9]')),
+                                          ],
+                                          enableSuggestions: false,
+                                          // onEditingComplete: () async {
+                                          //   print(
+                                          //       model.quantityController.text);
+                                          //   if (int.parse(model
+                                          //           .quantityController.text) >
+                                          //       0) {
+                                          //     await controller.addToCart(
+                                          //         productId: model.proId ?? "",
+                                          //         quantity: int.parse(model
+                                          //             .quantityController.text),
+                                          //         cartId: (model.cartId ?? 0)
+                                          //             .toString());
+                                          //   } else {
+                                          //     buildConfirmationDialog(
+                                          //         icon: Icons
+                                          //             .delete_forever_rounded,
+                                          //         title: "Delete From Cart",
+                                          //         msg:
+                                          //             "Are you sure you want to remove this product from the cart?",
+                                          //         onYesTap: () {
+                                          //           Get.back();
+                                          //           controller.deleteFromCart(
+                                          //               (model.cartId ?? 0)
+                                          //                   .toString());
+                                          //         });
+                                          //   }
+                                          // },
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            counterText: "",
                                           ),
+                                          onChanged: (value) async {
+                                            print(
+                                                model.quantityController.text);
+                                            if (int.parse(model
+                                                    .quantityController.text) >
+                                                0) {
+                                              await controller.addToCart(
+                                                  productId: model.proId ?? "",
+                                                  quantity: int.parse(model
+                                                      .quantityController.text),
+                                                  cartId: (model.cartId ?? 0)
+                                                      .toString());
+                                            } else {
+                                              buildConfirmationDialog(
+                                                  icon: Icons
+                                                      .delete_forever_rounded,
+                                                  title: "Delete From Cart",
+                                                  msg:
+                                                      "Are you sure you want to remove this product from the cart?",
+                                                  onYesTap: () {
+                                                    Get.back();
+                                                    controller.deleteFromCart(
+                                                        (model.cartId ?? 0)
+                                                            .toString());
+                                                  });
+                                            }
+                                          },
                                         ),
                                       ),
                                       IconButton(
@@ -354,14 +430,14 @@ class CartPage extends GetView<CartController> {
                             horizontal: 20, vertical: 10),
                         child: controller.isLoading.value
                             ? const SizedBox(
-                          height: 18,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: colorWhite,
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        )
+                                height: 18,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: colorWhite,
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

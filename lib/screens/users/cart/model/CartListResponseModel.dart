@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class CartListResponseModel {
   String? status;
   String? message;
@@ -39,6 +41,7 @@ class CartProductModel {
   double? proCourierCharges;
   String? proWeight;
   String? imagePath;
+  TextEditingController quantityController = TextEditingController();
 
   CartProductModel(
       {this.cartId,
@@ -48,9 +51,12 @@ class CartProductModel {
       this.proDiscount,
       this.proSGST,
       this.proCGST,
+      this.proQty,
       this.proCourierCharges,
       this.proWeight,
-      this.imagePath});
+      this.imagePath}) {
+    quantityController.text = (proQty ?? "1").toString();
+  }
 
   CartProductModel.fromJson(Map<String, dynamic> json) {
     cartId = json['CartId'];
@@ -61,6 +67,7 @@ class CartProductModel {
     proSGST = json['Pro_SGST'];
     proCGST = json['Pro_CGST'];
     proQty = json['Qty'];
+    quantityController.text = (proQty ?? "1").toString();
     proCourierCharges = json['Pro_Courier_Charges'];
     proWeight = json['Pro_Weight'];
     imagePath = json['ImagePath'];

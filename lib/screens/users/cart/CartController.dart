@@ -20,7 +20,8 @@ class CartController extends GetxController {
   RxList<CartProductModel> cartProductList = <CartProductModel>[].obs;
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
-  RxBool isAddCartLoading = false.obs;
+  RxBool isOrderPlacementLoading = false.obs;
+  RxBool isOrderPlacementSuccessFull = false.obs;
   RxDouble total = 0.0.obs;
   RxDouble subTotal = 0.0.obs;
   final TextEditingController textControllerSearch = TextEditingController();
@@ -134,7 +135,7 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getData(true);
+    // getData(true);
   }
 
   checkIfIdExist(String productId) {
@@ -158,59 +159,64 @@ class CartController extends GetxController {
       }
       total.value += (model.proSGST ?? 0) * (model.proQty ?? 0) +
           (model.proCGST ?? 0) * (model.proQty ?? 0);
-      subTotal.value += (model.proPrice ?? 0) * (model.proQty ?? 0);
+      subTotal.value += (model.proPrice ?? 0) * (model.proQty ?? 0) +
+          (model.proSGST ?? 0) * (model.proQty ?? 0) +
+          (model.proCGST ?? 0) * (model.proQty ?? 0);
     }
     return total.toStringAsFixed(2);
   }
 
   getData(bool isWithLoader) async {
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
-    HttpRequestModel request = HttpRequestModel(
-        url: endCartList,
-        authMethod: '',
-        body: '',
-        headerType: '',
-        params: {"Cus_Id": userId}.toString(),
-        method: 'POST');
+    if (userId != null && userId.isNotEmpty) {
+      HttpRequestModel request = HttpRequestModel(
+          url: endCartList,
+          authMethod: '',
+          body: '',
+          headerType: '',
+          params: {"Cus_Id": userId}.toString(),
+          method: 'POST');
 
-    try {
-      if (isWithLoader) {
-        isLoading.trigger(true);
-      }
-      String response = await HttpService().init(request);
-      if (response.isNotEmpty) {
-        CartListResponseModel responseModel =
-            CartListResponseModel.fromJson(jsonDecode(response));
-        if (responseModel.status == "1" &&
-            responseModel.cartProductLis != null) {
-          cartProductList.clear();
-          searchedCartProductList.clear();
-          if (responseModel.cartProductLis != null) {
-            cartProductList.addAll(responseModel.cartProductLis!);
-            searchedCartProductList.addAll(cartProductList);
-            getTotal();
+      try {
+        if (isWithLoader) {
+          isLoading.trigger(true);
+        }
+        String response = await HttpService().init(request);
+        if (response.isNotEmpty) {
+          CartListResponseModel responseModel =
+              CartListResponseModel.fromJson(jsonDecode(response));
+          if (responseModel.status == "1" &&
+              responseModel.cartProductLis != null) {
+            cartProductList.clear();
+            searchedCartProductList.clear();
+            if (responseModel.cartProductLis != null) {
+              cartProductList.addAll(responseModel.cartProductLis!);
+              searchedCartProductList.addAll(cartProductList);
+              getTotal();
+            } else {
+              inProgressOrDataNotAvailable.value = stringDataNotAvailable;
+            }
+            if (isWithLoader) {
+              isLoading.trigger(false);
+            }
           } else {
-            inProgressOrDataNotAvailable.value = stringDataNotAvailable;
-          }
-          if (isWithLoader) {
-            isLoading.trigger(false);
+            cartProductList.clear();
+            searchedCartProductList.clear();
+            subTotal.value = 0;
+            total.value = 0;
+            inProgressOrDataNotAvailable.value =
+                jsonDecode(response)["Message"];
           }
         } else {
-          cartProductList.clear();
-          searchedCartProductList.clear();
-          subTotal.value = 0;
-          total.value = 0;
-          inProgressOrDataNotAvailable.value = jsonDecode(response)["Message"];
+          inProgressOrDataNotAvailable.value = stringDataNotAvailable;
         }
-      } else {
+      } catch (e) {
+        log("ERROR: NS ${e.toString()}");
         inProgressOrDataNotAvailable.value = stringDataNotAvailable;
-      }
-    } catch (e) {
-      log("ERROR: NS ${e.toString()}");
-      inProgressOrDataNotAvailable.value = stringDataNotAvailable;
-    } finally {
-      if (isWithLoader) {
-        isLoading.trigger(false);
+      } finally {
+        if (isWithLoader) {
+          isLoading.trigger(false);
+        }
       }
     }
   }
@@ -234,7 +240,6 @@ class CartController extends GetxController {
         method: 'POST');
 
     try {
-      // isAddCartLoading.trigger(true);
       getOverlay();
       String response = await HttpService().init(request);
       if (response.isNotEmpty) {
@@ -254,7 +259,6 @@ class CartController extends GetxController {
       showSnackBarWithText(Get.context, stringSomeThingWentWrong);
     } finally {
       removeOverlay();
-      // isAddCartLoading.trigger(false);
     }
   }
 
@@ -295,15 +299,33 @@ class CartController extends GetxController {
   }
 
   placeOrder({required int addressId}) async {
+    isOrderPlacementLoading.trigger(true);
+    isOrderPlacementSuccessFull.trigger(false);
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
     String productIds = "";
     String productNames = "";
     String productQty = "";
+    String productTotal = "";
+    String SGST = "";
+    String CGST = "";
+
+    getTotal();
     for (CartProductModel model in cartProductList) {
+      double productPrice = (model.proDiscount != null && model.proDiscount != 0
+              ? model.proDiscount
+              : model.proPrice) ??
+          0;
       productIds += "${productIds.isEmpty ? "" : "^"}${model.proId ?? ""}";
       productNames +=
           "${productNames.isEmpty ? "" : "^"}${model.proName ?? ""}";
       productQty += "${productQty.isEmpty ? "" : "^"}${model.proQty ?? "1"}";
+      productTotal +=
+          "${productTotal.isEmpty ? "" : "^"}${productPrice * (model.proQty ?? 1)}";
+
+      SGST +=
+          "${SGST.isEmpty ? "" : "^"}${model.proSGST != null ? model.proSGST! * (model.proQty ?? 1) : "0"}";
+      CGST +=
+          "${CGST.isEmpty ? "" : "^"}${model.proCGST != null ? model.proCGST! * (model.proQty ?? 1) : "0"}";
     }
 
     HttpRequestModel request = HttpRequestModel(
@@ -318,7 +340,10 @@ class CartController extends GetxController {
           "ProductId": productIds,
           "ProductName": productNames,
           "SubTotal": subTotal.value.toString(),
-          "TotalAmount": subTotal.value.toString(),
+          "TotalAmount": total.value.toString(),
+          "ProductTotal": productTotal.toString(),
+          "SGST": SGST,
+          "CGST": CGST,
           "Qty": productQty,
           "OrderDate": DateFormat("dd MMM yyyy").format(DateTime.now()),
           "ExpectedDeliveryDate": DateFormat("dd MMM yyyy")
@@ -326,18 +351,33 @@ class CartController extends GetxController {
         }).toString(),
         method: 'POST');
 
+    print(request.params);
     try {
-      // isAddCartLoading.trigger(true);
-      getOverlay();
+      isOrderPlacementLoading.trigger(true);
+      isOrderPlacementSuccessFull.trigger(false);
+      // getOverlay();
+
+      // Get.to(() => const OrderPlacedResult());
+      // await Future.delayed(
+      //   const Duration(seconds: 3),
+      //   () {
+      //     isOrderPlacementLoading.trigger(false);
+      //     isOrderPlacementSuccessFull.trigger(true);
+      //   },
+      // );
+
       String response = await HttpService().init(request);
       if (response.isNotEmpty) {
         var responseJson = jsonDecode(response);
         if (responseJson["Status"] == "1") {
           showSnackBarWithText(Get.context, responseJson["Message"],
               color: colorGreen);
-          // await getData(false);
+          isOrderPlacementLoading.trigger(false);
+          isOrderPlacementSuccessFull.trigger(true);
+          await getData(false);
         } else {
           showSnackBarWithText(Get.context, responseJson["Message"]);
+          isOrderPlacementSuccessFull.trigger(false);
         }
       } else {
         showSnackBarWithText(Get.context, stringSomeThingWentWrong);
@@ -347,6 +387,7 @@ class CartController extends GetxController {
       showSnackBarWithText(Get.context, stringSomeThingWentWrong);
     } finally {
       removeOverlay();
+      isOrderPlacementLoading.trigger(false);
       // isAddCartLoading.trigger(false);
     }
   }

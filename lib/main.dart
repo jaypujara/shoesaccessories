@@ -6,9 +6,9 @@ import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 

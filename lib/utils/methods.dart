@@ -1,7 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+// import 'package:image_cropper/image_cropper.dart';
+import 'package:image_editor_plus/image_editor_plus.dart';
+import 'package:image_editor_plus/utils.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 
 import '../Network/ApiUrls.dart';
@@ -103,4 +109,50 @@ removeOverlay() {
   //   _isLoading = false;
   //   overlayEntry!.remove();
   // }
+}
+
+Future<File?> sendForCrop(String path) async {
+  // CroppedFile? croppedFile = await ImageCropper().cropImage(
+  //   sourcePath: path,
+  //   aspectRatio: CropAspectRatio(ratioX: x, ratioY: y),
+  //   uiSettings: [
+  //     AndroidUiSettings(
+  //       toolbarTitle: 'Cropper',
+  //       toolbarColor: colorPrimary,
+  //       toolbarWidgetColor: Colors.white,
+  //       initAspectRatio: CropAspectRatioPreset.original,
+  //       lockAspectRatio: true,
+  //     ),
+  //     IOSUiSettings(
+  //       title: 'Cropper',
+  //       aspectRatioLockEnabled: true,
+  //     ),
+  //   ],
+  // );
+  print(path);
+  final editedImage = await Navigator.push(
+    Get.context!,
+    MaterialPageRoute(
+      builder: (context) => ImageEditor(
+        image: File(path), // <-- Uint8List of image
+      ),
+    ),
+  );
+  final convertedImage = await ImageUtils.convert(
+    editedImage,
+    format: 'jpeg',
+    quality: 100,
+  );
+
+  Directory cacheDirectory = await getApplicationCacheDirectory();
+  print(cacheDirectory.path);
+  File image = await File('${cacheDirectory.path}/temp.jpg')
+      .writeAsBytes(convertedImage);
+  print(image.path);
+  if (image != null) {
+    print("IMAGE : " + image.path);
+    return File(image.path);
+  } else {
+    return null;
+  }
 }

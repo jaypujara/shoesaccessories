@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/screens/users/dashboard/model/CategoryResponseModel.dart';
 
 import '../../../Network/API.dart';
@@ -207,6 +208,11 @@ class DashBoardAdminController extends GetxController {
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
+    CartController cartController = Get.find(tag: "CartController");
+    cartController.refresh();
+    cartController.cartProductList.clear();
+    cartController.searchedCartProductList.clear();
+
     Get.back();
     Get.offAll(() => LoginPage());
   }

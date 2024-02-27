@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
@@ -69,12 +70,14 @@ class ManageAdvertisementsController extends GetxController {
     final ImagePicker picker = ImagePicker();
     final XFile? img = await picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 50,
     );
+
     if (img != null) {
-      print(img.path);
-      uploadImage(img.path);
-      // image = File(img.path);
+      File? image = await sendForCrop(img.path);
+      if (image != null) {
+        uploadImage(image.path);
+      }
     }
   }
 
@@ -83,12 +86,13 @@ class ManageAdvertisementsController extends GetxController {
     final ImagePicker picker = ImagePicker();
     XFile? img = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 10,
+      imageQuality: 50,
     );
     if (img != null) {
-      print(img.path);
-      uploadImage(img.path);
-      // image = File(img.path);
+      File? image = await sendForCrop(img.path);
+      if (image != null) {
+        uploadImage(image.path);
+      }
     }
   }
 

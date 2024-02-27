@@ -137,6 +137,7 @@ class ThemedTextField extends StatefulWidget {
   TextCapitalization? textCapitalization;
   String? Function(String?)? validator;
   double borderRadiusTextField;
+  TextAlign textAlign;
 
   ThemedTextField({
     super.key,
@@ -165,6 +166,7 @@ class ThemedTextField extends StatefulWidget {
     this.hintFontWeight = FontWeight.normal,
     this.borderRadiusTextField = radius,
     this.validator,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -195,6 +197,7 @@ class _ThemedTextFieldState extends State<ThemedTextField> {
         if (widget.isAcceptNumbersOnly)
           FilteringTextInputFormatter.allow(RegExp('[0-9]')),
       ],
+      textAlign: widget.textAlign,
       style: TextStyle(
           fontWeight: widget.fontWeight,
           fontSize: widget.fontSized,
@@ -204,6 +207,7 @@ class _ThemedTextFieldState extends State<ThemedTextField> {
       keyboardType: widget.isAcceptNumbersOnly
           ? TextInputType.number
           : widget.keyBoardType,
+      maxLines: 1,
       onChanged: (value) {
         if (widget.onChanged != null) {
           widget.onChanged!(value);

@@ -45,6 +45,7 @@ class AddProduct extends GetView<AddProductController> {
                                 aspectRatio: 3 / 3.5,
                                 child: Container(
                                     decoration: BoxDecoration(
+
                                       border: Border.all(
                                         color: colorPrimary.shade300,
                                         width: 1,

@@ -69,11 +69,10 @@ class AddProductController extends GetxController {
     final ImagePicker picker = ImagePicker();
     final XFile? img = await picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 10,
+      imageQuality: 50,
     );
     if (img != null) {
-      print(img.path);
-      image = File(img.path);
+      image = await sendForCrop(img.path);
       update();
     }
   }
@@ -83,11 +82,10 @@ class AddProductController extends GetxController {
     final ImagePicker picker = ImagePicker();
     XFile? img = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 10,
+      imageQuality: 50,
     );
     if (img != null) {
-      print(img.path);
-      image = File(img.path);
+      image = await sendForCrop(img.path);
       update();
     }
   }

@@ -12,6 +12,7 @@ import 'package:shoes_acces/utils/Preferences.dart';
 import 'package:shoes_acces/utils/Strings.dart';
 import 'package:shoes_acces/widgets/Widgets.dart';
 
+import '../cart/CartController.dart';
 import 'model/AdvertisementResponseModel.dart';
 import 'model/CategoryResponseModel.dart';
 
@@ -28,7 +29,8 @@ class DashBoardController extends GetxController {
   final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
   final TextEditingController textControllerOldPass = TextEditingController();
   final TextEditingController textControllerNewPass = TextEditingController();
-  final TextEditingController textControllerConfirmNewPass = TextEditingController();
+  final TextEditingController textControllerConfirmNewPass =
+      TextEditingController();
   RxBool isChangePassLoading = false.obs;
   RxString error = "".obs;
 
@@ -150,8 +152,8 @@ class DashBoardController extends GetxController {
           headerType: '',
           params: json.encode({
             "Cus_Id": userId,
-            "OldPassword": textControllerOldPass.text,
-            "NewPassword": textControllerNewPass.text,
+            "OldPassword": textControllerOldPass.text.trim(),
+            "NewPassword": textControllerNewPass.text.trim(),
           }).toString(),
           method: 'POST');
 
@@ -164,9 +166,12 @@ class DashBoardController extends GetxController {
           if (responseModel["Status"] == "1") {
             showSnackBarWithText(Get.context, responseModel["Message"],
                 color: colorGreen);
+            Preferences().setPrefString(
+                Preferences.prefPassword, textControllerNewPass.text.trim());
             error.value = "";
             textControllerOldPass.text = "";
             textControllerNewPass.text = "";
+
             Get.back();
           } else {
             error.value = responseModel["Message"];
@@ -192,6 +197,10 @@ class DashBoardController extends GetxController {
     await Preferences().setPrefString(Preferences.prefFullName, "");
     await Preferences().setPrefString(Preferences.prefPassword, "");
     await Preferences().setPrefString(Preferences.prefPhone, "");
+    CartController cartController = Get.find(tag: "CartController");
+    cartController.refresh();
+    cartController.cartProductList.clear();
+    cartController.searchedCartProductList.clear();
     Get.back();
     Get.offAll(() => LoginPage());
   }

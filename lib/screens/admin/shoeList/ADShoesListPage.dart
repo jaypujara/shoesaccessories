@@ -69,104 +69,51 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                           ),
                                           child: Row(
                                             children: [
-                                              Expanded(
-                                                flex: 2,
+                                              AspectRatio(
+                                                aspectRatio: 3 / 3.5,
                                                 child: Material(
                                                   elevation: 2,
-                                                  color: colorWhite,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
+                                                  clipBehavior: Clip
+                                                      .antiAliasWithSaveLayer,
                                                   child: InkWell(
                                                     onTap: () {
-                                                      Get.dialog(
-                                                        Dialog(
-                                                          clipBehavior: Clip
-                                                              .antiAliasWithSaveLayer,
-                                                          backgroundColor:
-                                                              colorWhite,
-                                                          insetPadding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      20),
-                                                          child: AspectRatio(
-                                                            aspectRatio: 1 / 1,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: model
-                                                                      .imagePath ??
-                                                                  "",
-                                                              imageBuilder:
-                                                                  (context,
-                                                                      imageProvider) {
-                                                                return Container(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  child: Image(
-                                                                      image:
-                                                                          imageProvider),
-                                                                );
-                                                              },
-                                                              progressIndicatorBuilder:
-                                                                  (context, url,
-                                                                          downloadProgress) =>
-                                                                      Center(
-                                                                          child:
-                                                                              CircularProgressIndicator(
-                                                                value:
-                                                                    downloadProgress
-                                                                        .progress,
-                                                                color:
-                                                                    colorPrimary,
-                                                                strokeWidth: 2,
-                                                              )),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
+                                                      _buildImageDialog(
+                                                          model.imagePath ??
+                                                              "");
                                                     },
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      child: Center(
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              model.imagePath ??
-                                                                  "",
-                                                          imageBuilder: (context,
-                                                              imageProvider) {
-                                                            return Container(
-                                                              color:
-                                                                  Colors.white,
-                                                              child: Image(
-                                                                  image:
-                                                                      imageProvider),
-                                                            );
-                                                          },
-                                                          progressIndicatorBuilder:
-                                                              (context, url,
-                                                                      downloadProgress) =>
-                                                                  Center(
-                                                                      child:
-                                                                          CircularProgressIndicator(
+                                                    child: Center(
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            model.imagePath ??
+                                                                "",
+                                                        imageBuilder: (context,
+                                                            imageProvider) {
+                                                          return Container(
+                                                            color: Colors.white,
+                                                            child: Image(
+                                                                image:
+                                                                    imageProvider),
+                                                          );
+                                                        },
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    downloadProgress) =>
+                                                                Center(
+                                                          child:
+                                                              CircularProgressIndicator(
                                                             value:
                                                                 downloadProgress
                                                                     .progress,
                                                             color: colorPrimary,
                                                             strokeWidth: 2,
-                                                          )),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
+                                                          ),
                                                         ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
                                                       ),
                                                     ),
                                                   ),
@@ -374,6 +321,36 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
         child: CircularProgressIndicator(
           color: colorPrimary,
           strokeWidth: 2,
+        ),
+      ),
+    );
+  }
+
+  void _buildImageDialog(String path) {
+    Get.dialog(
+      Dialog(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        backgroundColor: colorWhite,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        child: AspectRatio(
+          aspectRatio: 3 / 3.5,
+          child: CachedNetworkImage(
+            imageUrl: path,
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                color: Colors.white,
+                child: Image(image: imageProvider),
+              );
+            },
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+                    child: CircularProgressIndicator(
+              value: downloadProgress.progress,
+              color: colorPrimary,
+              strokeWidth: 2,
+            )),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
         ),
       ),
     );
