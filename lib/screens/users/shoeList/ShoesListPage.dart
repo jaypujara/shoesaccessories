@@ -55,7 +55,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                 Product model =
                                     controller.searchShoesList[index];
                                 return Container(
-                                  height: 150,
+                                  height: 180,
                                   margin: const EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
                                     color: colorWhite,
@@ -169,11 +169,11 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                               Text(
                                                 "${model.proName}",
                                                 textAlign: TextAlign.left,
-                                                maxLines: 2,
+                                                maxLines: 3,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   color: colorBlack,
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   height: 1,
                                                   fontWeight: FontWeight.w500,
                                                 ),
@@ -242,126 +242,131 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                   ),
                                                 ],
                                               ),
+
+                                              (model.model != null)
+                                                  ? Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () async {
+                                                      log(((model.model!.proQty ??
+                                                          1) +
+                                                          1)
+                                                          .toString());
+                                                      await controllerCart.addToCart(
+                                                          productId:
+                                                          model.proId ?? "",
+                                                          quantity: (model.model!
+                                                              .proQty ??
+                                                              1) +
+                                                              1,
+                                                          cartId: (model.model!
+                                                              .cartId ??
+                                                              0)
+                                                              .toString());
+                                                      controller
+                                                          .mapWithCartList();
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.add,
+                                                      color: colorGreen,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+
+                                                  
+                                                  SizedBox(
+                                                    width: 24,
+                                                    height: 24,
+                                                    child: Text(
+                                                      (model.model!.proQty ?? 1)
+                                                          .toString(),
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: () async {
+                                                      if ((model.model!.proQty ??
+                                                          1) >
+                                                          1) {
+                                                        await controllerCart.addToCart(
+                                                            productId:
+                                                            model.proId ?? "",
+                                                            quantity: (model
+                                                                .model!
+                                                                .proQty ??
+                                                                1) -
+                                                                1,
+                                                            cartId: (model.model!
+                                                                .cartId ??
+                                                                0)
+                                                                .toString());
+                                                        controller
+                                                            .mapWithCartList();
+                                                      } else {
+                                                        await buildConfirmationDialog(
+                                                            icon: Icons
+                                                                .delete_forever_rounded,
+                                                            title:
+                                                            "Delete From Cart",
+                                                            msg:
+                                                            "Are you sure you want to remove this product from the cart?",
+                                                            onYesTap: () async {
+                                                              await controllerCart
+                                                                  .deleteFromCart(
+                                                                  (model.model!.cartId ??
+                                                                      0)
+                                                                      .toString())
+                                                                  .then((v) {
+                                                                Future.delayed(
+                                                                    const Duration(
+                                                                        seconds:
+                                                                        1),
+                                                                        () {
+                                                                      controller
+                                                                          .mapWithCartList();
+                                                                    });
+                                                                model.model =
+                                                                null;
+                                                                Get.back();
+                                                              });
+                                                            },
+                                                            onClose: () {
+                                                              log("ENCLOSE");
+                                                              controller
+                                                                  .mapWithCartList();
+                                                            });
+                                                      }
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.remove_rounded,
+                                                      color: colorRed,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                                  : IconButton(
+                                                icon: const Icon(
+                                                  Icons.add_shopping_cart_rounded,
+                                                  color: colorPrimary,
+                                                ),
+                                                onPressed: () async {
+                                                  await controllerCart.addToCart(
+                                                      productId:
+                                                      model.proId ?? "");
+                                                  controller.mapWithCartList();
+                                                },
+                                              ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                      (model.model != null)
-                                          ? Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () async {
-                                                    log(((model.model!.proQty ??
-                                                                1) +
-                                                            1)
-                                                        .toString());
-                                                    await controllerCart.addToCart(
-                                                        productId:
-                                                            model.proId ?? "",
-                                                        quantity: (model.model!
-                                                                    .proQty ??
-                                                                1) +
-                                                            1,
-                                                        cartId: (model.model!
-                                                                    .cartId ??
-                                                                0)
-                                                            .toString());
-                                                    controller
-                                                        .mapWithCartList();
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.add,
-                                                    color: colorGreen,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 24,
-                                                  height: 24,
-                                                  child: Text(
-                                                    (model.model!.proQty ?? 1)
-                                                        .toString(),
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () async {
-                                                    if ((model.model!.proQty ??
-                                                            1) >
-                                                        1) {
-                                                      await controllerCart.addToCart(
-                                                          productId:
-                                                              model.proId ?? "",
-                                                          quantity: (model
-                                                                      .model!
-                                                                      .proQty ??
-                                                                  1) -
-                                                              1,
-                                                          cartId: (model.model!
-                                                                      .cartId ??
-                                                                  0)
-                                                              .toString());
-                                                      controller
-                                                          .mapWithCartList();
-                                                    } else {
-                                                      await buildConfirmationDialog(
-                                                          icon: Icons
-                                                              .delete_forever_rounded,
-                                                          title:
-                                                              "Delete From Cart",
-                                                          msg:
-                                                              "Are you sure you want to remove this product from the cart?",
-                                                          onYesTap: () async {
-                                                            await controllerCart
-                                                                .deleteFromCart(
-                                                                    (model.model!.cartId ??
-                                                                            0)
-                                                                        .toString())
-                                                                .then((v) {
-                                                              Future.delayed(
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          1),
-                                                                  () {
-                                                                controller
-                                                                    .mapWithCartList();
-                                                              });
-                                                              model.model =
-                                                                  null;
-                                                              Get.back();
-                                                            });
-                                                          },
-                                                          onClose: () {
-                                                            log("ENCLOSE");
-                                                            controller
-                                                                .mapWithCartList();
-                                                          });
-                                                    }
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.remove_rounded,
-                                                    color: colorRed,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          : IconButton(
-                                              icon: const Icon(
-                                                Icons.add_shopping_cart_rounded,
-                                                color: colorPrimary,
-                                              ),
-                                              onPressed: () async {
-                                                await controllerCart.addToCart(
-                                                    productId:
-                                                        model.proId ?? "");
-                                                controller.mapWithCartList();
-                                              },
-                                            ),
+
+
                                     ],
                                   ),
                                 );

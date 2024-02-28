@@ -55,7 +55,7 @@ class CartPage extends GetView<CartController> {
                             CartProductModel model =
                                 controller.searchedCartProductList[index];
                             return Container(
-                              height: 160,
+                              height: 200,
                               margin: const EdgeInsets.symmetric(vertical: 5),
                               decoration: BoxDecoration(
                                 color: colorWhite,
@@ -213,144 +213,160 @@ class CartPage extends GetView<CartController> {
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                onPressed: () async {
+                                                  if ((model.proQty ?? 1) > 1) {
+                                                    await controller.addToCart(
+                                                        productId: model.proId ?? "",
+                                                        quantity:
+                                                        (model.proQty ?? 1) - 1,
+                                                        cartId: (model.cartId ?? 0)
+                                                            .toString());
+                                                  } else {
+                                                    buildConfirmationDialog(
+                                                        icon: Icons
+                                                            .delete_forever_rounded,
+                                                        title: "Delete From Cart",
+                                                        msg:
+                                                        "Are you sure you want to remove this product from the cart?",
+                                                        onYesTap: () {
+                                                          Get.back();
+                                                          controller.deleteFromCart(
+                                                              (model.cartId ?? 0)
+                                                                  .toString());
+                                                        });
+                                                  }
+                                                },
+                                                icon: const Icon(
+                                                  Icons.remove_rounded,
+                                                  color: colorRed,
+                                                  size: 20,
+                                                ),
+                                              ),
+
+                                              Expanded(
+                                                child: SizedBox(
+                                                  height: 32,
+                                                  width: 60,
+                                                  child: Container(
+
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: Colors.black,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+
+                                                    child: TextField(
+                                                      controller: model.quantityController,
+                                                      keyboardType: TextInputType.number,
+                                                      textAlign: TextAlign.center,
+                                                      maxLines: 1,
+                                                      minLines: 1,
+                                                      buildCounter: (context,
+                                                          {required currentLength,
+                                                            required isFocused,
+                                                            maxLength}) {
+                                                        return const SizedBox(
+                                                          height: 0,
+                                                          width: 1,
+                                                        );
+                                                      },
+                                                      inputFormatters: [
+                                                        LengthLimitingTextInputFormatter(3),
+                                                        FilteringTextInputFormatter.allow(
+                                                            RegExp('[0-9]')),
+                                                      ],
+                                                      enableSuggestions: false,
+                                                      // onEditingComplete: () async {
+                                                      //   print(
+                                                      //       model.quantityController.text);
+                                                      //   if (int.parse(model
+                                                      //           .quantityController.text) >
+                                                      //       0) {
+                                                      //     await controller.addToCart(
+                                                      //         productId: model.proId ?? "",
+                                                      //         quantity: int.parse(model
+                                                      //             .quantityController.text),
+                                                      //         cartId: (model.cartId ?? 0)
+                                                      //             .toString());
+                                                      //   } else {
+                                                      //     buildConfirmationDialog(
+                                                      //         icon: Icons
+                                                      //             .delete_forever_rounded,
+                                                      //         title: "Delete From Cart",
+                                                      //         msg:
+                                                      //             "Are you sure you want to remove this product from the cart?",
+                                                      //         onYesTap: () {
+                                                      //           Get.back();
+                                                      //           controller.deleteFromCart(
+                                                      //               (model.cartId ?? 0)
+                                                      //                   .toString());
+                                                      //         });
+                                                      //   }
+                                                      // },
+                                                      decoration: const InputDecoration(
+                                                        border: InputBorder.none,
+                                                        counterText: "",
+                                                      ),
+                                                      onChanged: (value) async {
+                                                        print(
+                                                            model.quantityController.text);
+                                                        if (int.parse(model
+                                                            .quantityController.text) >
+                                                            0) {
+                                                          await controller.addToCart(
+                                                              productId: model.proId ?? "",
+                                                              quantity: int.parse(model
+                                                                  .quantityController.text),
+                                                              cartId: (model.cartId ?? 0)
+                                                                  .toString());
+                                                        } else {
+                                                          buildConfirmationDialog(
+                                                              icon: Icons
+                                                                  .delete_forever_rounded,
+                                                              title: "Delete From Cart",
+                                                              msg:
+                                                              "Are you sure you want to remove this product from the cart?",
+                                                              onYesTap: () {
+                                                                Get.back();
+                                                                controller.deleteFromCart(
+                                                                    (model.cartId ?? 0)
+                                                                        .toString());
+                                                              });
+                                                        }
+                                                      },
+                                                    ),
+
+                                                  ),
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  print((model.proQty ?? 1) + 1);
+                                                  await controller.addToCart(
+                                                      productId: model.proId ?? "",
+                                                      quantity: (model.proQty ?? 1) + 1,
+                                                      cartId: (model.cartId ?? 0)
+                                                          .toString());
+                                                },
+                                                icon: const Icon(
+                                                  Icons.add,
+                                                  color: colorGreen,
+                                                  size: 20,
+                                                ),
+                                              ),
+
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          print((model.proQty ?? 1) + 1);
-                                          await controller.addToCart(
-                                              productId: model.proId ?? "",
-                                              quantity: (model.proQty ?? 1) + 1,
-                                              cartId: (model.cartId ?? 0)
-                                                  .toString());
-                                        },
-                                        icon: const Icon(
-                                          Icons.add,
-                                          color: colorGreen,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 24,
-                                        width: 60,
-                                        child: TextField(
-                                          controller: model.quantityController,
-                                          keyboardType: TextInputType.number,
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          minLines: 1,
-                                          buildCounter: (context,
-                                              {required currentLength,
-                                              required isFocused,
-                                              maxLength}) {
-                                            return const SizedBox(
-                                              height: 0,
-                                              width: 1,
-                                            );
-                                          },
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(3),
-                                            FilteringTextInputFormatter.allow(
-                                                RegExp('[0-9]')),
-                                          ],
-                                          enableSuggestions: false,
-                                          // onEditingComplete: () async {
-                                          //   print(
-                                          //       model.quantityController.text);
-                                          //   if (int.parse(model
-                                          //           .quantityController.text) >
-                                          //       0) {
-                                          //     await controller.addToCart(
-                                          //         productId: model.proId ?? "",
-                                          //         quantity: int.parse(model
-                                          //             .quantityController.text),
-                                          //         cartId: (model.cartId ?? 0)
-                                          //             .toString());
-                                          //   } else {
-                                          //     buildConfirmationDialog(
-                                          //         icon: Icons
-                                          //             .delete_forever_rounded,
-                                          //         title: "Delete From Cart",
-                                          //         msg:
-                                          //             "Are you sure you want to remove this product from the cart?",
-                                          //         onYesTap: () {
-                                          //           Get.back();
-                                          //           controller.deleteFromCart(
-                                          //               (model.cartId ?? 0)
-                                          //                   .toString());
-                                          //         });
-                                          //   }
-                                          // },
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            counterText: "",
-                                          ),
-                                          onChanged: (value) async {
-                                            print(
-                                                model.quantityController.text);
-                                            if (int.parse(model
-                                                    .quantityController.text) >
-                                                0) {
-                                              await controller.addToCart(
-                                                  productId: model.proId ?? "",
-                                                  quantity: int.parse(model
-                                                      .quantityController.text),
-                                                  cartId: (model.cartId ?? 0)
-                                                      .toString());
-                                            } else {
-                                              buildConfirmationDialog(
-                                                  icon: Icons
-                                                      .delete_forever_rounded,
-                                                  title: "Delete From Cart",
-                                                  msg:
-                                                      "Are you sure you want to remove this product from the cart?",
-                                                  onYesTap: () {
-                                                    Get.back();
-                                                    controller.deleteFromCart(
-                                                        (model.cartId ?? 0)
-                                                            .toString());
-                                                  });
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          if ((model.proQty ?? 1) > 1) {
-                                            await controller.addToCart(
-                                                productId: model.proId ?? "",
-                                                quantity:
-                                                    (model.proQty ?? 1) - 1,
-                                                cartId: (model.cartId ?? 0)
-                                                    .toString());
-                                          } else {
-                                            buildConfirmationDialog(
-                                                icon: Icons
-                                                    .delete_forever_rounded,
-                                                title: "Delete From Cart",
-                                                msg:
-                                                    "Are you sure you want to remove this product from the cart?",
-                                                onYesTap: () {
-                                                  Get.back();
-                                                  controller.deleteFromCart(
-                                                      (model.cartId ?? 0)
-                                                          .toString());
-                                                });
-                                          }
-                                        },
-                                        icon: const Icon(
-                                          Icons.remove_rounded,
-                                          color: colorRed,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  )
+
                                 ],
                               ),
                             );
