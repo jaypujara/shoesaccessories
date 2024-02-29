@@ -306,47 +306,43 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                             }
                                                           },
                                                           icon: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(3),
                                                             decoration:
                                                                 BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(20.0),
-                                                                    color: Colors
-                                                                        .green,
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      color: colorPrimary
-                                                                          .shade300,
-                                                                      width: 1,
-                                                                    )),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0),
+                                                              color:
+                                                                  Colors.green,
+                                                              border:
+                                                                  Border.all(
+                                                                color:
+                                                                    colorPrimary
+                                                                        .shade300,
+                                                                width: 1,
+                                                              ),
+                                                            ),
                                                             child: const Icon(
                                                               Icons
                                                                   .remove_rounded,
                                                               color:
                                                                   Colors.white,
-                                                              size: 30,
+                                                              size: 24,
                                                             ),
                                                           ),
                                                         ),
-                                                        // SizedBox(
-                                                        //   width: 30,
-                                                        //   height: 30,
-                                                        //   child: Text(
-                                                        //     (model.model!.proQty ?? 1)
-                                                        //         .toString(),
-                                                        //     textAlign: TextAlign.center,
-                                                        //     style: const TextStyle(
-                                                        //       fontSize: 20,
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-
-                                                        SizedBox(
-                                                          height: 32,
-                                                          width: 60,
+                                                        Expanded(
                                                           child: Container(
+                                                            height: 32,
                                                             decoration:
                                                                 BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(5.0),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
                                                               border:
                                                                   Border.all(
                                                                 color: Colors
@@ -355,7 +351,9 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                               ),
                                                             ),
                                                             child: TextField(
-                                                              controller: model.model!.quantityController,
+                                                              controller: model
+                                                                  .model!
+                                                                  .quantityController,
                                                               keyboardType:
                                                                   TextInputType
                                                                       .number,
@@ -364,7 +362,6 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                       .center,
                                                               maxLines: 1,
                                                               minLines: 1,
-                                                           
                                                               inputFormatters: [
                                                                 LengthLimitingTextInputFormatter(
                                                                     3),
@@ -387,8 +384,9 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                     .model!
                                                                     .quantityController
                                                                     .text);
-                                                                if (int.parse(model.model!
-                                                                    .quantityController
+                                                                if (int.parse(model
+                                                                        .model!
+                                                                        .quantityController
                                                                         .text) >
                                                                     0) {
                                                                   await controllerCart.addToCart(
@@ -447,9 +445,14 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                 .mapWithCartList();
                                                           },
                                                           icon: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(3),
                                                             decoration:
                                                                 BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(20.0),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20.0),
                                                                     color: Colors
                                                                         .green,
                                                                     border:
@@ -463,7 +466,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                               Icons.add,
                                                               color:
                                                                   Colors.white,
-                                                              size: 30,
+                                                              size: 24,
                                                             ),
                                                           ),
                                                         ),

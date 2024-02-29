@@ -247,9 +247,10 @@ class CartPage extends GetView<CartController> {
                                                   }
                                                 },
                                                 icon: Container(
-
                                                   decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
                                                       color: Colors.green,
                                                       border: Border.all(
                                                         color: colorPrimary
@@ -268,9 +269,10 @@ class CartPage extends GetView<CartController> {
                                                   height: 32,
                                                   width: 60,
                                                   child: Container(
-
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(5.0),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
                                                       border: Border.all(
                                                         color: Colors.black,
                                                         width: 1,
@@ -302,33 +304,6 @@ class CartPage extends GetView<CartController> {
                                                                 '[0-9]')),
                                                       ],
                                                       enableSuggestions: false,
-                                                      // onEditingComplete: () async {
-                                                      //   print(
-                                                      //       model.quantityController.text);
-                                                      //   if (int.parse(model
-                                                      //           .quantityController.text) >
-                                                      //       0) {
-                                                      //     await controller.addToCart(
-                                                      //         productId: model.proId ?? "",
-                                                      //         quantity: int.parse(model
-                                                      //             .quantityController.text),
-                                                      //         cartId: (model.cartId ?? 0)
-                                                      //             .toString());
-                                                      //   } else {
-                                                      //     buildConfirmationDialog(
-                                                      //         icon: Icons
-                                                      //             .delete_forever_rounded,
-                                                      //         title: "Delete From Cart",
-                                                      //         msg:
-                                                      //             "Are you sure you want to remove this product from the cart?",
-                                                      //         onYesTap: () {
-                                                      //           Get.back();
-                                                      //           controller.deleteFromCart(
-                                                      //               (model.cartId ?? 0)
-                                                      //                   .toString());
-                                                      //         });
-                                                      //   }
-                                                      // },
                                                       decoration:
                                                           const InputDecoration(
                                                         border:
@@ -393,7 +368,9 @@ class CartPage extends GetView<CartController> {
                                                 icon: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.green,
-                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
                                                       border: Border.all(
                                                         color: colorPrimary
                                                             .shade300,
@@ -479,7 +456,12 @@ class CartPage extends GetView<CartController> {
                     flex: 2,
                     child: InkWell(
                       onTap: () {
-                        _buildAddressListDialog();
+                        if (controller.cartProductList.isNotEmpty) {
+                          _buildAddressListDialog();
+                        } else {
+                          showSnackBarWithText(context,
+                              "Your cart is empty! Please select at list a product.");
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

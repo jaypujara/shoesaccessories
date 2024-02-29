@@ -67,8 +67,8 @@ class HttpService {
     await setHeaders(httpRequestModel);
 
     log("URL : ${httpRequestModel.url} PARAMS : ${httpRequestModel.params}");
-    isNetworkConnected = await connectionStatus.checkConnection();
-
+    // isNetworkConnected = await connectionStatus.checkConnection();
+    isNetworkConnected = true;
     if (isNetworkConnected == false) {
       showSnackBarWithText(Get.context, stringErrorNoInterNet);
       return Future(() => "");
@@ -86,13 +86,8 @@ class HttpService {
       }
 
       if (httpRequestModel.method == 'POST') {
-        var url = baseUrlWithHttp.trim() +
-            nestedUrl.trim() +
-            httpRequestModel.url.trim();
-
-        log(url);
-        http.Response response =
-            await doPost(url, httpRequestModel.params!, headers);
+        http.Response response = await doPost(
+            httpRequestModel.url.trim(), httpRequestModel.params!, headers);
 
         log("API_RESPONSE ${httpRequestModel.url} : ${response.body.toString()}");
         return handleResponse(response, callback);
@@ -113,7 +108,8 @@ class HttpService {
             nestedUrl.trim() +
             httpRequestModel.url.trim();
         log(url);
-        http.Response response = await doDelete(url, httpRequestModel.params!, headers);
+        http.Response response =
+            await doDelete(url, httpRequestModel.params!, headers);
         log("API_RESPONSE : ${response.body.toString()}");
         return handleResponse(response, callback);
       }
@@ -214,9 +210,12 @@ class HttpService {
 
   Future<http.Response> doPost(
       String subUrl, String body, Map<String, String> headerType) {
+    var url = nestedUrl.trim() + subUrl;
+
+    log(url);
     return getHttpClient()
         .post(
-      Uri.parse(subUrl),
+      Uri.https(baseUrl, url),
       headers: headerType,
       body: body,
     )

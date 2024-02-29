@@ -171,9 +171,6 @@ buildConfirmationDialog({
                 Expanded(
                   child: InkWell(
                     onTap: onYesTap,
-                    /*() async {
-                      await controller.onAddressDelete(id: addressId);
-                    },*/
                     child: Container(
                       decoration: BoxDecoration(
                         color: colorRed,

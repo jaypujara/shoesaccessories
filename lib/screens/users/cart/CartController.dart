@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shoes_acces/Network/API.dart';
 import 'package:shoes_acces/Network/ApiUrls.dart';
+import 'package:shoes_acces/screens/users/cart/OrderPlaceResult.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Preferences.dart';
 import 'package:shoes_acces/utils/Strings.dart';
@@ -374,7 +375,8 @@ class CartController extends GetxController {
               color: colorGreen);
           isOrderPlacementLoading.trigger(false);
           isOrderPlacementSuccessFull.trigger(true);
-          await getData(false);
+          getData(false);
+          Get.off(() => const OrderPlacedResult());
         } else {
           showSnackBarWithText(Get.context, responseJson["Message"]);
           isOrderPlacementSuccessFull.trigger(false);

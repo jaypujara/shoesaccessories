@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/users/addressList/AddressListPage.dart';
 import 'package:shoes_acces/screens/users/cart/CartController.dart';
@@ -25,54 +26,68 @@ class DashBoardPage extends GetView<DashBoardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: controller.keyScaffold,
-      drawer: _buildDrawer(),
-      appBar: _buildAppBar(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // const SizedBox(height: 10),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              //   child: Text(
-              //     "WellCome To",
-              //     style: Theme.of(context).textTheme.headlineSmall,
-              //   ),
-              // ),
-              // const SizedBox(height: 3),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              //   child: Text(
-              //     "Shoes Accessories",
-              //     style: Theme.of(context).textTheme.headlineLarge,
-              //   ),
-              // ),
-              const SizedBox(height: 20),
-              Obx(
-                () => controller.imageList.isNotEmpty
-                    ? _buildSlider()
-                    : const SizedBox(),
-              ),
-              // if (controller.imageList.isNotEmpty)
-              //   _buildSlider(),
-              // buildSearch(context, controller.textControllerSearch, (value) {
-              //   controller.search(value);
-              // }),
-              const SizedBox(height: 20),
-              Obx(
-                () => !controller.isLoading.value &&
-                        controller.searchCategoryList.isNotEmpty
-                    ? _buildList()
-                    : !controller.isLoading.value &&
-                            controller.searchCategoryList.isEmpty
-                        ? buildNoData(
-                            controller.inProgressOrDataNotAvailable.value)
-                        : _buildLoading(),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () {
+        buildConfirmationDialog(
+            title: "Exit",
+            msg: "Are you sure you want to exit from this app?",
+            icon: Icons.exit_to_app_rounded,
+            onYesTap: () {
+              print("YesTap");
+              Get.back(closeOverlays: true);
+              SystemNavigator.pop();
+            });
+        return Future(() => false);
+      },
+      child: Scaffold(
+        key: controller.keyScaffold,
+        drawer: _buildDrawer(),
+        appBar: _buildAppBar(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const SizedBox(height: 10),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                //   child: Text(
+                //     "WellCome To",
+                //     style: Theme.of(context).textTheme.headlineSmall,
+                //   ),
+                // ),
+                // const SizedBox(height: 3),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                //   child: Text(
+                //     "Shoes Accessories",
+                //     style: Theme.of(context).textTheme.headlineLarge,
+                //   ),
+                // ),
+                const SizedBox(height: 20),
+                Obx(
+                  () => controller.imageList.isNotEmpty
+                      ? _buildSlider()
+                      : const SizedBox(),
+                ),
+                // if (controller.imageList.isNotEmpty)
+                //   _buildSlider(),
+                // buildSearch(context, controller.textControllerSearch, (value) {
+                //   controller.search(value);
+                // }),
+                const SizedBox(height: 20),
+                Obx(
+                  () => !controller.isLoading.value &&
+                          controller.searchCategoryList.isNotEmpty
+                      ? _buildList()
+                      : !controller.isLoading.value &&
+                              controller.searchCategoryList.isEmpty
+                          ? buildNoData(
+                              controller.inProgressOrDataNotAvailable.value)
+                          : _buildLoading(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

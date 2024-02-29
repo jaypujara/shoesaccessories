@@ -156,3 +156,114 @@ Future<File?> sendForCrop(String path) async {
     return null;
   }
 }
+
+buildConfirmationDialog(
+    String title, String msg, IconData icon, void Function() onYesTap,
+    {bool isDelete = false, void Function()? onclose}) {
+  Get.dialog(
+    Dialog(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Material(
+                  color: colorPrimary,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Icon(
+                      icon,
+                      color: colorWhite,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: colorPrimary,
+                    fontSize: 30,
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Divider(color: colorPrimary.shade100),
+            const SizedBox(height: 20),
+            Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: colorPrimary.shade300,
+                fontSize: 18,
+                height: 1,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Divider(color: colorPrimary.shade100),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: onYesTap,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colorRed,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: const Text(
+                        "Yes",
+                        style: TextStyle(
+                          color: colorWhite,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colorGreen,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: const Text(
+                        "No",
+                        style: TextStyle(
+                          color: colorWhite,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  ).then((value) {
+    if (onclose != null) onclose;
+  });
+}
