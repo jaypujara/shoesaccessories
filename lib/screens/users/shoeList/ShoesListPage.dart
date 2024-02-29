@@ -346,6 +346,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                           child: Container(
                                                             decoration:
                                                                 BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(5.0),
                                                               border:
                                                                   Border.all(
                                                                 color: Colors
