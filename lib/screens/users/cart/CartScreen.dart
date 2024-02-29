@@ -220,33 +220,47 @@ class CartPage extends GetView<CartController> {
                                                 onPressed: () async {
                                                   if ((model.proQty ?? 1) > 1) {
                                                     await controller.addToCart(
-                                                        productId: model.proId ?? "",
+                                                        productId:
+                                                            model.proId ?? "",
                                                         quantity:
-                                                        (model.proQty ?? 1) - 1,
-                                                        cartId: (model.cartId ?? 0)
-                                                            .toString());
+                                                            (model.proQty ??
+                                                                    1) -
+                                                                1,
+                                                        cartId:
+                                                            (model.cartId ?? 0)
+                                                                .toString());
                                                   } else {
                                                     buildConfirmationDialog(
                                                         icon: Icons
                                                             .delete_forever_rounded,
-                                                        title: "Delete From Cart",
+                                                        title:
+                                                            "Delete From Cart",
                                                         msg:
-                                                        "Are you sure you want to remove this product from the cart?",
+                                                            "Are you sure you want to remove this product from the cart?",
                                                         onYesTap: () {
                                                           Get.back();
                                                           controller.deleteFromCart(
-                                                              (model.cartId ?? 0)
+                                                              (model.cartId ??
+                                                                      0)
                                                                   .toString());
                                                         });
                                                   }
                                                 },
-                                                icon: const Icon(
-                                                  Icons.remove_rounded,
-                                                  color: colorRed,
-                                                  size: 20,
+                                                icon: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      border: Border.all(
+                                                        color: colorPrimary
+                                                            .shade300,
+                                                        width: 1,
+                                                      )),
+                                                  child: const Icon(
+                                                    Icons.remove_rounded,
+                                                    color: Colors.white,
+                                                    size: 30,
+                                                  ),
                                                 ),
                                               ),
-
                                               Expanded(
                                                 child: SizedBox(
                                                   height: 32,
@@ -254,31 +268,36 @@ class CartPage extends GetView<CartController> {
                                                   child: Container(
 
                                                     decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(20.0),
                                                       border: Border.all(
                                                         color: Colors.black,
                                                         width: 1,
                                                       ),
                                                     ),
-
                                                     child: TextField(
-                                                      controller: model.quantityController,
-                                                      keyboardType: TextInputType.number,
-                                                      textAlign: TextAlign.center,
+                                                      controller: model
+                                                          .quantityController,
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       maxLines: 1,
                                                       minLines: 1,
                                                       buildCounter: (context,
                                                           {required currentLength,
-                                                            required isFocused,
-                                                            maxLength}) {
+                                                          required isFocused,
+                                                          maxLength}) {
                                                         return const SizedBox(
                                                           height: 0,
                                                           width: 1,
                                                         );
                                                       },
                                                       inputFormatters: [
-                                                        LengthLimitingTextInputFormatter(3),
-                                                        FilteringTextInputFormatter.allow(
-                                                            RegExp('[0-9]')),
+                                                        LengthLimitingTextInputFormatter(
+                                                            3),
+                                                        FilteringTextInputFormatter
+                                                            .allow(RegExp(
+                                                                '[0-9]')),
                                                       ],
                                                       enableSuggestions: false,
                                                       // onEditingComplete: () async {
@@ -308,65 +327,89 @@ class CartPage extends GetView<CartController> {
                                                       //         });
                                                       //   }
                                                       // },
-                                                      decoration: const InputDecoration(
-                                                        border: InputBorder.none,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
                                                         counterText: "",
                                                       ),
                                                       onChanged: (value) async {
-                                                        print(
-                                                            model.quantityController.text);
+                                                        print(model
+                                                            .quantityController
+                                                            .text);
                                                         if (int.parse(model
-                                                            .quantityController.text) >
+                                                                .quantityController
+                                                                .text) >
                                                             0) {
                                                           await controller.addToCart(
-                                                              productId: model.proId ?? "",
-                                                              quantity: int.parse(model
-                                                                  .quantityController.text),
-                                                              cartId: (model.cartId ?? 0)
+                                                              productId:
+                                                                  model.proId ??
+                                                                      "",
+                                                              quantity: int
+                                                                  .parse(model
+                                                                      .quantityController
+                                                                      .text),
+                                                              cartId: (model
+                                                                          .cartId ??
+                                                                      0)
                                                                   .toString());
                                                         } else {
                                                           buildConfirmationDialog(
                                                               icon: Icons
                                                                   .delete_forever_rounded,
-                                                              title: "Delete From Cart",
+                                                              title:
+                                                                  "Delete From Cart",
                                                               msg:
-                                                              "Are you sure you want to remove this product from the cart?",
+                                                                  "Are you sure you want to remove this product from the cart?",
                                                               onYesTap: () {
                                                                 Get.back();
                                                                 controller.deleteFromCart(
-                                                                    (model.cartId ?? 0)
+                                                                    (model.cartId ??
+                                                                            0)
                                                                         .toString());
                                                               });
                                                         }
                                                       },
                                                     ),
-
                                                   ),
                                                 ),
                                               ),
                                               IconButton(
                                                 onPressed: () async {
-                                                  print((model.proQty ?? 1) + 1);
+                                                  print(
+                                                      (model.proQty ?? 1) + 1);
                                                   await controller.addToCart(
-                                                      productId: model.proId ?? "",
-                                                      quantity: (model.proQty ?? 1) + 1,
-                                                      cartId: (model.cartId ?? 0)
-                                                          .toString());
+                                                      productId:
+                                                          model.proId ?? "",
+                                                      quantity:
+                                                          (model.proQty ?? 1) +
+                                                              1,
+                                                      cartId:
+                                                          (model.cartId ?? 0)
+                                                              .toString());
                                                 },
-                                                icon: const Icon(
-                                                  Icons.add,
-                                                  color: colorGreen,
-                                                  size: 20,
+                                                icon: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      border: Border.all(
+                                                        color: colorPrimary
+                                                            .shade300,
+                                                        width: 1,
+                                                      )),
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                    size: 30,
+                                                  ),
                                                 ),
                                               ),
-
                                             ],
                                           )
                                         ],
                                       ),
                                     ),
                                   ),
-
                                 ],
                               ),
                             );

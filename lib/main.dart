@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Shoe Accessory',
+      title: 'Shoes Accessories',
       defaultTransition: Transition.fadeIn,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: colorPrimary),
