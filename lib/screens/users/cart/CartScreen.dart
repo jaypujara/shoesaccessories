@@ -326,14 +326,10 @@ class CartPage extends GetView<CartController> {
                                                                   .parse(model
                                                                       .quantityController
                                                                       .text),
-                                                              cartId: (model
-                                                                          .cartId ??
-                                                                      0)
-                                                                  .toString());
+                                                              cartId: (model.cartId ?? 0).toString());
                                                         } else {
                                                           buildConfirmationDialog(
-                                                              icon: Icons
-                                                                  .delete_forever_rounded,
+                                                              icon: Icons.delete_forever_rounded,
                                                               title:
                                                                   "Delete From Cart",
                                                               msg:

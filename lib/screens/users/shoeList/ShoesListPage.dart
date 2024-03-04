@@ -382,7 +382,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                   await controllerCart.addToCart(
                                                                       productId:model.proId ??"",
                                                                       quantity: int.parse(model.model!.quantityController.text),
-                                                                      cartId: (model.proId ?? 0).toString());
+                                                                      cartId: (model.model!.cartId ?? 0).toString());
                                                                 } else {
                                                                   buildConfirmationDialog(
                                                                       icon: Icons.delete_forever_rounded,
@@ -390,7 +390,9 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                       msg:"Are you sure you want to remove this product from the cart?",
                                                                       onYesTap:() {
                                                                         Get.back();
-                                                                        controllerCart.deleteFromCart((model.proId ?? 0).toString());
+                                                                        controllerCart.deleteFromCart((model.model!.cartId ??
+                                                                                0)
+                                                                            .toString());
                                                                       });
 
 
@@ -514,8 +516,9 @@ class _ShoesListPageState extends State<ShoesListPage> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {
-                              Get.to(() => CartPage());
+                            onTap: () async {
+                              await Get.to(() => CartPage());
+                              controller.mapWithCartList();
                             },
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
