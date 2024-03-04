@@ -170,7 +170,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                               Text(
                                                 "${model.proName}",
                                                 textAlign: TextAlign.left,
-                                                maxLines: 3,
+                                                maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   color: colorBlack,
@@ -369,80 +369,43 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                     .allow(RegExp(
                                                                         '[0-9]')),
                                                               ],
-                                                              enableSuggestions:
-                                                                  false,
-                                                              decoration:
-                                                                  const InputDecoration(
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
+                                                              enableSuggestions: false,
+                                                              decoration:const InputDecoration(
+                                                                border:InputBorder.none,
                                                                 counterText: "",
                                                               ),
-                                                              onChanged:
-                                                                  (value) async {
-                                                                print(model
-                                                                    .model!
-                                                                    .quantityController
-                                                                    .text);
-                                                                if (int.parse(model
-                                                                        .model!
-                                                                        .quantityController
-                                                                        .text) >
-                                                                    0) {
+                                                              onChanged: (value) async {
+                                                                print(model.model!.quantityController.text);
+                                                                if (int.parse(model.model!.quantityController.text) > 0) {
+
+
                                                                   await controllerCart.addToCart(
-                                                                      productId:
-                                                                          model.proId ??
-                                                                              "",
-                                                                      quantity: int.parse(model
-                                                                          .model!
-                                                                          .quantityController
-                                                                          .text),
-                                                                      cartId: (model.proId ??
-                                                                              0)
-                                                                          .toString());
+                                                                      productId:model.proId ??"",
+                                                                      quantity: int.parse(model.model!.quantityController.text),
+                                                                      cartId: (model.proId ?? 0).toString());
                                                                 } else {
                                                                   buildConfirmationDialog(
-                                                                      icon: Icons
-                                                                          .delete_forever_rounded,
-                                                                      title:
-                                                                          "Delete From Cart",
-                                                                      msg:
-                                                                          "Are you sure you want to remove this product from the cart?",
-                                                                      onYesTap:
-                                                                          () {
+                                                                      icon: Icons.delete_forever_rounded,
+                                                                      title: "Delete From Cart",
+                                                                      msg:"Are you sure you want to remove this product from the cart?",
+                                                                      onYesTap:() {
                                                                         Get.back();
-                                                                        controllerCart.deleteFromCart((model.proId ??
-                                                                                0)
-                                                                            .toString());
+                                                                        controllerCart.deleteFromCart((model.proId ?? 0).toString());
                                                                       });
-                                                                }
+
+
+                                                                } controller.mapWithCartList();
                                                               },
                                                             ),
                                                           ),
                                                         ),
                                                         IconButton(
                                                           onPressed: () async {
-                                                            log(((model.model!
-                                                                            .proQty ??
-                                                                        1) +
-                                                                    1)
-                                                                .toString());
-                                                            await controllerCart.addToCart(
-                                                                productId: model
-                                                                        .proId ??
-                                                                    "",
-                                                                quantity: (model
-                                                                            .model!
-                                                                            .proQty ??
-                                                                        1) +
-                                                                    1,
-                                                                cartId: (model
-                                                                            .model!
-                                                                            .cartId ??
-                                                                        0)
-                                                                    .toString());
-                                                            controller
-                                                                .mapWithCartList();
+                                                            log(((model.model!.proQty ?? 1) + 1).toString());
+                                                            await controllerCart.addToCart(productId: model.proId ?? "",
+                                                                quantity: (model.model!.proQty ??1) + 1,
+                                                                cartId: (model.model!.cartId ?? 0).toString());
+                                                            controller.mapWithCartList();
                                                           },
                                                           icon: Container(
                                                             padding:

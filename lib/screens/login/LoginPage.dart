@@ -42,6 +42,7 @@ class LoginPage extends GetView<LoginController> {
                     ),
                   ),
                   const Text(
+
                     "Sign in to your account",
                     style: TextStyle(
                       fontSize: 16,
@@ -53,7 +54,7 @@ class LoginPage extends GetView<LoginController> {
                   ThemedTextField(
                     controller: controller.controllerEmail,
                     borderRadiusTextField: 25,
-                    hintText: "Email",
+                    hintText: "Email Or Phone No",
                     preFix: const Icon(Icons.email_outlined),
                     validator: (p0) {
                       if (p0 == null || p0.isEmpty) {
@@ -137,7 +138,7 @@ class LoginPage extends GetView<LoginController> {
                                     controller:
                                         controller.controllerForgotNumber,
                                     borderRadiusTextField: 25,
-                                    hintText: "Mobile Number",
+                                    hintText: "Email Id",
                                     preFix:
                                         const Icon(Icons.phone_android_rounded),
                                     keyBoardType: TextInputType.phone,

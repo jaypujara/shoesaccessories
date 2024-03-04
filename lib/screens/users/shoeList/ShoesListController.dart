@@ -57,6 +57,7 @@ class ShoesListController extends GetxController {
         }
       }
     }
+    update();
     search("");
   }
 

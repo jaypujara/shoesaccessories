@@ -356,7 +356,7 @@ class CartController extends GetxController {
     try {
       isOrderPlacementLoading.trigger(true);
       isOrderPlacementSuccessFull.trigger(false);
-      // getOverlay();
+      getOverlay();
 
       // Get.to(() => const OrderPlacedResult());
       // await Future.delayed(

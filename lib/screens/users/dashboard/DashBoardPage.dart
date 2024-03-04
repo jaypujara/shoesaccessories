@@ -48,33 +48,14 @@ class DashBoardPage extends GetView<DashBoardController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // const SizedBox(height: 10),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                //   child: Text(
-                //     "WellCome To",
-                //     style: Theme.of(context).textTheme.headlineSmall,
-                //   ),
-                // ),
-                // const SizedBox(height: 3),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                //   child: Text(
-                //     "Shoes Accessories",
-                //     style: Theme.of(context).textTheme.headlineLarge,
-                //   ),
-                // ),
+
                 const SizedBox(height: 20),
                 Obx(
                   () => controller.imageList.isNotEmpty
                       ? _buildSlider()
                       : const SizedBox(),
                 ),
-                // if (controller.imageList.isNotEmpty)
-                //   _buildSlider(),
-                // buildSearch(context, controller.textControllerSearch, (value) {
-                //   controller.search(value);
-                // }),
+
                 const SizedBox(height: 20),
                 Obx(
                   () => !controller.isLoading.value &&
