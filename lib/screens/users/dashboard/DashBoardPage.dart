@@ -8,6 +8,7 @@ import 'package:shoes_acces/screens/users/addressList/AddressListPage.dart';
 import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/screens/users/cart/CartScreen.dart';
 import 'package:shoes_acces/screens/users/order_history/OrderHistoryList.dart';
+import 'package:shoes_acces/screens/users/privacy/privacy.dart';
 import 'package:shoes_acces/screens/users/shoeList/ShoesListPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/utils/Constants.dart';
@@ -271,6 +272,18 @@ class DashBoardPage extends GetView<DashBoardController> {
                             },
                             leading: const Icon(Icons.password_rounded),
                             title: const Text("Change Password"),
+                          ),
+                          Divider(
+                            color: colorPrimary.shade100,
+                            endIndent: 10,
+                            indent: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Get.to(()=> WebViewLinkOpnning(title: 'Privacy & Policy', url: 'https://sites.google.com/view/shoes-accessories/home?authuser=5',));
+                            },
+                            leading: const Icon(Icons.privacy_tip_rounded),
+                            title: const Text("Privacy & Policy"),
                           ),
                           Divider(
                             color: colorPrimary.shade100,

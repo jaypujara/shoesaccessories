@@ -46,6 +46,9 @@ dependencies:
   image_editor_plus: ^1.0.5
   path_provider: ^2.1.2
 
+  webview_flutter: ^3.0.4
+
+
   flutter_svg: ^2.0.9
 
 
@@ -81,7 +84,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
-    - assets/fonts/
+#    - assets/fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
