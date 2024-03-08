@@ -17,12 +17,11 @@ class OrderPlacedResult extends StatefulWidget {
 class _OrderPlacedResultState extends State<OrderPlacedResult> {
   CartController cartController = Get.find(tag: "CartController");
 
-  List<CartProductModel> dataList = [];
-
   @override
   void initState() {
-    dataList.addAll(cartController.cartProductList);
     super.initState();
+
+    print("INIT RESULT");
   }
 
   @override

@@ -371,24 +371,29 @@ class CartController extends GetxController {
       if (response.isNotEmpty) {
         var responseJson = jsonDecode(response);
         if (responseJson["Status"] == "1") {
+          removeOverlay();
           showSnackBarWithText(Get.context, responseJson["Message"],
               color: colorGreen);
           isOrderPlacementLoading.trigger(false);
           isOrderPlacementSuccessFull.trigger(true);
           getData(false);
+          print("TransFer");
           Get.off(() => const OrderPlacedResult());
         } else {
+          removeOverlay();
           showSnackBarWithText(Get.context, responseJson["Message"]);
           isOrderPlacementSuccessFull.trigger(false);
         }
       } else {
+        removeOverlay();
         showSnackBarWithText(Get.context, stringSomeThingWentWrong);
       }
     } catch (e) {
+      removeOverlay();
       log("ERROR: NS ${e.toString()}");
       showSnackBarWithText(Get.context, stringSomeThingWentWrong);
     } finally {
-      removeOverlay();
+      // removeOverlay();
       isOrderPlacementLoading.trigger(false);
       // isAddCartLoading.trigger(false);
     }
