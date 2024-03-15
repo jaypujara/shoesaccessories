@@ -1,4 +1,4 @@
-package com.shoes.shoes_acces;
+package com.shoes.shoes;
 
 import io.flutter.embedding.android.FlutterActivity;
 
