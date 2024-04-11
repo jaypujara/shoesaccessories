@@ -1,9 +1,14 @@
-import 'dart:developer';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shoes_acces/screens/users/cart/CartScreen.dart';
 
 import '../../../utils/ColorConstants.dart';
@@ -90,33 +95,39 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                       horizontal: 20),
                                                   child: AspectRatio(
                                                     aspectRatio: 1 / 1,
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          model.imagePath ?? "",
-                                                      imageBuilder: (context,
-                                                          imageProvider) {
-                                                        return Container(
-                                                          color: Colors.white,
-                                                          child: Image(
-                                                              image:
-                                                                  imageProvider),
-                                                        );
-                                                      },
-                                                      progressIndicatorBuilder:
-                                                          (context, url,
-                                                                  downloadProgress) =>
-                                                              Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(
-                                                        value: downloadProgress
-                                                            .progress,
-                                                        color: colorPrimary,
-                                                        strokeWidth: 2,
-                                                      )),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.error),
+                                                    child: PhotoView(
+                                                      imageProvider:
+                                                          NetworkImage(
+                                                              model.imagePath ??
+                                                                  ""),
+                                                      // child: CachedNetworkImage(
+                                                      //   imageUrl:
+                                                      //       model.imagePath ?? "",
+                                                      //   imageBuilder: (context,
+                                                      //       imageProvider) {
+                                                      //     return Container(
+                                                      //       color: Colors.white,
+                                                      //       child: Image(
+                                                      //           image:
+                                                      //               imageProvider),
+                                                      //     );
+                                                      //   },
+                                                      //   progressIndicatorBuilder:
+                                                      //       (context, url,
+                                                      //               downloadProgress) =>
+                                                      //           Center(
+                                                      //               child:
+                                                      //                   CircularProgressIndicator(
+                                                      //     value: downloadProgress
+                                                      //         .progress,
+                                                      //     color: colorPrimary,
+                                                      //     strokeWidth: 2,
+                                                      //   )),
+                                                      //   errorWidget: (context,
+                                                      //           url, error) =>
+                                                      //       const Icon(
+                                                      //           Icons.error),
+                                                      // ),
                                                     ),
                                                   ),
                                                 ),
@@ -191,59 +202,104 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                              const SizedBox(height: 10),
                                               Row(
                                                 children: [
-                                                  if (model.proDiscount !=
-                                                          null &&
-                                                      model.proDiscount != 0)
-                                                    Text(
-                                                      "${model.proDiscount}₹",
-                                                      textAlign: TextAlign.left,
-                                                      style: const TextStyle(
-                                                        color: colorGreen,
-                                                        fontSize: 16,
-                                                        height: 1,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
+                                                  Expanded(
+                                                    child: Row(
+                                                      children: [
+                                                        if (model.proDiscount !=
+                                                                null &&
+                                                            model.proDiscount !=
+                                                                0)
+                                                          Text(
+                                                            "${model.proDiscount}₹",
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: colorGreen,
+                                                              fontSize: 16,
+                                                              height: 1,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        if (model.proDiscount !=
+                                                                null &&
+                                                            model.proDiscount !=
+                                                                0)
+                                                          const SizedBox(
+                                                              width: 5),
+                                                        Text(
+                                                          "${model.proPrice}₹",
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                            color: model.proDiscount !=
+                                                                        null &&
+                                                                    model.proDiscount !=
+                                                                        0
+                                                                ? Colors.red
+                                                                : colorGreen,
+                                                            fontSize: model.proDiscount !=
+                                                                        null &&
+                                                                    model.proDiscount !=
+                                                                        0
+                                                                ? 12
+                                                                : 16,
+                                                            decoration: model
+                                                                            .proDiscount !=
+                                                                        null &&
+                                                                    model.proDiscount !=
+                                                                        0
+                                                                ? TextDecoration
+                                                                    .lineThrough
+                                                                : null,
+                                                            height: 1,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  if (model.proDiscount !=
-                                                          null &&
-                                                      model.proDiscount != 0)
-                                                    const SizedBox(width: 5),
-                                                  Text(
-                                                    "${model.proPrice}₹",
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                      color: model.proDiscount !=
-                                                                  null &&
-                                                              model.proDiscount !=
-                                                                  0
-                                                          ? Colors.red
-                                                          : colorGreen,
-                                                      fontSize: model.proDiscount !=
-                                                                  null &&
-                                                              model.proDiscount !=
-                                                                  0
-                                                          ? 12
-                                                          : 16,
-                                                      decoration:
-                                                          model.proDiscount !=
-                                                                      null &&
-                                                                  model.proDiscount !=
-                                                                      0
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null,
-                                                      height: 1,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      if (model.imagePath !=
+                                                          null) {
+                                                        XFile fileForShare =
+                                                            await fileFromImageUrl(
+                                                                model.imagePath ??
+                                                                    "",
+                                                                model.imagePath!
+                                                                    .split("/")
+                                                                    .last);
+
+                                                        Share.shareXFiles(
+                                                          [fileForShare],
+                                                          text:
+                                                              "${model.proName}\nPrice :${model.proDiscount == null || model.proDiscount == 0 ? model.proPrice : model.proDiscount}",
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: colorPrimary
+                                                            .shade100,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              spaceVertical),
+                                                      child: const Icon(
+                                                        Icons.share,
+                                                        size: 16,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(height: 10),
                                               (model.model != null)
                                                   ? Row(
                                                       mainAxisSize:
@@ -299,7 +355,6 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                     });
                                                                   },
                                                                   onClose: () {
-                                                                    log("ENCLOSE");
                                                                     controller
                                                                         .mapWithCartList();
                                                                   });
@@ -369,45 +424,82 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                     .allow(RegExp(
                                                                         '[0-9]')),
                                                               ],
-                                                              enableSuggestions: false,
-                                                              decoration:const InputDecoration(
-                                                                border:InputBorder.none,
+                                                              enableSuggestions:
+                                                                  false,
+                                                              decoration:
+                                                                  const InputDecoration(
+                                                                border:
+                                                                    InputBorder
+                                                                        .none,
                                                                 counterText: "",
                                                               ),
-                                                              onChanged: (value) async {
-                                                                print(model.model!.quantityController.text);
-                                                                if (int.parse(model.model!.quantityController.text) > 0) {
-
-
+                                                              onChanged:
+                                                                  (value) async {
+                                                                print(model
+                                                                    .model!
+                                                                    .quantityController
+                                                                    .text);
+                                                                if (int.parse(model
+                                                                        .model!
+                                                                        .quantityController
+                                                                        .text) >
+                                                                    0) {
                                                                   await controllerCart.addToCart(
-                                                                      productId:model.proId ??"",
-                                                                      quantity: int.parse(model.model!.quantityController.text),
-                                                                      cartId: (model.model!.cartId ?? 0).toString());
+                                                                      productId:
+                                                                          model.proId ??
+                                                                              "",
+                                                                      quantity: int.parse(model
+                                                                          .model!
+                                                                          .quantityController
+                                                                          .text),
+                                                                      cartId: (model.model!.cartId ??
+                                                                              0)
+                                                                          .toString());
                                                                 } else {
                                                                   buildConfirmationDialog(
-                                                                      icon: Icons.delete_forever_rounded,
-                                                                      title: "Delete From Cart",
-                                                                      msg:"Are you sure you want to remove this product from the cart?",
-                                                                      onYesTap:() {
+                                                                      icon: Icons
+                                                                          .delete_forever_rounded,
+                                                                      title:
+                                                                          "Delete From Cart",
+                                                                      msg:
+                                                                          "Are you sure you want to remove this product from the cart?",
+                                                                      onYesTap:
+                                                                          () {
                                                                         Get.back();
                                                                         controllerCart.deleteFromCart((model.model!.cartId ??
                                                                                 0)
                                                                             .toString());
                                                                       });
-
-
-                                                                } controller.mapWithCartList();
+                                                                }
+                                                                controller
+                                                                    .mapWithCartList();
                                                               },
                                                             ),
                                                           ),
                                                         ),
                                                         IconButton(
                                                           onPressed: () async {
-                                                            log(((model.model!.proQty ?? 1) + 1).toString());
-                                                            await controllerCart.addToCart(productId: model.proId ?? "",
-                                                                quantity: (model.model!.proQty ??1) + 1,
-                                                                cartId: (model.model!.cartId ?? 0).toString());
-                                                            controller.mapWithCartList();
+                                                            print(((model.model!
+                                                                            .proQty ??
+                                                                        1) +
+                                                                    1)
+                                                                .toString());
+                                                            await controllerCart.addToCart(
+                                                                productId: model
+                                                                        .proId ??
+                                                                    "",
+                                                                quantity: (model
+                                                                            .model!
+                                                                            .proQty ??
+                                                                        1) +
+                                                                    1,
+                                                                cartId: (model
+                                                                            .model!
+                                                                            .cartId ??
+                                                                        0)
+                                                                    .toString());
+                                                            controller
+                                                                .mapWithCartList();
                                                           },
                                                           icon: Container(
                                                             padding:
@@ -562,5 +654,23 @@ class _ShoesListPageState extends State<ShoesListPage> {
         ),
       ),
     );
+  }
+
+  fileFromImageUrl(String url, String userName) async {
+    final response = await http.get(
+      Uri.parse(url),
+    );
+
+    final documentDirectory = await getApplicationDocumentsDirectory();
+
+    var randomNumber = Random();
+
+    final file = File(
+      "${documentDirectory.path}/${randomNumber.nextInt(100)}_$userName.png",
+    );
+
+    file.writeAsBytesSync(response.bodyBytes);
+
+    return XFile(file.path);
   }
 }

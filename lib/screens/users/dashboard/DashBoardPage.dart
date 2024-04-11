@@ -49,14 +49,12 @@ class DashBoardPage extends GetView<DashBoardController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 const SizedBox(height: 20),
                 Obx(
                   () => controller.imageList.isNotEmpty
                       ? _buildSlider()
                       : const SizedBox(),
                 ),
-
                 const SizedBox(height: 20),
                 Obx(
                   () => !controller.isLoading.value &&
@@ -280,7 +278,11 @@ class DashBoardPage extends GetView<DashBoardController> {
                           ),
                           ListTile(
                             onTap: () {
-                              Get.to(()=> WebViewLinkOpnning(title: 'Privacy & Policy', url: 'https://sites.google.com/view/shoes-accessories/home?authuser=5',));
+                              Get.to(() => WebViewLinkOpnning(
+                                    title: 'Privacy & Policy',
+                                    url:
+                                        'https://sites.google.com/view/shoes-accessories/home?authuser=5',
+                                  ));
                             },
                             leading: const Icon(Icons.privacy_tip_rounded),
                             title: const Text("Privacy & Policy"),
@@ -449,11 +451,12 @@ class DashBoardPage extends GetView<DashBoardController> {
                     },
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                      color: colorPrimary,
-                      strokeWidth: 2,
-                    )),
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        color: colorPrimary,
+                        strokeWidth: 2,
+                      ),
+                    ),
                     errorWidget: (context, url, error) =>
                         const Icon(Icons.error),
                   ),
@@ -467,7 +470,6 @@ class DashBoardPage extends GetView<DashBoardController> {
                       color: colorPrimary.shade400,
                       gradient: const LinearGradient(
                           colors: [
-                            // Colors.transparent,
                             Color(0xFF6842FF),
                             Color(0xFF896BFF),
                           ],
