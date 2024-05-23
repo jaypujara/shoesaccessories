@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/admin/add_products/AddProduct.dart';
 import 'package:shoes_acces/screens/admin/categories/AddCategory.dart';
+import 'package:shoes_acces/screens/admin/order_history/OrderHistoryListAdmin.dart';
 import 'package:shoes_acces/screens/admin/shoeList/ADShoesListPage.dart';
 import 'package:shoes_acces/screens/users/dashboard/model/CategoryResponseModel.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
@@ -218,7 +219,7 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Container(
-                        height: 50,
+                        height: 55,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: colorPrimary.shade400,
@@ -425,6 +426,21 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                     ),
                     Divider(
                       color: colorPrimary.shade100,
+                      endIndent: 10,
+                      indent: 50,
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        if (controller.keyScaffold.currentState != null) {
+                          controller.keyScaffold.currentState!.closeDrawer();
+                        }
+                        Get.to(OrderHistoryListAdmin());
+                      },
+                      leading: const Icon(Icons.delivery_dining_rounded),
+                      title: const Text("Order History"),
+                    ),
+                    Divider(
+                      color: colorPrimary.shade100,
                     ),
                   ],
                 ),
@@ -449,26 +465,6 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
               leading: const Icon(Icons.logout_rounded),
               title: const Text("Logout"),
             ),
-            // if (!isAdminLogin)
-            //   Divider(
-            //     color: colorPrimary.shade100,
-            //     endIndent: 10,
-            //     indent: 50,
-            //   ),
-            // if (!isAdminLogin)
-            //   ListTile(
-            //     onTap: () {
-            //
-            //       _buildLogOutOrDeleteAcc(
-            //         "Delete",
-            //         "Are you sure?\nYou want to delete account from this out servers!",
-            //         Icons.delete_forever_rounded,
-            //         isDelete: true,
-            //       );
-            //     },
-            //     leading: const Icon(Icons.delete_forever_rounded),
-            //     title: const Text("Delete Account"),
-            //   ),
             Divider(color: colorPrimary.shade100),
           ],
         ),

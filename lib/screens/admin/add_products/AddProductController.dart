@@ -21,6 +21,7 @@ import '../../users/shoeList/model/ProductResponseModel.dart';
 class AddProductController extends GetxController {
   final Rx<GlobalKey<FormState>> keyForm = GlobalKey<FormState>().obs;
   final TextEditingController controllerName = TextEditingController();
+  final TextEditingController controllerProductCode = TextEditingController();
   final TextEditingController controllerPrice = TextEditingController();
   final TextEditingController controllerPriceDiscount = TextEditingController();
   final TextEditingController controllerSGST = TextEditingController();
@@ -49,6 +50,7 @@ class AddProductController extends GetxController {
       editModel = Get.arguments["model"];
       catId = Get.arguments["catId"];
       controllerName.text = editModel!.proName ?? "";
+      controllerProductCode.text = editModel!.proCode ?? "";
       controllerPrice.text = (editModel!.proPrice ?? 0).toString();
       controllerPriceDiscount.text = (editModel!.proDiscount ?? 0).toString();
       controllerSGST.text = (editModel!.proSGST ?? 0).toString();
@@ -119,6 +121,7 @@ class AddProductController extends GetxController {
       var request = http.MultipartRequest("POST", postUri);
       request.fields['Pro_Id'] = '0';
       request.fields['Pro_Name'] = controllerName.text.trim();
+      request.fields['Pro_Code'] = controllerProductCode.text.trim();
       request.fields['Pro_Cat_Id'] = selectedCategory!.catId.toString();
       request.fields['Pro_Price'] = controllerPrice.text.trim();
       request.fields['Pro_Discount'] = controllerPriceDiscount.text.trim();
@@ -157,6 +160,7 @@ class AddProductController extends GetxController {
         params: json.encode({
           "Pro_Id": editModel!.proId,
           "Pro_Name": controllerName.text.trim(),
+          "Pro_Code": controllerProductCode.text.trim(),
           'Pro_Cat_Id': selectedCategory!.catId.toString(),
           'Pro_Price': controllerPrice.text.trim(),
           'Pro_Discount': controllerPriceDiscount.text.trim(),

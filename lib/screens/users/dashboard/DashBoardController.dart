@@ -35,6 +35,7 @@ class DashBoardController extends GetxController {
   RxString error = "".obs;
 
   RxBool isAdmin = false.obs;
+  static RxBool isGuest = false.obs;
 
   @override
   void onInit() {
@@ -63,6 +64,7 @@ class DashBoardController extends GetxController {
   }
 
   getData() async {
+    isGuest.trigger(await Preferences().getPrefBool(Preferences.prefIsGuest));
     HttpRequestModel request = HttpRequestModel(
         url: endCategoryList,
         authMethod: '',

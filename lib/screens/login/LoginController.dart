@@ -63,6 +63,7 @@ class LoginController extends GetxController {
               Preferences.prefFullName, jsonResponse["Data"]["Cus_FullName"]);
           await Preferences().setPrefString(Preferences.prefEmail, email);
           await Preferences().setPrefString(Preferences.prefPassword, password);
+          await Preferences().setPrefBool(Preferences.prefIsGuest, false);
           // await Preferences().setPrefBool(
           //     Preferences.prefIsAdmin, jsonResponse["Data"]["IsAdmin"] == "1");
           isAdminLogin = jsonResponse["Data"]["IsAdmin"] == "1";

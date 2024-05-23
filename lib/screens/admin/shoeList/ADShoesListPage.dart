@@ -153,6 +153,18 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                                         ),
                                                       ),
                                                       Text(
+                                                        "Code : ${model.proCode}",
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: const TextStyle(
+                                                          color: colorGrayText,
+                                                          fontSize: 14,
+                                                          height: 1,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      Text(
                                                         model.proWeight!.isEmpty
                                                             ? ""
                                                             : "${model.proWeight}",

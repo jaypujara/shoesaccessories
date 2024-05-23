@@ -63,9 +63,9 @@ class ADShoesListController extends GetxController {
       if (response.isNotEmpty) {
         ProductResponseModel responseModel =
             ProductResponseModel.fromJson(jsonDecode(response));
+        shoesList.clear();
+        searchShoesList.clear();
         if (responseModel.status == "1" && responseModel.productList != null) {
-          shoesList.clear();
-          searchShoesList.clear();
           if (responseModel.productList != null) {
             shoesList.addAll(responseModel.productList!);
             searchShoesList.addAll(shoesList);

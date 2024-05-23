@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/users/dashboard/DashBoardPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 import 'package:shoes_acces/widgets/ThemedTextField.dart';
 
+import '../../utils/Preferences.dart';
 import '../../widgets/Widgets.dart';
 import '../users/register/RegisterPage.dart';
 import 'LoginController.dart';
@@ -42,7 +44,6 @@ class LoginPage extends GetView<LoginController> {
                     ),
                   ),
                   const Text(
-
                     "Sign in to your account",
                     style: TextStyle(
                       fontSize: 16,
@@ -138,13 +139,12 @@ class LoginPage extends GetView<LoginController> {
                                     controller:
                                         controller.controllerForgotNumber,
                                     borderRadiusTextField: 25,
-                                    hintText: "Email Id",
-                                    preFix:
-                                        const Icon(Icons.phone_android_rounded),
-                                    keyBoardType: TextInputType.phone,
+                                    hintText: "Mobile Number / Email",
+                                    preFix: const Icon(
+                                        Icons.alternate_email_rounded),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return "Please enter you number!";
+                                        return "Please enter your registered Mobile Number or Email!";
                                       }
                                       return null;
                                     },
@@ -211,6 +211,15 @@ class LoginPage extends GetView<LoginController> {
                         height: 1,
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  FilledButton.tonal(
+                    onPressed: () async {
+                      await Preferences()
+                          .setPrefBool(Preferences.prefIsGuest, true);
+                      Get.off(DashBoardPage());
+                    },
+                    child: const Text("Continue as Guest"),
                   ),
                 ],
               ),

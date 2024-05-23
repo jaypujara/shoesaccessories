@@ -45,44 +45,32 @@ class AddProduct extends GetView<AddProductController> {
                                 aspectRatio: 3 / 3.5,
                                 child: Container(
                                     decoration: BoxDecoration(
-
                                       border: Border.all(
                                         color: colorPrimary.shade300,
                                         width: 1,
                                       ),
                                       borderRadius: boxBorderRadius,
                                     ),
-                                    child:  CachedNetworkImage(
+                                    child: CachedNetworkImage(
                                       imageUrl:
-                                      controller.editModel!.imagePath ?? "",
-                                      imageBuilder: (context,
-                                          imageProvider) {
+                                          controller.editModel!.imagePath ?? "",
+                                      imageBuilder: (context, imageProvider) {
                                         return Container(
-                                          color:
-                                          Colors.white,
-                                          child: Image(
-                                              image:
-                                              imageProvider),
+                                          color: Colors.white,
+                                          child: Image(image: imageProvider),
                                         );
                                       },
-                                      progressIndicatorBuilder:
-                                          (context, url,
-                                          downloadProgress) =>
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
                                           Center(
-                                              child:
-                                              CircularProgressIndicator(
-                                                value:
-                                                downloadProgress
-                                                    .progress,
-                                                color: colorPrimary,
-                                                strokeWidth: 2,
-                                              )),
-                                      errorWidget: (context,
-                                          url, error) =>
-                                      const Icon(
-                                          Icons.error),
-                                    )
-                                    ),
+                                              child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: colorPrimary,
+                                        strokeWidth: 2,
+                                      )),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    )),
                               ),
                             ),
                           ),
@@ -113,8 +101,8 @@ class AddProduct extends GetView<AddProductController> {
                                   child: controller.image != null
                                       ? Image.file(controller.image!)
                                       : const Center(
-                                    child: Text("Selecte Image"),
-                                  ),
+                                          child: Text("Selecte Image"),
+                                        ),
                                 ),
                               ),
                             ),
@@ -158,6 +146,23 @@ class AddProduct extends GetView<AddProductController> {
                         if (value == null || value.isEmpty) {
                           return "Please enter you full name!";
                         }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    ThemedTextField(
+                      controller: controller.controllerProductCode,
+                      borderRadiusTextField: 25,
+                      hintText: "Product Code",
+                      keyBoardType: TextInputType.name,
+                      preFix: const Icon(Icons.code),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter you full name!";
+                        } else if (value.length > 10) {
+                          return "Code length has to be less then 10 characters";
+                        }
+
                         return null;
                       },
                     ),

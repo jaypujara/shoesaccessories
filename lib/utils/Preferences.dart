@@ -7,6 +7,7 @@ class Preferences {
   static const String prefPhone = "phone";
   static const String prefEmail = 'email';
   static const String prefPassword = 'password';
+  static const String prefIsGuest = 'isGuest';
 
 
   setPrefString(String key, String value) async {

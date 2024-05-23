@@ -76,3 +76,17 @@ const String endOrderSave = "OrderSave";
 
 /// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
 const String endOrderHistoryList = "OrderHistoryList";
+
+/// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
+///  * --OrderId,Status
+///  * Status = 0 --> 'Order Placed'
+///  * Status = 1 --> 'Accepted'
+///  * Status = 2 --> 'Dispatch'
+///  * Status = 3 --> 'Delivered'
+const String endOrderStatusChange = "OrderStatusUpdate";
+
+
+const String endAppVersion = "CheckAppversion";
+
+
+

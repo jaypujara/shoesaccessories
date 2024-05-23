@@ -34,6 +34,7 @@ class OrderModel {
   String? address;
   int? productId;
   String? productName;
+  String? productCode;
   double? subTotal;
   double? totalAmount;
   double? qty;
@@ -43,6 +44,7 @@ class OrderModel {
   String? orderDate;
   String? expectedDeliveryDate;
   String? status;
+  int? statusCode;
   String? imagePath;
 
   OrderModel(
@@ -52,6 +54,7 @@ class OrderModel {
       this.address,
       this.productId,
       this.productName,
+      this.productCode,
       this.subTotal,
       this.totalAmount,
       this.qty,
@@ -61,6 +64,7 @@ class OrderModel {
       this.orderDate,
       this.expectedDeliveryDate,
       this.status,
+      this.statusCode,
       this.imagePath});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -70,6 +74,7 @@ class OrderModel {
     address = json['Address'];
     productId = json['ProductId'];
     productName = json['ProductName'];
+    productCode = json['ProductCode'];
     subTotal = json['SubTotal'];
     totalAmount = json['TotalAmount'];
     qty = json['Qty'];
@@ -79,6 +84,7 @@ class OrderModel {
     orderDate = json['OrderDate'];
     expectedDeliveryDate = json['ExpectedDeliveryDate'];
     status = json['Status'];
+    statusCode = json['StatusCode'] != null ? int.parse(json['StatusCode']) : 0;
     imagePath = json['ImagePath'];
   }
 
@@ -90,6 +96,7 @@ class OrderModel {
     data['Address'] = address;
     data['ProductId'] = productId;
     data['ProductName'] = productName;
+    data['ProductCode'] = productCode;
     data['SubTotal'] = subTotal;
     data['TotalAmount'] = totalAmount;
     data['Qty'] = qty;
@@ -97,6 +104,8 @@ class OrderModel {
     data['SGST'] = sGST;
     data['CGST'] = cGST;
     data['OrderDate'] = orderDate;
+    data['Status'] = statusCode;
+    data['StatusCode'] = statusCode;
     data['ExpectedDeliveryDate'] = expectedDeliveryDate;
     return data;
   }

@@ -304,6 +304,7 @@ class CartController extends GetxController {
     isOrderPlacementSuccessFull.trigger(false);
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
     String productIds = "";
+    String productCodes = "";
     String productNames = "";
     String productQty = "";
     String productTotal = "";
@@ -317,6 +318,7 @@ class CartController extends GetxController {
               : model.proPrice) ??
           0;
       productIds += "${productIds.isEmpty ? "" : "^"}${model.proId ?? ""}";
+      productCodes += "${productCodes.isEmpty ? "" : "^"}${model.proCode ?? ""}";
       productNames +=
           "${productNames.isEmpty ? "" : "^"}${model.proName ?? ""}";
       productQty += "${productQty.isEmpty ? "" : "^"}${model.proQty ?? "1"}";
@@ -339,6 +341,7 @@ class CartController extends GetxController {
           "UserId": userId,
           "AddressId": addressId.toString(),
           "ProductId": productIds,
+          "ProductCode": productCodes,
           "ProductName": productNames,
           "SubTotal": subTotal.value.toString(),
           "TotalAmount": total.value.toString(),

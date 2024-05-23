@@ -32,6 +32,7 @@ class CartListResponseModel {
 class CartProductModel {
   int? cartId;
   String? proId;
+  String? proCode;
   String? proName;
   double? proPrice;
   double? proDiscount;
@@ -46,6 +47,7 @@ class CartProductModel {
   CartProductModel(
       {this.cartId,
       this.proId,
+      this.proCode,
       this.proName,
       this.proPrice,
       this.proDiscount,
@@ -62,6 +64,7 @@ class CartProductModel {
     cartId = json['CartId'];
     proId = json['Pro_Id'];
     proName = json['Pro_Name'];
+    proCode = json['Pro_Code'];
     proPrice = json['Pro_Price'];
     proDiscount = json['Pro_Discount'];
     proSGST = json['Pro_SGST'];
@@ -77,6 +80,7 @@ class CartProductModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['CartId'] = cartId;
     data['Pro_Id'] = proId;
+    data['Pro_Code'] = proCode;
     data['Pro_Name'] = proName;
     data['Pro_Price'] = proPrice;
     data['Pro_Discount'] = proDiscount;

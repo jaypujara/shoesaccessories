@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shoes_acces/screens/login/LoginPage.dart';
 import 'package:shoes_acces/screens/users/cart/CartScreen.dart';
+import 'package:shoes_acces/screens/users/dashboard/DashBoardController.dart';
 
 import '../../../utils/ColorConstants.dart';
 import '../../../utils/Constants.dart';
@@ -72,252 +74,449 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                     horizontal: 10,
                                     vertical: 8,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      AspectRatio(
-                                        aspectRatio: 3 / 3.5,
-                                        child: Material(
-                                          elevation: 2,
-                                          color: colorWhite,
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Get.dialog(
-                                                Dialog(
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  backgroundColor: colorWhite,
-                                                  insetPadding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 20),
-                                                  child: AspectRatio(
-                                                    aspectRatio: 1 / 1,
-                                                    child: PhotoView(
-                                                      imageProvider:
-                                                          NetworkImage(
-                                                              model.imagePath ??
-                                                                  ""),
-                                                      // child: CachedNetworkImage(
-                                                      //   imageUrl:
-                                                      //       model.imagePath ?? "",
-                                                      //   imageBuilder: (context,
-                                                      //       imageProvider) {
-                                                      //     return Container(
-                                                      //       color: Colors.white,
-                                                      //       child: Image(
-                                                      //           image:
-                                                      //               imageProvider),
-                                                      //     );
-                                                      //   },
-                                                      //   progressIndicatorBuilder:
-                                                      //       (context, url,
-                                                      //               downloadProgress) =>
-                                                      //           Center(
-                                                      //               child:
-                                                      //                   CircularProgressIndicator(
-                                                      //     value: downloadProgress
-                                                      //         .progress,
-                                                      //     color: colorPrimary,
-                                                      //     strokeWidth: 2,
-                                                      //   )),
-                                                      //   errorWidget: (context,
-                                                      //           url, error) =>
-                                                      //       const Icon(
-                                                      //           Icons.error),
-                                                      // ),
+                                  child: InkWell(
+                                    onTap: DashBoardController.isGuest.value
+                                        ? () {
+                                            buildConfirmationDialog(
+                                                title: "Login",
+                                                msg:
+                                                    "You are not logged in yet\nPlease Login first",
+                                                icon: Icons.exit_to_app_rounded,
+                                                onYesTap: () {
+                                                  print("YesTap");
+                                                  Get.back(closeOverlays: true);
+                                                  Get.offAll(LoginPage());
+                                                });
+                                          }
+                                        : null,
+                                    child: Row(
+                                      children: [
+                                        AspectRatio(
+                                          aspectRatio: 3 / 3.5,
+                                          child: Material(
+                                            elevation: 2,
+                                            color: colorWhite,
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Get.dialog(
+                                                  Dialog(
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    backgroundColor: colorWhite,
+                                                    insetPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 20),
+                                                    child: AspectRatio(
+                                                      aspectRatio: 1 / 1,
+                                                      child: PhotoView(
+                                                        imageProvider:
+                                                            NetworkImage(model
+                                                                    .imagePath ??
+                                                                ""),
+                                                        // child: CachedNetworkImage(
+                                                        //   imageUrl:
+                                                        //       model.imagePath ?? "",
+                                                        //   imageBuilder: (context,
+                                                        //       imageProvider) {
+                                                        //     return Container(
+                                                        //       color: Colors.white,
+                                                        //       child: Image(
+                                                        //           image:
+                                                        //               imageProvider),
+                                                        //     );
+                                                        //   },
+                                                        //   progressIndicatorBuilder:
+                                                        //       (context, url,
+                                                        //               downloadProgress) =>
+                                                        //           Center(
+                                                        //               child:
+                                                        //                   CircularProgressIndicator(
+                                                        //     value: downloadProgress
+                                                        //         .progress,
+                                                        //     color: colorPrimary,
+                                                        //     strokeWidth: 2,
+                                                        //   )),
+                                                        //   errorWidget: (context,
+                                                        //           url, error) =>
+                                                        //       const Icon(
+                                                        //           Icons.error),
+                                                        // ),
+                                                      ),
                                                     ),
                                                   ),
+                                                );
+                                              },
+                                              child: AspectRatio(
+                                                aspectRatio: 3 / 4,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      model.imagePath ?? "",
+                                                  imageBuilder:
+                                                      (context, imageProvider) {
+                                                    return Container(
+                                                      color: Colors.white,
+                                                      child: Image(
+                                                          image: imageProvider),
+                                                    );
+                                                  },
+                                                  progressIndicatorBuilder: (context,
+                                                          url,
+                                                          downloadProgress) =>
+                                                      Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    color: colorPrimary,
+                                                    strokeWidth: 2,
+                                                  )),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
                                                 ),
-                                              );
-                                            },
-                                            child: AspectRatio(
-                                              aspectRatio: 3 / 4,
-                                              child: CachedNetworkImage(
-                                                imageUrl: model.imagePath ?? "",
-                                                imageBuilder:
-                                                    (context, imageProvider) {
-                                                  return Container(
-                                                    color: Colors.white,
-                                                    child: Image(
-                                                        image: imageProvider),
-                                                  );
-                                                },
-                                                progressIndicatorBuilder: (context,
-                                                        url,
-                                                        downloadProgress) =>
-                                                    Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
-                                                  color: colorPrimary,
-                                                  strokeWidth: 2,
-                                                )),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 8,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                "${model.proName}",
-                                                textAlign: TextAlign.left,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  color: colorBlack,
-                                                  fontSize: 18,
-                                                  height: 1,
-                                                  fontWeight: FontWeight.w500,
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                  "${model.proName}",
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: colorBlack,
+                                                    fontSize: 18,
+                                                    height: 1,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                model.proWeight!.isEmpty
-                                                    ? ""
-                                                    : "${model.proWeight}",
-                                                textAlign: TextAlign.left,
-                                                style: const TextStyle(
-                                                  color: colorGrayText,
-                                                  fontSize: 14,
-                                                  height: 1,
-                                                  fontWeight: FontWeight.w500,
+                                                Text(
+                                                  model.proWeight!.isEmpty
+                                                      ? ""
+                                                      : "${model.proWeight}",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                    color: colorGrayText,
+                                                    fontSize: 14,
+                                                    height: 1,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        if (model.proDiscount !=
-                                                                null &&
-                                                            model.proDiscount !=
-                                                                0)
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          if (model.proDiscount !=
+                                                                  null &&
+                                                              model.proDiscount !=
+                                                                  0)
+                                                            Text(
+                                                              "${model.proDiscount}₹",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    colorGreen,
+                                                                fontSize: 16,
+                                                                height: 1,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          if (model.proDiscount !=
+                                                                  null &&
+                                                              model.proDiscount !=
+                                                                  0)
+                                                            const SizedBox(
+                                                                width: 5),
                                                           Text(
-                                                            "${model.proDiscount}₹",
+                                                            "${model.proPrice}₹",
                                                             textAlign:
                                                                 TextAlign.left,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: colorGreen,
-                                                              fontSize: 16,
+                                                            style: TextStyle(
+                                                              color: model.proDiscount !=
+                                                                          null &&
+                                                                      model.proDiscount !=
+                                                                          0
+                                                                  ? Colors.red
+                                                                  : colorGreen,
+                                                              fontSize: model.proDiscount !=
+                                                                          null &&
+                                                                      model.proDiscount !=
+                                                                          0
+                                                                  ? 12
+                                                                  : 16,
+                                                              decoration: model
+                                                                              .proDiscount !=
+                                                                          null &&
+                                                                      model.proDiscount !=
+                                                                          0
+                                                                  ? TextDecoration
+                                                                      .lineThrough
+                                                                  : null,
                                                               height: 1,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
                                                             ),
                                                           ),
-                                                        if (model.proDiscount !=
-                                                                null &&
-                                                            model.proDiscount !=
-                                                                0)
-                                                          const SizedBox(
-                                                              width: 5),
-                                                        Text(
-                                                          "${model.proPrice}₹",
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: TextStyle(
-                                                            color: model.proDiscount !=
-                                                                        null &&
-                                                                    model.proDiscount !=
-                                                                        0
-                                                                ? Colors.red
-                                                                : colorGreen,
-                                                            fontSize: model.proDiscount !=
-                                                                        null &&
-                                                                    model.proDiscount !=
-                                                                        0
-                                                                ? 12
-                                                                : 16,
-                                                            decoration: model
-                                                                            .proDiscount !=
-                                                                        null &&
-                                                                    model.proDiscount !=
-                                                                        0
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : null,
-                                                            height: 1,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      if (model.imagePath !=
-                                                          null) {
-                                                        XFile fileForShare =
-                                                            await fileFromImageUrl(
-                                                                model.imagePath ??
-                                                                    "",
-                                                                model.imagePath!
-                                                                    .split("/")
-                                                                    .last);
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        if (model.imagePath !=
+                                                            null) {
+                                                          XFile fileForShare =
+                                                              await fileFromImageUrl(
+                                                                  model.imagePath ??
+                                                                      "",
+                                                                  model
+                                                                      .imagePath!
+                                                                      .split(
+                                                                          "/")
+                                                                      .last);
 
-                                                        Share.shareXFiles(
-                                                          [fileForShare],
-                                                          text:
-                                                              "${model.proName}\nPrice :${model.proDiscount == null || model.proDiscount == 0 ? model.proPrice : model.proDiscount}",
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: colorPrimary
-                                                            .shade100,
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              spaceVertical),
-                                                      child: const Icon(
-                                                        Icons.share,
-                                                        size: 16,
+                                                          Share.shareXFiles(
+                                                            [fileForShare],
+                                                            text:
+                                                                "${model.proName}\nPrice :${model.proDiscount == null || model.proDiscount == 0 ? model.proPrice : model.proDiscount}",
+                                                          );
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: colorPrimary
+                                                              .shade100,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(
+                                                                spaceVertical),
+                                                        child: const Icon(
+                                                          Icons.share,
+                                                          size: 16,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              (model.model != null)
-                                                  ? Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        IconButton(
-                                                          onPressed: () async {
-                                                            if ((model.model!
-                                                                        .proQty ??
-                                                                    1) >
-                                                                1) {
+                                                  ],
+                                                ),
+                                                (model.model != null)
+                                                    ? Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              if ((model.model!
+                                                                          .proQty ??
+                                                                      1) >
+                                                                  1) {
+                                                                await controllerCart.addToCart(
+                                                                    productId:
+                                                                        model.proId ??
+                                                                            "",
+                                                                    quantity:
+                                                                        (model.model!.proQty ??
+                                                                                1) -
+                                                                            1,
+                                                                    cartId: (model.model!.cartId ??
+                                                                            0)
+                                                                        .toString());
+                                                                controller
+                                                                    .mapWithCartList();
+                                                              } else {
+                                                                await buildConfirmationDialog(
+                                                                    icon: Icons
+                                                                        .delete_forever_rounded,
+                                                                    title:
+                                                                        "Delete From Cart",
+                                                                    msg:
+                                                                        "Are you sure you want to remove this product from the cart?",
+                                                                    onYesTap:
+                                                                        () async {
+                                                                      await controllerCart
+                                                                          .deleteFromCart((model.model!.cartId ?? 0)
+                                                                              .toString())
+                                                                          .then(
+                                                                              (v) {
+                                                                        Future.delayed(
+                                                                            const Duration(seconds: 1),
+                                                                            () {
+                                                                          controller
+                                                                              .mapWithCartList();
+                                                                        });
+                                                                        model.model =
+                                                                            null;
+                                                                        Get.back();
+                                                                      });
+                                                                    },
+                                                                    onClose:
+                                                                        () {
+                                                                      controller
+                                                                          .mapWithCartList();
+                                                                    });
+                                                              }
+                                                            },
+                                                            icon: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(3),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20.0),
+                                                                color: Colors
+                                                                    .green,
+                                                                border:
+                                                                    Border.all(
+                                                                  color: colorPrimary
+                                                                      .shade300,
+                                                                  width: 1,
+                                                                ),
+                                                              ),
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .remove_rounded,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 24,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Container(
+                                                              height: 32,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5.0),
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 1,
+                                                                ),
+                                                              ),
+                                                              child: TextField(
+                                                                controller: model
+                                                                    .model!
+                                                                    .quantityController,
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                maxLines: 1,
+                                                                minLines: 1,
+                                                                inputFormatters: [
+                                                                  LengthLimitingTextInputFormatter(
+                                                                      3),
+                                                                  FilteringTextInputFormatter
+                                                                      .allow(RegExp(
+                                                                          '[0-9]')),
+                                                                ],
+                                                                enableSuggestions:
+                                                                    false,
+                                                                decoration:
+                                                                    const InputDecoration(
+                                                                  border:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  counterText:
+                                                                      "",
+                                                                ),
+                                                                onChanged:
+                                                                    (value) async {
+                                                                  print(model
+                                                                      .model!
+                                                                      .quantityController
+                                                                      .text);
+                                                                  if (int.parse(model
+                                                                          .model!
+                                                                          .quantityController
+                                                                          .text) >
+                                                                      0) {
+                                                                    await controllerCart.addToCart(
+                                                                        productId:
+                                                                            model.proId ??
+                                                                                "",
+                                                                        quantity: int.parse(model
+                                                                            .model!
+                                                                            .quantityController
+                                                                            .text),
+                                                                        cartId: (model.model!.cartId ??
+                                                                                0)
+                                                                            .toString());
+                                                                  } else {
+                                                                    buildConfirmationDialog(
+                                                                        icon: Icons
+                                                                            .delete_forever_rounded,
+                                                                        title:
+                                                                            "Delete From Cart",
+                                                                        msg:
+                                                                            "Are you sure you want to remove this product from the cart?",
+                                                                        onYesTap:
+                                                                            () {
+                                                                          Get.back();
+                                                                          controllerCart
+                                                                              .deleteFromCart((model.model!.cartId ?? 0).toString());
+                                                                        });
+                                                                  }
+                                                                  controller
+                                                                      .mapWithCartList();
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              print(((model.model!
+                                                                              .proQty ??
+                                                                          1) +
+                                                                      1)
+                                                                  .toString());
                                                               await controllerCart.addToCart(
                                                                   productId:
                                                                       model.proId ??
                                                                           "",
                                                                   quantity:
                                                                       (model.model!.proQty ??
-                                                                              1) -
+                                                                              1) +
                                                                           1,
                                                                   cartId: (model
                                                                               .model!
@@ -326,190 +525,43 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                       .toString());
                                                               controller
                                                                   .mapWithCartList();
-                                                            } else {
-                                                              await buildConfirmationDialog(
-                                                                  icon: Icons
-                                                                      .delete_forever_rounded,
-                                                                  title:
-                                                                      "Delete From Cart",
-                                                                  msg:
-                                                                      "Are you sure you want to remove this product from the cart?",
-                                                                  onYesTap:
-                                                                      () async {
-                                                                    await controllerCart
-                                                                        .deleteFromCart((model.model!.cartId ??
-                                                                                0)
-                                                                            .toString())
-                                                                        .then(
-                                                                            (v) {
-                                                                      Future.delayed(
-                                                                          const Duration(
-                                                                              seconds: 1),
-                                                                          () {
-                                                                        controller
-                                                                            .mapWithCartList();
-                                                                      });
-                                                                      model.model =
-                                                                          null;
-                                                                      Get.back();
-                                                                    });
-                                                                  },
-                                                                  onClose: () {
-                                                                    controller
-                                                                        .mapWithCartList();
-                                                                  });
-                                                            }
-                                                          },
-                                                          icon: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(3),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0),
-                                                              color:
-                                                                  Colors.green,
-                                                              border:
-                                                                  Border.all(
-                                                                color:
-                                                                    colorPrimary
-                                                                        .shade300,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-                                                            child: const Icon(
-                                                              Icons
-                                                                  .remove_rounded,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 24,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            height: 32,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5.0),
-                                                              border:
-                                                                  Border.all(
-                                                                color: Colors
-                                                                    .black,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-                                                            child: TextField(
-                                                              controller: model
-                                                                  .model!
-                                                                  .quantityController,
-                                                              keyboardType:
-                                                                  TextInputType
-                                                                      .number,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              maxLines: 1,
-                                                              minLines: 1,
-                                                              inputFormatters: [
-                                                                LengthLimitingTextInputFormatter(
-                                                                    3),
-                                                                FilteringTextInputFormatter
-                                                                    .allow(RegExp(
-                                                                        '[0-9]')),
-                                                              ],
-                                                              enableSuggestions:
-                                                                  false,
+                                                            },
+                                                            icon: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(3),
                                                               decoration:
-                                                                  const InputDecoration(
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                                counterText: "",
+                                                                  BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20.0),
+                                                                      color: Colors
+                                                                          .green,
+                                                                      border:
+                                                                          Border
+                                                                              .all(
+                                                                        color: colorPrimary
+                                                                            .shade300,
+                                                                        width:
+                                                                            1,
+                                                                      )),
+                                                              child: const Icon(
+                                                                Icons.add,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 24,
                                                               ),
-                                                              onChanged:
-                                                                  (value) async {
-                                                                print(model
-                                                                    .model!
-                                                                    .quantityController
-                                                                    .text);
-                                                                if (int.parse(model
-                                                                        .model!
-                                                                        .quantityController
-                                                                        .text) >
-                                                                    0) {
-                                                                  await controllerCart.addToCart(
-                                                                      productId:
-                                                                          model.proId ??
-                                                                              "",
-                                                                      quantity: int.parse(model
-                                                                          .model!
-                                                                          .quantityController
-                                                                          .text),
-                                                                      cartId: (model.model!.cartId ??
-                                                                              0)
-                                                                          .toString());
-                                                                } else {
-                                                                  buildConfirmationDialog(
-                                                                      icon: Icons
-                                                                          .delete_forever_rounded,
-                                                                      title:
-                                                                          "Delete From Cart",
-                                                                      msg:
-                                                                          "Are you sure you want to remove this product from the cart?",
-                                                                      onYesTap:
-                                                                          () {
-                                                                        Get.back();
-                                                                        controllerCart.deleteFromCart((model.model!.cartId ??
-                                                                                0)
-                                                                            .toString());
-                                                                      });
-                                                                }
-                                                                controller
-                                                                    .mapWithCartList();
-                                                              },
                                                             ),
                                                           ),
-                                                        ),
-                                                        IconButton(
-                                                          onPressed: () async {
-                                                            print(((model.model!
-                                                                            .proQty ??
-                                                                        1) +
-                                                                    1)
-                                                                .toString());
-                                                            await controllerCart.addToCart(
-                                                                productId: model
-                                                                        .proId ??
-                                                                    "",
-                                                                quantity: (model
-                                                                            .model!
-                                                                            .proQty ??
-                                                                        1) +
-                                                                    1,
-                                                                cartId: (model
-                                                                            .model!
-                                                                            .cartId ??
-                                                                        0)
-                                                                    .toString());
-                                                            controller
-                                                                .mapWithCartList();
-                                                          },
-                                                          icon: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(3),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20.0),
+                                                        ],
+                                                      )
+                                                    : Obx(
+                                                        () => !DashBoardController
+                                                                .isGuest.value
+                                                            ? IconButton(
+                                                                icon: Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
                                                                     color: Colors
                                                                         .green,
                                                                     border:
@@ -518,58 +570,44 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                                       color: colorPrimary
                                                                           .shade300,
                                                                       width: 1,
-                                                                    )),
-                                                            child: const Icon(
-                                                              Icons.add,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 24,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : IconButton(
-                                                      icon: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.green,
-                                                            border: Border.all(
-                                                              color:
-                                                                  colorPrimary
-                                                                      .shade300,
-                                                              width: 1,
-                                                            ),
-                                                            borderRadius:
-                                                                boxBorderRadius,
-                                                          ),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      15,
-                                                                  vertical: 5),
-                                                          child: const Text(
-                                                            'Add',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 15),
-                                                          )),
-                                                      onPressed: () async {
-                                                        await controllerCart
-                                                            .addToCart(
-                                                                productId: model
-                                                                        .proId ??
-                                                                    "");
-                                                        controller
-                                                            .mapWithCartList();
-                                                      },
-                                                    ),
-                                            ],
+                                                                    ),
+                                                                    borderRadius:
+                                                                        boxBorderRadius,
+                                                                  ),
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15,
+                                                                      vertical:
+                                                                          5),
+                                                                  child:
+                                                                      const Text(
+                                                                    'Add',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            15),
+                                                                  ),
+                                                                ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  await controllerCart.addToCart(
+                                                                      productId:
+                                                                          model.proId ??
+                                                                              "");
+                                                                  controller
+                                                                      .mapWithCartList();
+                                                                },
+                                                              )
+                                                            : const SizedBox(),
+                                                      ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

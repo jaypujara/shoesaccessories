@@ -1,6 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
-
 import '../../cart/model/CartListResponseModel.dart';
 
 class ProductResponseModel {
@@ -34,6 +31,7 @@ class ProductResponseModel {
 
 class Product {
   String? proId;
+  String? proCode;
   String? proName;
   double? proPrice;
   double? proDiscount;
@@ -46,6 +44,7 @@ class Product {
 
   Product(
       {this.proId,
+      this.proCode,
       this.proName,
       this.proPrice,
       this.proDiscount,
@@ -57,6 +56,7 @@ class Product {
 
   Product.fromJson(Map<String, dynamic> json) {
     proId = json['Pro_Id'];
+    proCode = json['Pro_Code'];
     proName = json['Pro_Name'];
     proPrice = json['Pro_Price'];
     proDiscount = json['Pro_Discount'];
@@ -70,6 +70,7 @@ class Product {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Pro_Id'] = proId;
+    data['Pro_Code'] = proCode;
     data['Pro_Name'] = proName;
     data['Pro_Price'] = proPrice;
     data['Pro_Discount'] = proDiscount;
