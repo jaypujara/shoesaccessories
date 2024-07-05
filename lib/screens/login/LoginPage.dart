@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shoes_acces/screens/users/dashboard/DashBoardPage.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
@@ -213,13 +214,36 @@ class LoginPage extends GetView<LoginController> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  FilledButton.tonal(
-                    onPressed: () async {
-                      await Preferences()
-                          .setPrefBool(Preferences.prefIsGuest, true);
-                      Get.off(DashBoardPage());
-                    },
-                    child: const Text("Continue as Guest"),
+                  Divider(),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton.filledTonal(
+                        onPressed: () {
+                          controller.signWithGoogle();
+                        },
+                        icon: SvgPicture.asset("assets/svgs/svg_google.svg"),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton.filledTonal(
+                        onPressed: () {
+                          controller.signWithFacebook();
+                        },
+                        icon: SvgPicture.asset("assets/svgs/svg_facebook.svg"),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text("OR"),
+                      const SizedBox(width: 10),
+                      FilledButton.tonal(
+                        onPressed: () async {
+                          await Preferences()
+                              .setPrefBool(Preferences.prefIsGuest, true);
+                          Get.off(DashBoardPage());
+                        },
+                        child: const Text("Continue as Guest"),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -22,6 +22,7 @@ class DashBoardController extends GetxController {
   List<CategoryModel> categoryList = [];
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
+
   RxInt indexSlider = 0.obs;
   RxList imageList = [].obs;
   final TextEditingController textControllerSearch = TextEditingController();

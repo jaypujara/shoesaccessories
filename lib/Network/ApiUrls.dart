@@ -77,6 +77,9 @@ const String endOrderSave = "OrderSave";
 /// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
 const String endOrderHistoryList = "OrderHistoryList";
 
+/// * [OrderHistoryList_v2] "OrderHistoryList_v2" Get Saved orders V2 that gives order and then product list in that orders
+const String endOrderHistoryList_V2 = "OrderHistoryList_v2";
+
 /// * [endOrderHistoryList] "OrderHistoryList" Get Saved orders
 ///  * --OrderId,Status
 ///  * Status = 0 --> 'Order Placed'

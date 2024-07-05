@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shoes_acces/screens/admin/dashboard/DashBoardAdmin.dart';
 import 'package:shoes_acces/screens/users/cart/CartController.dart';
 import 'package:shoes_acces/screens/users/dashboard/DashBoardPage.dart';
@@ -114,4 +116,25 @@ class LoginController extends GetxController {
       removeOverlay();
     }
   }
+
+  Future<void> signWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+
+  }
+
+  Future<void> signWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    // final facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken?.);
+
+    // Once signed in, return the UserCredential
+    // return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
 }
