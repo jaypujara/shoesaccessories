@@ -87,7 +87,7 @@ class ADShoesListController extends GetxController {
     }
   }
 
-  deleteProduct(String categoryId) async {
+  changeStatusOfProduct({required String categoryId,required bool isActive}) async {
     HttpRequestModel request = HttpRequestModel(
         url: endProductDelete,
         authMethod: '',
@@ -95,6 +95,7 @@ class ADShoesListController extends GetxController {
         headerType: '',
         params: json.encode({
           "Pro_ID": categoryId,
+          "OprType": isActive ? 2 : 3,
         }).toString(),
         method: 'POST');
 

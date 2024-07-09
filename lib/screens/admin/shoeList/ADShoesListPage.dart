@@ -51,7 +51,6 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                 Product model =
                                     controller.searchShoesList[index];
                                 return Container(
-                                  height: 150,
                                   margin: const EdgeInsets.only(top: 10),
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   decoration: BoxDecoration(
@@ -59,246 +58,359 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: boxShadow,
                                   ),
-                                  child: Row(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 8,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              AspectRatio(
-                                                aspectRatio: 3 / 3.5,
-                                                child: Material(
-                                                  elevation: 2,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      _buildImageDialog(
-                                                          model.imagePath ??
-                                                              "");
-                                                    },
-                                                    child: Center(
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            model.imagePath ??
-                                                                "",
-                                                        imageBuilder: (context,
-                                                            imageProvider) {
-                                                          return Container(
-                                                            color: Colors.white,
-                                                            child: Image(
-                                                                image:
-                                                                    imageProvider),
-                                                          );
-                                                        },
-                                                        progressIndicatorBuilder:
-                                                            (context, url,
-                                                                    downloadProgress) =>
-                                                                Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress,
-                                                            color: colorPrimary,
-                                                            strokeWidth: 2,
+                                      SizedBox(
+                                        height: 150,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    AspectRatio(
+                                                      aspectRatio: 3 / 3.5,
+                                                      child: Material(
+                                                        elevation: 2,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        clipBehavior: Clip
+                                                            .antiAliasWithSaveLayer,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            _buildImageDialog(
+                                                                model.imagePath ??
+                                                                    "");
+                                                          },
+                                                          child: Center(
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: model
+                                                                      .imagePath ??
+                                                                  "",
+                                                              imageBuilder:
+                                                                  (context,
+                                                                      imageProvider) {
+                                                                return Container(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  child: Image(
+                                                                      image:
+                                                                          imageProvider),
+                                                                );
+                                                              },
+                                                              progressIndicatorBuilder:
+                                                                  (context, url,
+                                                                          downloadProgress) =>
+                                                                      Center(
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  value: downloadProgress
+                                                                      .progress,
+                                                                  color:
+                                                                      colorPrimary,
+                                                                  strokeWidth:
+                                                                      2,
+                                                                ),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            ),
                                                           ),
                                                         ),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            const Icon(
-                                                                Icons.error),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  width: double.infinity,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 8,
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      Text(
-                                                        "${model.proName}",
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          color: colorBlack,
-                                                          fontSize: 20,
-                                                          height: 1,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child: Container(
+                                                        width: double.infinity,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 8,
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        "Code : ${model.proCode}",
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: const TextStyle(
-                                                          color: colorGrayText,
-                                                          fontSize: 14,
-                                                          height: 1,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        model.proWeight!.isEmpty
-                                                            ? ""
-                                                            : "${model.proWeight}",
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: const TextStyle(
-                                                          color: colorGrayText,
-                                                          fontSize: 14,
-                                                          height: 1,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 15),
-                                                      Row(
-                                                        children: [
-                                                          if (model.proDiscount !=
-                                                                  null &&
-                                                              model.proDiscount !=
-                                                                  0)
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const SizedBox(
+                                                                height: 10),
                                                             Text(
-                                                              "${model.proDiscount}₹",
+                                                              "${model.proName}",
                                                               textAlign:
                                                                   TextAlign
                                                                       .left,
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                               style:
                                                                   const TextStyle(
                                                                 color:
-                                                                    colorGreen,
-                                                                fontSize: 16,
+                                                                    colorBlack,
+                                                                fontSize: 20,
                                                                 height: 1,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
                                                               ),
                                                             ),
-                                                          if (model.proDiscount !=
-                                                                  null &&
-                                                              model.proDiscount !=
-                                                                  0)
-                                                            const SizedBox(
-                                                                width: 5),
-                                                          Text(
-                                                            "${model.proPrice}₹",
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                              color: model.proDiscount !=
-                                                                          null &&
-                                                                      model.proDiscount !=
-                                                                          0
-                                                                  ? Colors.red
-                                                                  : colorGreen,
-                                                              fontSize: model.proDiscount !=
-                                                                          null &&
-                                                                      model.proDiscount !=
-                                                                          0
-                                                                  ? 12
-                                                                  : 16,
-                                                              decoration: model
-                                                                              .proDiscount !=
-                                                                          null &&
-                                                                      model.proDiscount !=
-                                                                          0
-                                                                  ? TextDecoration
-                                                                      .lineThrough
-                                                                  : null,
-                                                              height: 1,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
+                                                            Text(
+                                                              "Code : ${model.proCode}",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    colorGrayText,
+                                                                fontSize: 14,
+                                                                height: 1,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                            Text(
+                                                              model.proWeight!
+                                                                      .isEmpty
+                                                                  ? ""
+                                                                  : "${model.proWeight}",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    colorGrayText,
+                                                                fontSize: 14,
+                                                                height: 1,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 15),
+                                                            Row(
+                                                              children: [
+                                                                if (model.proDiscount !=
+                                                                        null &&
+                                                                    model.proDiscount !=
+                                                                        0)
+                                                                  Text(
+                                                                    "${model.proDiscount}₹",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color:
+                                                                          colorGreen,
+                                                                      fontSize:
+                                                                          16,
+                                                                      height: 1,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                                  ),
+                                                                if (model.proDiscount !=
+                                                                        null &&
+                                                                    model.proDiscount !=
+                                                                        0)
+                                                                  const SizedBox(
+                                                                      width: 5),
+                                                                Text(
+                                                                  "${model.proPrice}₹",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: model.proDiscount !=
+                                                                                null &&
+                                                                            model.proDiscount !=
+                                                                                0
+                                                                        ? Colors
+                                                                            .red
+                                                                        : colorGreen,
+                                                                    fontSize: model.proDiscount !=
+                                                                                null &&
+                                                                            model.proDiscount !=
+                                                                                0
+                                                                        ? 12
+                                                                        : 16,
+                                                                    decoration: model.proDiscount !=
+                                                                                null &&
+                                                                            model.proDiscount !=
+                                                                                0
+                                                                        ? TextDecoration
+                                                                            .lineThrough
+                                                                        : null,
+                                                                    height: 1,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            Column(
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    color: colorYellow,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons.edit_rounded,
+                                                        color: colorWhite,
+                                                      ),
+                                                      onPressed: () async {
+                                                        var result =
+                                                            await Get.to(
+                                                          () => AddProduct(),
+                                                          arguments: {
+                                                            "model": model,
+                                                            "catId": int.parse(
+                                                                controller
+                                                                    .catId),
+                                                          },
+                                                        );
+                                                        if (result != null &&
+                                                            result == true) {
+                                                          controller.getData();
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Container(
+                                                    color: colorRed,
+                                                    child: IconButton(
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .delete_forever_rounded,
+                                                        color: colorWhite,
+                                                      ),
+                                                      onPressed: () async {
+                                                        buildConfirmationDialog(
+                                                          title:
+                                                              "Delete Confirmation!",
+                                                          msg:
+                                                              "Are you sure you want to delete this Product?",
+                                                          icon: Icons
+                                                              .delete_forever_rounded,
+                                                          onYesTap: () {
+                                                            Get.back();
+                                                            controller
+                                                                .changeStatusOfProduct(
+                                                              categoryId:
+                                                                  model.proId ??
+                                                                      "",
+                                                              isActive: false,
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Column(
+                                      const Divider(
+                                        color: colorWhite,
+                                        height: 1,
+                                      ),
+                                      Row(
                                         children: [
                                           Expanded(
-                                            child: Container(
-                                              color: colorYellow,
-                                              child: IconButton(
-                                                icon: const Icon(
-                                                  Icons.edit_rounded,
-                                                  color: colorWhite,
+                                            child: InkWell(
+                                              onTap: () {
+                                                controller
+                                                    .changeStatusOfProduct(
+                                                  categoryId: model.proId ?? "",
+                                                  isActive: true,
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: model.isProductActive
+                                                      ? colorGreen
+                                                      : null,
                                                 ),
-                                                onPressed: () async {
-                                                  var result = await Get.to(
-                                                    () => AddProduct(),
-                                                    arguments: {
-                                                      "model": model,
-                                                      "catId": int.parse(
-                                                          controller.catId),
-                                                    },
-                                                  );
-                                                  if (result != null &&
-                                                      result == true) {
-                                                    controller.getData();
-                                                  }
-                                                },
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                ),
+                                                child: Text(
+                                                  "Enabled",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        model.isProductActive
+                                                            ? colorWhite
+                                                            : colorGrayText,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
                                           Expanded(
-                                            child: Container(
-                                              color: colorRed,
-                                              child: IconButton(
-                                                icon: const Icon(
-                                                  Icons.delete_forever_rounded,
-                                                  color: colorWhite,
+                                            child: InkWell(
+                                              onTap: () {
+                                                controller
+                                                    .changeStatusOfProduct(
+                                                  categoryId: model.proId ?? "",
+                                                  isActive: false,
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: model.isProductActive
+                                                      ? null
+                                                      : colorRed,
                                                 ),
-                                                onPressed: () async {
-                                                  buildConfirmationDialog(
-                                                    title:
-                                                        "Delete Confirmation!",
-                                                    msg:
-                                                        "Are you sure you want to delete this Product?",
-                                                    icon: Icons
-                                                        .delete_forever_rounded,
-                                                    onYesTap: () {
-                                                      Get.back();
-                                                      controller.deleteProduct(
-                                                          model.proId ?? "");
-                                                    },
-                                                  );
-                                                },
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                ),
+                                                child: Text(
+                                                  "Disabled",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        model.isProductActive
+                                                            ? colorGrayText
+                                                            : colorWhite,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),

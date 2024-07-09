@@ -40,6 +40,7 @@ class Product {
   double? proCourierCharges;
   String? proWeight;
   String? imagePath;
+  bool isProductActive = false;
   CartProductModel? model;
 
   Product(
@@ -52,6 +53,7 @@ class Product {
       this.proCGST,
       this.proCourierCharges,
       this.proWeight,
+      this.isProductActive = false,
       this.imagePath});
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -63,6 +65,7 @@ class Product {
     proSGST = json['Pro_SGST'];
     proCGST = json['Pro_CGST'];
     proCourierCharges = json['Pro_Courier_Charges'];
+    isProductActive = json['Pro_IsActive'].toString().toLowerCase() == "true";
     proWeight = json['Pro_Weight'];
     imagePath = json['ImagePath'];
   }
@@ -76,6 +79,7 @@ class Product {
     data['Pro_Discount'] = proDiscount;
     data['Pro_SGST'] = proSGST;
     data['Pro_CGST'] = proCGST;
+    data['Pro_IsActive'] = isProductActive;
     data['Pro_Courier_Charges'] = proCourierCharges;
     data['Pro_Weight'] = proWeight;
     data['ImagePath'] = imagePath;

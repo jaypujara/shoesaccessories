@@ -27,24 +27,19 @@ class OrderHistoryListControllerAdmin extends GetxController {
   void search(String value) {
     searchOrderList.clear();
     if (value.isNotEmpty) {
-      // searchOrderList.value = orderList
-      //     .where((element) =>
-      //         (element.productName != null &&
-      //             element.productName
-      //                 .toString()
-      //                 .toLowerCase()
-      //                 .contains(value.toLowerCase())) ||
-      //         (element.orderId != null &&
-      //             element.orderId
-      //                 .toString()
-      //                 .toLowerCase()
-      //                 .contains(value.toLowerCase())) ||
-      //         (element.totalAmount != null &&
-      //             element.totalAmount
-      //                 .toString()
-      //                 .toLowerCase()
-      //                 .contains(value.toLowerCase())))
-      //     .toList();
+      searchOrderList.value = orderList
+          .where((element) =>
+              (element.orderId != null &&
+                  element.orderId
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())) ||
+              (element.totalAmount != null &&
+                  element.totalAmount
+                      .toString()
+                      .toLowerCase()
+                      .contains(value.toLowerCase())))
+          .toList();
     } else {
       searchOrderList.addAll(orderList);
     }

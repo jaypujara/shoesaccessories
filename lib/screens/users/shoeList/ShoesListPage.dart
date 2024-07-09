@@ -62,7 +62,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                               itemBuilder: (context, index) {
                                 Product model =
                                     controller.searchShoesList[index];
-                                return Container(
+                                return model.isProductActive ?  Container(
                                   height: 200,
                                   margin: const EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
@@ -609,7 +609,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                       ],
                                     ),
                                   ),
-                                );
+                                ) : const SizedBox();
                               },
                             )
                           : !controller.isLoading.value &&

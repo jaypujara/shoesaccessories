@@ -11,7 +11,13 @@ import 'AddressListController.dart';
 class AddressListPage extends GetView<AddressListController> {
   AddressListController controller = Get.put(AddressListController());
 
-  AddressListPage({super.key});
+  AddressListPage({super.key, bool isWithAddAddressDialog = false}) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (isWithAddAddressDialog) {
+        _addOrEditAddress();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

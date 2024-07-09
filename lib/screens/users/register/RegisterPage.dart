@@ -31,11 +31,10 @@ class RegisterPage extends GetView<RegisterController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/logo.png",
-                      height: 130,
-                      width: 130,
+                      "assets/images/logo_new.png",
+                      height: 150,
+                      width: 150,
                     ),
-                    const SizedBox(height: 30),
                     ThemedTextField(
                       controller: controller.controllerName,
                       borderRadiusTextField: 25,

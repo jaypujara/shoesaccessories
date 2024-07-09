@@ -3,18 +3,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoes_acces/screens/users/order_history/model/OrderHistoryListResponseModel_V2.dart';
 
 import '../../../Network/API.dart';
 import '../../../Network/ApiUrls.dart';
 import '../../../utils/Preferences.dart';
 import '../../../utils/Strings.dart';
-import 'model/OrderHistoryListResponseModel.dart';
-
-
 
 class OrderHistoryListController extends GetxController {
-  List<OrderModel> orderList = <OrderModel>[];
-  RxList<OrderModel> searchOrderList = <OrderModel>[].obs;
+  List<Orders> orderList = <Orders>[];
+  RxList<Orders> searchOrderList = <Orders>[].obs;
 
   RxString inProgressOrDataNotAvailable = "".obs;
   RxBool isLoading = false.obs;
@@ -31,11 +29,6 @@ class OrderHistoryListController extends GetxController {
     if (value.isNotEmpty) {
       searchOrderList.value = orderList
           .where((element) =>
-              (element.productName != null &&
-                  element.productName
-                      .toString()
-                      .toLowerCase()
-                      .contains(value.toLowerCase())) ||
               (element.orderId != null &&
                   element.orderId
                       .toString()
@@ -55,7 +48,7 @@ class OrderHistoryListController extends GetxController {
   getData() async {
     String userId = await Preferences().getPrefString(Preferences.prefCustId);
     HttpRequestModel request = HttpRequestModel(
-        url: endOrderHistoryList,
+        url: endOrderHistoryList_V2,
         authMethod: '',
         body: '',
         headerType: '',
@@ -66,14 +59,15 @@ class OrderHistoryListController extends GetxController {
       isLoading.trigger(true);
       String response = await HttpService().init(request);
       if (response.isNotEmpty) {
-        OrderHistoryListResponseModel responseModel =
-            OrderHistoryListResponseModel.fromJson(jsonDecode(response));
-        if (responseModel.status == "1" && responseModel.data != null) {
+        OrderHistoryListResponseModel_V2 responseModel =
+            OrderHistoryListResponseModel_V2.fromJson(jsonDecode(response));
+        if (responseModel.status == "1") {
           orderList.clear();
           searchOrderList.clear();
-          if (responseModel.data != null) {
-            orderList.addAll(responseModel.data!);
+          if (responseModel.orders != null) {
+            orderList.addAll(responseModel.orders!);
             searchOrderList.addAll(orderList);
+            print(searchOrderList);
           } else {
             inProgressOrDataNotAvailable.value = stringDataNotAvailable;
           }

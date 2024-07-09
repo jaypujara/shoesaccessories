@@ -434,7 +434,7 @@ class DashBoardAdmin extends GetView<DashBoardAdminController> {
                         if (controller.keyScaffold.currentState != null) {
                           controller.keyScaffold.currentState!.closeDrawer();
                         }
-                        Get.to(OrderHistoryListAdmin());
+                        Get.to(() => OrderHistoryListAdmin());
                       },
                       leading: const Icon(Icons.delivery_dining_rounded),
                       title: const Text("Order History"),
