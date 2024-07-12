@@ -37,6 +37,8 @@ class AddProductController extends GetxController {
   int catId = 0;
   Product? editModel;
   bool isForUpdate = false;
+  RxInt indexSelectedImage = 0.obs;
+  List<String> imageUpdateList = [];
 
   DashBoardAdminController controllerDashboard =
       Get.find(tag: "DashBoardAdminController");
@@ -62,6 +64,9 @@ class AddProductController extends GetxController {
           .where((element) => int.parse(element.catId ?? "0") == catId)
           .toList()
           .first;
+      if(editModel!.imagePath != null) {
+        imageUpdateList = editModel!.imagePath!.split(",");
+      }
       update();
     }
   }
@@ -117,32 +122,45 @@ class AddProductController extends GetxController {
     try {
       isLoading.trigger(true);
       getOverlay();
-      var postUri = getUrl(endProductSave);
-      var request = http.MultipartRequest("POST", postUri);
-      request.fields['Pro_Id'] = '0';
-      request.fields['Pro_Name'] = controllerName.text.trim();
-      request.fields['Pro_Code'] = controllerProductCode.text.trim();
-      request.fields['Pro_Cat_Id'] = selectedCategory!.catId.toString();
-      request.fields['Pro_Price'] = controllerPrice.text.trim();
-      request.fields['Pro_Discount'] = controllerPriceDiscount.text.trim();
-      request.fields['Pro_SGST'] = controllerSGST.text.trim();
-      request.fields['Pro_CGST'] = controllerCGST.text.trim();
-      request.fields['Pro_Courier_Charges'] =
-          controllerCourierCharges.text.trim();
-      request.fields['Pro_Weight'] = controllerWeight.text.trim();
-      request.files
-          .add(await http.MultipartFile.fromPath('FileName', image!.path));
-      await request.send().then((response) {
-        if (response.statusCode == 200) {
-          print("SUCCESS");
-          showSnackBarWithText(Get.context, "Product Added SuccessFully",
+
+      HttpRequestModel request = HttpRequestModel(
+          url: endProductSave,
+          authMethod: '',
+          body: '',
+          headerType: '',
+          params: json.encode({
+            "Pro_Id": '0',
+            "Pro_Name": controllerName.text.trim(),
+            "Pro_Code": controllerProductCode.text.trim(),
+            'Pro_Cat_Id': selectedCategory!.catId.toString(),
+            'Pro_Price': controllerPrice.text.trim(),
+            'Pro_Discount': controllerPriceDiscount.text.trim(),
+            'Pro_SGST': controllerSGST.text.trim(),
+            'Pro_CGST': controllerCGST.text.trim(),
+            'Pro_Courier_Charges': controllerCourierCharges.text.trim(),
+            'Pro_Weight': controllerWeight.text.trim()
+          }).toString(),
+          method: 'POST');
+
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
               color: colorGreen);
-          Get.back(result: true);
+          removeOverlay();
+          if (image != null) {
+            updateImage(image!.path);
+          }
+          if (image == null) {
+            Get.back(result: true);
+          }
         } else {
-          showSnackBarWithText(
-              Get.context, response.reasonPhrase ?? "Image upload failed!");
+          showSnackBarWithText(Get.context, responseJson["Message"]);
         }
-      });
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
     } catch (e) {
       print(e);
     } finally {

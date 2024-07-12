@@ -86,15 +86,27 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                                         child: InkWell(
                                                           onTap: () {
                                                             _buildImageDialog(
-                                                                model.imagePath ??
-                                                                    "");
+                                                                model.imagePath !=
+                                                                        null
+                                                                    ? model
+                                                                        .imagePath!
+                                                                        .split(
+                                                                            ",")
+                                                                        .first
+                                                                    : "");
                                                           },
                                                           child: Center(
                                                             child:
                                                                 CachedNetworkImage(
                                                               imageUrl: model
-                                                                      .imagePath ??
-                                                                  "",
+                                                                          .imagePath !=
+                                                                      null
+                                                                  ? model
+                                                                      .imagePath!
+                                                                      .split(
+                                                                          ",")
+                                                                      .first
+                                                                  : "",
                                                               imageBuilder:
                                                                   (context,
                                                                       imageProvider) {
@@ -373,10 +385,9 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                                   "Enabled",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    color:
-                                                        model.isProductActive
-                                                            ? colorWhite
-                                                            : colorGrayText,
+                                                    color: model.isProductActive
+                                                        ? colorWhite
+                                                        : colorGrayText,
                                                   ),
                                                 ),
                                               ),
@@ -405,10 +416,9 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                                   "Disabled",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    color:
-                                                        model.isProductActive
-                                                            ? colorGrayText
-                                                            : colorWhite,
+                                                    color: model.isProductActive
+                                                        ? colorGrayText
+                                                        : colorWhite,
                                                   ),
                                                 ),
                                               ),

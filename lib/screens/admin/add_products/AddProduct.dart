@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,15 +37,41 @@ class AddProduct extends GetView<AddProductController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        if (controller.isForUpdate)
-                          Expanded(
-                            child: SizedBox(
-                              height: 200,
-                              child: AspectRatio(
-                                aspectRatio: 3 / 3.5,
-                                child: Container(
+                    if (controller.isForUpdate)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            width: Get.width - 10,
+                            child: controller.image != null
+                                ? InkWell(
+                                    onTap: () {
+                                      _buildPikeImageChooseDialog();
+                                    },
+                                    child: AspectRatio(
+                                      aspectRatio: 3 / 3.5,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: colorPrimary.shade300,
+                                            width: 1,
+                                          ),
+                                          borderRadius: boxBorderRadius,
+                                        ),
+                                        child: controller.image != null
+                                            ? Image.file(controller.image!)
+                                            : const Center(
+                                                child: Text(
+                                                  "Add Image",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: colorPrimary.shade300,
@@ -51,12 +79,13 @@ class AddProduct extends GetView<AddProductController> {
                                       ),
                                       borderRadius: boxBorderRadius,
                                     ),
+                                    margin: const EdgeInsets.all(2),
+                                    padding: const EdgeInsets.all(2),
                                     child: CachedNetworkImage(
-                                      imageUrl:
-                                          controller.editModel!.imagePath ?? "",
+                                      imageUrl: controller.imageUpdateList[
+                                          controller.indexSelectedImage.value],
                                       imageBuilder: (context, imageProvider) {
                                         return Container(
-                                          color: Colors.white,
                                           child: Image(image: imageProvider),
                                         );
                                       },
@@ -71,45 +100,131 @@ class AddProduct extends GetView<AddProductController> {
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                     )),
-                              ),
-                            ),
                           ),
-                        if (controller.isForUpdate)
-                          const SizedBox(
-                            width: 20,
-                            child: Center(
-                              child: Text("or"),
-                            ),
-                          ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 200,
-                            child: InkWell(
-                              onTap: () {
-                                _buildPikeImageChooseDialog();
-                              },
-                              child: AspectRatio(
-                                aspectRatio: 3 / 3.5,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: colorPrimary.shade300,
-                                      width: 1,
-                                    ),
-                                    borderRadius: boxBorderRadius,
-                                  ),
-                                  child: controller.image != null
-                                      ? Image.file(controller.image!)
-                                      : const Center(
-                                          child: Text("Selecte Image"),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 100,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount:
+                                        controller.imageUpdateList.length,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          controller.indexSelectedImage
+                                              .trigger(index);
+                                        },
+                                        child: AspectRatio(
+                                          aspectRatio: 3 / 3.5,
+                                          child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: colorPrimary.shade300,
+                                                  width: 1,
+                                                ),
+                                                borderRadius: boxBorderRadius,
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    controller.imageUpdateList[
+                                                        controller
+                                                            .indexSelectedImage
+                                                            .value],
+                                                imageBuilder:
+                                                    (context, imageProvider) {
+                                                  return Container(
+                                                    child: Image(
+                                                        image: imageProvider),
+                                                  );
+                                                },
+                                                progressIndicatorBuilder: (context,
+                                                        url,
+                                                        downloadProgress) =>
+                                                    Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: colorPrimary,
+                                                  strokeWidth: 2,
+                                                )),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              )),
                                         ),
+                                      );
+                                    },
+                                  ),
                                 ),
+                                SizedBox(
+                                  height: 100,
+                                  child: InkWell(
+                                    onTap: () {
+                                      _buildPikeImageChooseDialog();
+                                    },
+                                    child: AspectRatio(
+                                      aspectRatio: 3 / 3.5,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: colorPrimary.shade300,
+                                            width: 1,
+                                          ),
+                                          borderRadius: boxBorderRadius,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            controller.image != null
+                                                ? "Change Image"
+                                                : "Add Image",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    if (!controller.isForUpdate)
+                      SizedBox(
+                        height: 200,
+                        child: InkWell(
+                          onTap: () {
+                            _buildPikeImageChooseDialog();
+                          },
+                          child: AspectRatio(
+                            aspectRatio: 3 / 3.5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: colorPrimary.shade300,
+                                  width: 1,
+                                ),
+                                borderRadius: boxBorderRadius,
                               ),
+                              child: controller.image != null
+                                  ? Image.file(controller.image!)
+                                  : const Center(
+                                      child: Text("Selecte Image"),
+                                    ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
                     // SizedBox(
                     //   height: 200,
                     //   child: InkWell(
