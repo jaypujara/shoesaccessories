@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,35 +69,82 @@ class AddProduct extends GetView<AddProductController> {
                                       ),
                                     ),
                                   )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: colorPrimary.shade300,
-                                        width: 1,
+                                : Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                          width: Get.width - 10,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: colorPrimary.shade300,
+                                              width: 1,
+                                            ),
+                                            borderRadius: boxBorderRadius,
+                                          ),
+                                          margin: const EdgeInsets.all(2),
+                                          padding: const EdgeInsets.all(2),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                controller.imageUpdateList[
+                                                    controller
+                                                        .indexSelectedImage
+                                                        .value],
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                child:
+                                                    Image(image: imageProvider),
+                                              );
+                                            },
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: colorPrimary,
+                                              strokeWidth: 2,
+                                            )),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          )),
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: IconButton(
+                                          iconSize: 16,
+                                          style: IconButton.styleFrom(
+                                            backgroundColor: colorRed,
+                                            padding: const EdgeInsets.all(0),
+                                            minimumSize: const Size(30, 30),
+                                            maximumSize: const Size(30, 30),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.delete_forever_rounded,
+                                            color: colorWhite,
+                                          ),
+                                          onPressed: () {
+                                            buildConfirmationDialog(
+                                              title: "Delete Image",
+                                              msg:
+                                                  "Are you sure you want to delete this image?",
+                                              icon:
+                                                  Icons.delete_forever_rounded,
+                                              onYesTap: () {
+                                                Get.back();
+                                                controller.deleteImage(
+                                                    controller.imageUpdateList[
+                                                        controller
+                                                            .indexSelectedImage
+                                                            .value]);
+                                              },
+                                            );
+                                          },
+                                        ),
                                       ),
-                                      borderRadius: boxBorderRadius,
-                                    ),
-                                    margin: const EdgeInsets.all(2),
-                                    padding: const EdgeInsets.all(2),
-                                    child: CachedNetworkImage(
-                                      imageUrl: controller.imageUpdateList[
-                                          controller.indexSelectedImage.value],
-                                      imageBuilder: (context, imageProvider) {
-                                        return Container(
-                                          child: Image(image: imageProvider),
-                                        );
-                                      },
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          Center(
-                                              child: CircularProgressIndicator(
-                                        value: downloadProgress.progress,
-                                        color: colorPrimary,
-                                        strokeWidth: 2,
-                                      )),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    )),
+                                    ],
+                                  ),
                           ),
                           const SizedBox(height: 10),
                           SizedBox(
@@ -117,6 +162,7 @@ class AddProduct extends GetView<AddProductController> {
                                         onTap: () {
                                           controller.indexSelectedImage
                                               .trigger(index);
+                                          controller.update();
                                         },
                                         child: AspectRatio(
                                           aspectRatio: 3 / 3.5,
@@ -134,11 +180,8 @@ class AddProduct extends GetView<AddProductController> {
                                                 borderRadius: boxBorderRadius,
                                               ),
                                               child: CachedNetworkImage(
-                                                imageUrl:
-                                                    controller.imageUpdateList[
-                                                        controller
-                                                            .indexSelectedImage
-                                                            .value],
+                                                imageUrl: controller
+                                                    .imageUpdateList[index],
                                                 imageBuilder:
                                                     (context, imageProvider) {
                                                   return Container(

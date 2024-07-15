@@ -90,9 +90,6 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
                                                                         null
                                                                     ? model
                                                                         .imagePath!
-                                                                        .split(
-                                                                            ",")
-                                                                        .first
                                                                     : "");
                                                           },
                                                           child: Center(
@@ -464,26 +461,30 @@ class _ADShoesListPageState extends State<ADShoesListPage> {
     Get.dialog(
       Dialog(
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        backgroundColor: colorWhite,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        backgroundColor: Colors.transparent,
         child: AspectRatio(
-          aspectRatio: 3 / 3.5,
-          child: CachedNetworkImage(
-            imageUrl: path,
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                color: Colors.white,
-                child: Image(image: imageProvider),
-              );
-            },
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
-                    child: CircularProgressIndicator(
-              value: downloadProgress.progress,
-              color: colorPrimary,
-              strokeWidth: 2,
-            )),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          aspectRatio: 3 / 3.8,
+          child: PageView(
+            children: path
+                .split(",")
+                .map(
+                  (e) => CachedNetworkImage(
+                    imageUrl: e,
+                    imageBuilder: (context, imageProvider) {
+                      return Image(image: imageProvider);
+                    },
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      color: colorPrimary,
+                      strokeWidth: 2,
+                    )),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                )
+                .toList(),
           ),
         ),
       ),

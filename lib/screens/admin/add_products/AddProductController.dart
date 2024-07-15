@@ -64,7 +64,7 @@ class AddProductController extends GetxController {
           .where((element) => int.parse(element.catId ?? "0") == catId)
           .toList()
           .first;
-      if(editModel!.imagePath != null) {
+      if (editModel!.imagePath != null) {
         imageUpdateList = editModel!.imagePath!.split(",");
       }
       update();
@@ -219,7 +219,7 @@ class AddProductController extends GetxController {
     try {
       isLoading.trigger(true);
       getOverlay();
-      var postUri = getUrl(endUpdateProductImage);
+      var postUri = getUrl(endAddImage);
       var request = http.MultipartRequest("POST", postUri);
       request.fields['Pro_Id'] = editModel!.proId ?? "";
       request.files
@@ -240,6 +240,44 @@ class AddProductController extends GetxController {
       print(e);
     } finally {
       isLoading.trigger(false);
+      removeOverlay();
+    }
+  }
+
+  Future<void> deleteImage(String imagePath) async {
+    HttpRequestModel request = HttpRequestModel(
+        url: endDeleteImage,
+        authMethod: '',
+        body: '',
+        headerType: '',
+        params: json.encode({
+          "Pro_ID": editModel!.proId,
+          "FileName": imagePath.split("/").last
+        }).toString(),
+        method: 'POST');
+
+    try {
+      getOverlay();
+      String response = await HttpService().init(request);
+      if (response.isNotEmpty) {
+        var responseJson = jsonDecode(response);
+        if (responseJson["Status"] == "1") {
+          showSnackBarWithText(Get.context, responseJson["Message"],
+              color: colorGreen);
+          removeOverlay();
+          if (image == null) {
+            Get.back(result: true);
+          }
+        } else {
+          showSnackBarWithText(Get.context, responseJson["Message"]);
+        }
+      } else {
+        showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+      }
+    } catch (e) {
+      log("ERROR: $endProductDelete ${e.toString()}");
+      showSnackBarWithText(Get.context, stringSomeThingWentWrong);
+    } finally {
       removeOverlay();
     }
   }

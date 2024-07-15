@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_editor_plus/utils.dart';
 import 'package:get/get.dart';
 
 // import 'package:image_cropper/image_cropper.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
-import 'package:image_editor_plus/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shoes_acces/utils/ColorConstants.dart';
 

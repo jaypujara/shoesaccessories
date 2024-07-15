@@ -29,8 +29,11 @@ const String endProductDelete = "ProductDelete";
 /// * [endProductUpdate] "ProductUpdate" fetch product list as per category
 const String endProductUpdate = "ProductUpdate";
 
-/// * [endUpdateProductImage] "ProductFileUpdated" fetch product list as per category
-const String endUpdateProductImage = "ProductFileUpdated";
+/// * [endAddImage] "ProductFileUpdated" fetch product list as per category
+const String endAddImage = "ProductFileUpdated";
+
+/// * [endDeleteImage] "ProductFileUpdated" fetch product list as per category
+const String endDeleteImage = "ProductFileDelete";
 
 /// * [endLogin] "MobileLogin" Login
 const String endLogin = "MobileLogin";
@@ -88,8 +91,4 @@ const String endOrderHistoryList_V2 = "OrderHistoryList_v2";
 ///  * Status = 3 --> 'Delivered'
 const String endOrderStatusChange = "OrderStatusUpdate";
 
-
 const String endAppVersion = "CheckAppversion";
-
-
-

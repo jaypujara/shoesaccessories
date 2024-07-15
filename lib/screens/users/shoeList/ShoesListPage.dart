@@ -102,54 +102,7 @@ class _ShoesListPageState extends State<ShoesListPage> {
                                                 BorderRadius.circular(8),
                                             child: InkWell(
                                               onTap: () {
-                                                Get.dialog(
-                                                  Dialog(
-                                                    clipBehavior: Clip
-                                                        .antiAliasWithSaveLayer,
-                                                    backgroundColor: colorWhite,
-                                                    insetPadding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 20),
-                                                    child: AspectRatio(
-                                                      aspectRatio: 1 / 1,
-                                                      child: PhotoView(
-                                                        imageProvider:
-                                                            NetworkImage(model
-                                                                    .imagePath ??
-                                                                ""),
-                                                        // child: CachedNetworkImage(
-                                                        //   imageUrl:
-                                                        //       model.imagePath ?? "",
-                                                        //   imageBuilder: (context,
-                                                        //       imageProvider) {
-                                                        //     return Container(
-                                                        //       color: Colors.white,
-                                                        //       child: Image(
-                                                        //           image:
-                                                        //               imageProvider),
-                                                        //     );
-                                                        //   },
-                                                        //   progressIndicatorBuilder:
-                                                        //       (context, url,
-                                                        //               downloadProgress) =>
-                                                        //           Center(
-                                                        //               child:
-                                                        //                   CircularProgressIndicator(
-                                                        //     value: downloadProgress
-                                                        //         .progress,
-                                                        //     color: colorPrimary,
-                                                        //     strokeWidth: 2,
-                                                        //   )),
-                                                        //   errorWidget: (context,
-                                                        //           url, error) =>
-                                                        //       const Icon(
-                                                        //           Icons.error),
-                                                        // ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
+                                                controller.buildImageDialog(model.imagePath ?? "");
                                               },
                                               child: AspectRatio(
                                                 aspectRatio: 3 / 4,

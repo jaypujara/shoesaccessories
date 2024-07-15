@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../Network/API.dart';
 import '../../../Network/ApiUrls.dart';
+import '../../../utils/ColorConstants.dart';
 import '../../../utils/Strings.dart';
 import '../cart/CartController.dart';
 import '../cart/model/CartListResponseModel.dart';
@@ -100,5 +102,40 @@ class ShoesListController extends GetxController {
     } finally {
       isLoading.trigger(false);
     }
+  }
+
+
+  void buildImageDialog(String path) {
+    Get.dialog(
+      Dialog(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        backgroundColor: Colors.transparent,
+        child: AspectRatio(
+          aspectRatio: 3 / 3.8,
+          child: PageView(
+            children: path
+                .split(",")
+                .map(
+                  (e) => CachedNetworkImage(
+                imageUrl: e,
+                imageBuilder: (context, imageProvider) {
+                  return Image(image: imageProvider);
+                },
+                progressIndicatorBuilder:
+                    (context, url, downloadProgress) => Center(
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      color: colorPrimary,
+                      strokeWidth: 2,
+                    )),
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.error),
+              ),
+            )
+                .toList(),
+          ),
+        ),
+      ),
+    );
   }
 }
